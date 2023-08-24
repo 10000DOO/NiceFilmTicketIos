@@ -16,6 +16,8 @@
 		69DA58122A96FCB1009CEA28 /* NiceFilmTicketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA58112A96FCB1009CEA28 /* NiceFilmTicketTests.swift */; };
 		69DA581C2A96FCB1009CEA28 /* NiceFilmTicketUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA581B2A96FCB1009CEA28 /* NiceFilmTicketUITests.swift */; };
 		69DA581E2A96FCB1009CEA28 /* NiceFilmTicketUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA581D2A96FCB1009CEA28 /* NiceFilmTicketUITestsLaunchTests.swift */; };
+		69DA58352A97589F009CEA28 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA58342A97589F009CEA28 /* SplashViewController.swift */; };
+		69DA58382A97C5C1009CEA28 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 69DA58372A97C5C1009CEA28 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,7 @@
 		69DA58172A96FCB1009CEA28 /* NiceFilmTicketUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NiceFilmTicketUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		69DA581B2A96FCB1009CEA28 /* NiceFilmTicketUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceFilmTicketUITests.swift; sourceTree = "<group>"; };
 		69DA581D2A96FCB1009CEA28 /* NiceFilmTicketUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiceFilmTicketUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		69DA58342A97589F009CEA28 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69DA58382A97C5C1009CEA28 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,12 +103,11 @@
 		69DA57F92A96FCB0009CEA28 /* NiceFilmTicket */ = {
 			isa = PBXGroup;
 			children = (
-				69DA582C2A96FEB9009CEA28 /* SupportingFiles */,
+				69DA58082A96FCB1009CEA28 /* Info.plist */,
 				69DA582B2A96FEA0009CEA28 /* Resource */,
 				69DA582A2A96FE74009CEA28 /* Features */,
 				69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */,
 				69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */,
-				69DA57FE2A96FCB0009CEA28 /* ViewController.swift */,
 				69DA58032A96FCB1009CEA28 /* Assets.xcassets */,
 			);
 			path = NiceFilmTicket;
@@ -130,6 +133,7 @@
 		69DA582A2A96FE74009CEA28 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				69DA58332A97588F009CEA28 /* Splash */,
 				69DA582D2A96FF27009CEA28 /* Authentication */,
 			);
 			path = Features;
@@ -144,19 +148,20 @@
 			path = Resource;
 			sourceTree = "<group>";
 		};
-		69DA582C2A96FEB9009CEA28 /* SupportingFiles */ = {
-			isa = PBXGroup;
-			children = (
-				69DA58082A96FCB1009CEA28 /* Info.plist */,
-			);
-			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
 		69DA582D2A96FF27009CEA28 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				69DA57FE2A96FCB0009CEA28 /* ViewController.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		69DA58332A97588F009CEA28 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				69DA58342A97589F009CEA28 /* SplashViewController.swift */,
+			);
+			path = Splash;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,6 +180,9 @@
 			dependencies = (
 			);
 			name = NiceFilmTicket;
+			packageProductDependencies = (
+				69DA58372A97C5C1009CEA28 /* SnapKit */,
+			);
 			productName = NiceFilmTicket;
 			productReference = 69DA57F72A96FCB0009CEA28 /* NiceFilmTicket.app */;
 			productType = "com.apple.product-type.application";
@@ -247,6 +255,9 @@
 				Base,
 			);
 			mainGroup = 69DA57EE2A96FCB0009CEA28;
+			packageReferences = (
+				69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 69DA57F82A96FCB0009CEA28 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -293,6 +304,7 @@
 				69DA57FF2A96FCB0009CEA28 /* ViewController.swift in Sources */,
 				69DA57FB2A96FCB0009CEA28 /* AppDelegate.swift in Sources */,
 				69DA57FD2A96FCB0009CEA28 /* SceneDelegate.swift in Sources */,
+				69DA58352A97589F009CEA28 /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +648,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		69DA58372A97C5C1009CEA28 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 69DA57EF2A96FCB0009CEA28 /* Project object */;
 }
