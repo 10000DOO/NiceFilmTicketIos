@@ -31,10 +31,7 @@ class SplashViewController: UIViewController {
         view.addSubview(safeAreaView)
         
         safeAreaView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(20)
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading).offset(20)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing).inset(20)
+            make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50))
         }
     }
     
@@ -44,19 +41,27 @@ class SplashViewController: UIViewController {
         // 렌더링 피직셀 정렬 옵션 사용
         view.layer.allowsEdgeAntialiasing = true
         
-        // 애니메이션을 설정하고 실행
-        centerYConstraint?.deactivate()
-        imageView.snp.makeConstraints { make in
-            centerYConstraint = make.centerY.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(120).constraint
-        }
-        
-        UIView.animate(withDuration: 1.3, animations: {
+        UIView.animate(withDuration: 1, animations: {
             // 테두리의 투명도를 0으로 설정하여 흐려져서 사라지도록 함
             self.safeAreaView.layer.opacity = 0
+            
             self.view.layoutIfNeeded()
         }) { _ in
             // 애니메이션 완료 후 safeAreaView 제거
             self.safeAreaView.removeFromSuperview()
+        }
+        UIView.animate(withDuration: 1.3, animations: {
+            //로고 올라가는 애니메이션
+            self.centerYConstraint?.deactivate()
+            self.imageView.snp.makeConstraints { make in
+                self.centerYConstraint = make.centerY.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(120).constraint
+            }
+            self.view.layoutIfNeeded()
+        }) { _ in
+            let authenticationVC = AuthenticationViewController()
+            authenticationVC.modalPresentationStyle = .fullScreen
+            // 현재 뷰 컨트롤러를 AuthenticationViewController로 전환
+            self.present(authenticationVC, animated: false, completion: nil)
         }
     }
 }
