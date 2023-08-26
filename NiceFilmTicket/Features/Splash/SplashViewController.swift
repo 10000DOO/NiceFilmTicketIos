@@ -18,8 +18,8 @@ class SplashViewController: UIViewController {
         imageView.snp.makeConstraints { make in
             centerYConstraint = make.centerY.equalTo(self.view.snp.centerY).constraint
             make.centerX.equalTo(self.view.snp.centerX)
-            make.width.equalTo(270)
-            make.height.equalTo(180)
+            make.width.equalTo(350)
+            make.height.equalTo(450)
         }
         
         // safeArea의 테두리를 설정
@@ -37,9 +37,6 @@ class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // 렌더링 피직셀 정렬 옵션 사용
-        view.layer.allowsEdgeAntialiasing = true
         
         UIView.animate(withDuration: 1, animations: {
             // 테두리의 투명도를 0으로 설정하여 흐려져서 사라지도록 함
