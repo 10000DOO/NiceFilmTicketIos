@@ -19,10 +19,11 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="t3B-v2-Brn"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="576.33587786259545" y="8.4507042253521139"/>
+            <point key="canvasLocation" x="608" y="8"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="v1W-8q-jU8">
@@ -37,7 +38,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cXl-7R-0D5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1408" y="8"/>
+            <point key="canvasLocation" x="1459" y="8"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="XPn-IY-0GG">

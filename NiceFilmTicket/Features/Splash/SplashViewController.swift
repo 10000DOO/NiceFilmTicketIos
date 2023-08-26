@@ -9,6 +9,7 @@ class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         
         // 이미지 뷰 생성
         imageView = UIImageView(image: UIImage(named: "SplashImage"))
@@ -16,8 +17,8 @@ class SplashViewController: UIViewController {
         
         // 이미지 뷰의 제약 조건 설정
         imageView.snp.makeConstraints { make in
-            centerYConstraint = make.centerY.equalTo(self.view.snp.centerY).constraint
-            make.centerX.equalTo(self.view.snp.centerX)
+            centerYConstraint = make.centerY.equalTo(view.snp.centerY).constraint
+            make.centerX.equalTo(view.snp.centerX)
             make.width.equalTo(350)
             make.height.equalTo(450)
         }
@@ -31,7 +32,7 @@ class SplashViewController: UIViewController {
         view.addSubview(safeAreaView)
         
         safeAreaView.snp.makeConstraints { make in
-            make.edges.equalTo(self.view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50))
+            make.edges.equalTo(view.safeAreaLayoutGuide).inset(UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50))
         }
     }
     
@@ -51,14 +52,15 @@ class SplashViewController: UIViewController {
             //로고 올라가는 애니메이션
             self.centerYConstraint?.deactivate()
             self.imageView.snp.makeConstraints { make in
-                self.centerYConstraint = make.centerY.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(120).constraint
+                self.centerYConstraint = make.centerY.equalTo(self.view.snp.top).offset(200).constraint
             }
             self.view.layoutIfNeeded()
         }) { _ in
+            //AuthenticationViewController를 루트뷰로 설정해서 navigationController 적용
             let authenticationVC = AuthenticationViewController()
-            authenticationVC.modalPresentationStyle = .fullScreen
-            // 현재 뷰 컨트롤러를 AuthenticationViewController로 전환
-            self.present(authenticationVC, animated: false, completion: nil)
+            let navigationController = UINavigationController(rootViewController: authenticationVC)
+            self.view.window?.rootViewController = navigationController
+            self.view.window?.makeKeyAndVisible()
         }
     }
 }

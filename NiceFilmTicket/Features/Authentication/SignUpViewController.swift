@@ -9,11 +9,13 @@ import UIKit
 import SnapKit
 
 class SignUpViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
+        //뒤로가기 제스쳐는 살리고 백버튼 지우기
+        self.navigationController?.navigationBar.isHidden = true
+        
         let logoImageView = UIImageView(image: UIImage(named: "Logo"))
         view.addSubview(logoImageView)
         
@@ -38,5 +40,6 @@ class SignUpViewController: UIViewController {
             make.left.equalToSuperview().inset(50)
             make.top.equalTo(logoImageView.snp.bottom).offset(-110)
         }
+        
     }
 }

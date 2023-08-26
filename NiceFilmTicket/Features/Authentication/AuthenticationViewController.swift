@@ -33,7 +33,7 @@ class AuthenticationViewController: UIViewController {
         
         // 로고이미지 뷰의 제약 조건 설정
         logoImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(view.safeAreaLayoutGuide.snp.top).offset(120)
+            make.centerY.equalTo(view.snp.top).offset(200)
             make.centerX.equalTo(view.snp.centerX)
             make.width.equalTo(350)
             make.height.equalTo(450)
@@ -125,10 +125,10 @@ class AuthenticationViewController: UIViewController {
         
         // 카카오 로그인 뷰의 제약 조건 설정
         kakaoImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(businessButtonContainer.snp.bottom).offset(100)
+            make.centerY.equalTo(view.snp.bottom).inset(150)
             make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(200)
-            make.height.equalTo(45)
+            make.width.equalTo(250)
+            make.height.equalTo(60)
         }
         
         //ID 입력 텍스트 필드
@@ -144,10 +144,10 @@ class AuthenticationViewController: UIViewController {
         view.addSubview(idTextField)
         
         idTextField.snp.makeConstraints { make in
-            make.top.equalTo(personalButtonContainer.snp.bottom).offset(60)
-            make.centerX.equalTo(view.snp.centerX)
-            make.leading.equalTo(view.snp.leading).inset(30)
             make.height.equalTo(50)
+            make.top.equalTo(businessButtonContainer.snp.bottom).offset(60)
+            make.leading.equalTo(view.snp.leading).inset(30)
+            make.trailing.equalTo(view.snp.trailing).inset(30)
         }
         
         //비밀번호 입력 텍스트 필드
@@ -164,9 +164,9 @@ class AuthenticationViewController: UIViewController {
         
         pwTextField.snp.makeConstraints { make in
             make.top.equalTo(idTextField.snp.bottom).offset(20)
-            make.centerX.equalTo(view.snp.centerX)
-            make.leading.equalTo(view.snp.leading).inset(30)
             make.height.equalTo(50)
+            make.leading.equalTo(view.snp.leading).inset(30)
+            make.trailing.equalTo(view.snp.trailing).inset(30)
         }
         
         hideKeyboardWhenTappedAround()
@@ -301,12 +301,9 @@ extension AuthenticationViewController {
     
     @objc func didTapSignupButton() {
         let signUpVC = SignUpViewController()
-        signUpVC.modalPresentationStyle = .fullScreen
-        self.present(signUpVC, animated: false, completion: nil)
+        self.navigationController?.pushViewController(signUpVC, animated: false)
     }
-}
-
-extension AuthenticationViewController {
+    
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(AuthenticationViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
