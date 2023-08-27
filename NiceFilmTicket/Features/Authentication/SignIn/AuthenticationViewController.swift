@@ -182,7 +182,7 @@ extension AuthenticationViewController {
     
     private func setBusinessLogin() {
         // 비지니스로그인 텍스트 레이블 생성
-        let businessLoginText = MenuUILabel(text: "비즈니스", size: UIFont.boldSystemFont(ofSize: 25))
+        businessLoginText = MenuUILabel(text: "비즈니스", size: UIFont.boldSystemFont(ofSize: 25))
         businessLoginText.isUserInteractionEnabled = true
         contentView.addSubview(businessLoginText)
         
