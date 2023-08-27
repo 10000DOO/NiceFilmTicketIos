@@ -19,8 +19,8 @@ class SplashViewController: UIViewController {
         imageView.snp.makeConstraints { make in
             centerYConstraint = make.centerY.equalTo(view.snp.centerY).constraint
             make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(350)
-            make.height.equalTo(450)
+            make.width.equalTo(210)
+            make.height.equalTo(150)
         }
         
         // safeArea의 테두리를 설정
@@ -52,7 +52,7 @@ class SplashViewController: UIViewController {
             //로고 올라가는 애니메이션
             self.centerYConstraint?.deactivate()
             self.imageView.snp.makeConstraints { make in
-                self.centerYConstraint = make.centerY.equalTo(self.view.snp.top).offset(200).constraint
+                self.centerYConstraint = make.centerY.equalTo(self.view.snp.top).offset(170).constraint
             }
             self.view.layoutIfNeeded()
         }) { _ in
