@@ -61,11 +61,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         // 개인로그인 텍스트 레이블 생성
-        let personalLoginText = UILabel()
-        personalLoginText.text = "일반"
-        personalLoginText.textAlignment = .center
-        personalLoginText.font = UIFont.boldSystemFont(ofSize: 25)
-        personalLoginText.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+        let personalLoginText = MenuUILabel(text: "일반", size: UIFont.boldSystemFont(ofSize: 25))
         personalLoginText.isUserInteractionEnabled = true // 하위 뷰의 클릭 이벤트 허용
         personalButtonContainer.addSubview(personalLoginText)
         
@@ -101,11 +97,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         // 비지니스로그인 텍스트 레이블 생성
-        let businessLoginText = UILabel()
-        businessLoginText.text = "비즈니스"
-        businessLoginText.textAlignment = .center
-        businessLoginText.font = UIFont.boldSystemFont(ofSize: 25)
-        businessLoginText.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+        let businessLoginText = MenuUILabel(text: "비즈니스", size: UIFont.boldSystemFont(ofSize: 25))
         businessLoginText.isUserInteractionEnabled = true // 하위 뷰의 클릭 이벤트 허용
         businessButtonContainer.addSubview(businessLoginText)
         
@@ -132,34 +124,18 @@ class AuthenticationViewController: UIViewController {
         }
         
         //ID 입력 텍스트 필드
-        idTextField.layer.cornerRadius = 10 // 모서리 둥글기 설정
-        idTextField.layer.borderWidth = 2 // 테두리 두께 설정
-        idTextField.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor // 테두리 색상 설정
-        idTextField.layer.masksToBounds = true // 테두리를 모서리에 맞춰서 그림
-        idTextField.font = UIFont.systemFont(ofSize: 20) // 원하는 폰트 크기로 설정
-        idTextField.backgroundColor = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1)
-        idTextField.placeholder = "  ID"
-        idTextField.isHidden = true
-        idTextField.keyboardType = .asciiCapable //처음 영어 키보드로 나오도록
+        idTextField = AuthenticationTextField(placeholder: "  ID", isSecureTextEntry: false, backgroundColor: UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1), isHidden: true, font: UIFont.systemFont(ofSize: 20))
         view.addSubview(idTextField)
         
         idTextField.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.top.equalTo(businessButtonContainer.snp.bottom).offset(60)
+            make.top.equalTo(businessButtonContainer.snp.bottom).offset(25)
             make.leading.equalTo(view.snp.leading).inset(30)
             make.trailing.equalTo(view.snp.trailing).inset(30)
         }
         
         //비밀번호 입력 텍스트 필드
-        pwTextField.layer.cornerRadius = 10 // 모서리 둥글기 설정
-        pwTextField.layer.borderWidth = 2 // 테두리 두께 설정
-        pwTextField.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor // 테두리 색상 설정
-        pwTextField.layer.masksToBounds = true // 테두리를 모서리에 맞춰서 그림
-        pwTextField.font = UIFont.systemFont(ofSize: 20) // 원하는 폰트 크기로 설정
-        pwTextField.backgroundColor = UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1)
-        pwTextField.isHidden = true
-        pwTextField.isSecureTextEntry = true // 비밀번호 입력 시 입력한 문자를 가려서 보여줌
-        pwTextField.placeholder = "  PW"
+        pwTextField = AuthenticationTextField(placeholder: "  PW", isSecureTextEntry: true, backgroundColor: UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1), isHidden: true, font: UIFont.systemFont(ofSize: 20))
         view.addSubview(pwTextField)
         
         pwTextField.snp.makeConstraints { make in
@@ -172,13 +148,7 @@ class AuthenticationViewController: UIViewController {
         hideKeyboardWhenTappedAround()
         
         //로그인 버튼
-        loginButton.backgroundColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-        loginButton.setTitle("LogIn", for: .normal)
-        loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20) // 텍스트 크기 설정
-        loginButton.layer.cornerRadius = 10 // 테두리 둥글기 설정
-        loginButton.layer.borderWidth = 1 // 테두리 두께 설정
-        loginButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor // 테두리 색상 설정
-        loginButton.isHidden = true
+        loginButton = AuthenticationUIButton(title: "LogIn")
         view.addSubview(loginButton)
         
         loginButton.snp.makeConstraints { make in
@@ -200,13 +170,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         //회원가입 버튼
-        signupButton.backgroundColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-        signupButton.setTitle("Make Account", for: .normal)
-        signupButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20) // 텍스트 크기 설정
-        signupButton.layer.cornerRadius = 10 // 테두리 둥글기 설정
-        signupButton.layer.borderWidth = 1 // 테두리 두께 설정
-        signupButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor // 테두리 색상 설정
-        signupButton.isHidden = true
+        signupButton = AuthenticationUIButton(title: "Make Account")
         signupButton.addTarget(self, action: #selector(didTapSignupButton), for: .touchUpInside) //회원가입 버튼 눌렀을 때
         view.addSubview(signupButton)
         
@@ -229,13 +193,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         //아이디 찾기
-        findId = UILabel()
-        findId.text = "아이디 찾기"
-        findId.textAlignment = .center
-        findId.font = UIFont.boldSystemFont(ofSize: 15)
-        findId.textColor = .darkGray
-        findId.isUserInteractionEnabled = true // 하위 뷰의 클릭 이벤트 허용
-        findId.isHidden = true
+        findId = FindIdPwUILabel(text: "아이디 찾기")
         view.addSubview(findId)
         
         // 아이디 찾기 제약 조건
@@ -245,13 +203,7 @@ class AuthenticationViewController: UIViewController {
         }
         
         //비밀번호 찾기
-        findPw = UILabel()
-        findPw.text = "비밀번호 찾기"
-        findPw.textAlignment = .center
-        findPw.font = UIFont.boldSystemFont(ofSize: 15)
-        findPw.textColor = .darkGray
-        findPw.isUserInteractionEnabled = true // 하위 뷰의 클릭 이벤트 허용
-        findPw.isHidden = true
+        findPw = FindIdPwUILabel(text: "비밀번호 찾기")
         view.addSubview(findPw)
         
         // 비밀번호 찾기 제약 조건
@@ -271,6 +223,7 @@ class AuthenticationViewController: UIViewController {
 }
 
 extension AuthenticationViewController {
+    //개인 로그인으로 변경
     @objc func clickPersonButton() {
         personalLoginImage.image = UIImage(systemName: "person.fill")
         businessLoginImage.image = UIImage(systemName: "bag")
@@ -285,6 +238,7 @@ extension AuthenticationViewController {
         dividerLine.isHidden = true
     }
     
+    //비즈니스 로그인으로 변경
     @objc func clickBusinessButton() {
         businessLoginImage.image = UIImage(systemName: "bag.fill")
         personalLoginImage.image = UIImage(systemName: "person")
@@ -299,11 +253,13 @@ extension AuthenticationViewController {
         dividerLine.isHidden = false
     }
     
+    //회원가입 뷰로 이동
     @objc func didTapSignupButton() {
         let signUpVC = SignUpViewController()
         self.navigationController?.pushViewController(signUpVC, animated: false)
     }
     
+    //키보드 내리기
     func hideKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(AuthenticationViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false

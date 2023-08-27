@@ -28,18 +28,24 @@ class SignUpViewController: UIViewController {
         }
         
         // 회원가입 텍스트 레이블 생성
-        let signUpText = UILabel()
-        signUpText.text = "회원가입"
-        signUpText.textAlignment = .center
-        signUpText.font = UIFont.boldSystemFont(ofSize: 25)
-        signUpText.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+        let signUpText = MenuUILabel(text: "회원가입", size: UIFont.boldSystemFont(ofSize: 25))
         view.addSubview(signUpText)
         
-        // 개인로그인 텍스트 제약 조건
+        // 회원가입 텍스트 제약 조건
         signUpText.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(50)
+            make.left.equalToSuperview().inset(30)
             make.top.equalTo(logoImageView.snp.bottom).offset(-110)
         }
         
+        //이메일 입력 텍스트 필드
+        let emailTextField = AuthenticationTextField(placeholder: "  이메일", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
+        view.addSubview(emailTextField)
+        
+        emailTextField.snp.makeConstraints { make in
+            make.top.equalTo(signUpText.snp.bottom).offset(20)
+            make.height.equalTo(50)
+            make.leading.equalTo(view.snp.leading).inset(30)
+            make.trailing.equalTo(view.snp.trailing).inset(30)
+        }
     }
 }

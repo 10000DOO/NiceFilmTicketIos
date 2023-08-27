@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		6951713F2A998A9300CC3F5D /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6951713E2A998A9300CC3F5D /* SignUpViewController.swift */; };
+		69CA1CF62A9AD0AF00ED39A2 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 69CA1CF52A9AD0AF00ED39A2 /* FirebaseCrashlytics */; };
+		69CA1CF92A9AE39100ED39A2 /* AuthenticationTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1CF82A9AE39100ED39A2 /* AuthenticationTextField.swift */; };
+		69CA1D012A9AF10700ED39A2 /* FindIdPwUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1D002A9AF10700ED39A2 /* FindIdPwUILabel.swift */; };
+		69CA1D032A9AF38100ED39A2 /* AuthenticationUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1D022A9AF38100ED39A2 /* AuthenticationUIButton.swift */; };
+		69CA1D062A9AF58300ED39A2 /* MenuUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1D052A9AF58300ED39A2 /* MenuUILabel.swift */; };
+		69CA1D0C2A9AFB9700ED39A2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 69CA1D0B2A9AFB9700ED39A2 /* .gitignore */; };
 		69DA57FB2A96FCB0009CEA28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */; };
 		69DA57FD2A96FCB0009CEA28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */; };
 		69DA57FF2A96FCB0009CEA28 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FE2A96FCB0009CEA28 /* AuthenticationViewController.swift */; };
@@ -40,6 +46,11 @@
 
 /* Begin PBXFileReference section */
 		6951713E2A998A9300CC3F5D /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		69CA1CF82A9AE39100ED39A2 /* AuthenticationTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTextField.swift; sourceTree = "<group>"; };
+		69CA1D002A9AF10700ED39A2 /* FindIdPwUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdPwUILabel.swift; sourceTree = "<group>"; };
+		69CA1D022A9AF38100ED39A2 /* AuthenticationUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationUIButton.swift; sourceTree = "<group>"; };
+		69CA1D052A9AF58300ED39A2 /* MenuUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuUILabel.swift; sourceTree = "<group>"; };
+		69CA1D0B2A9AFB9700ED39A2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		69DA57F72A96FCB0009CEA28 /* NiceFilmTicket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceFilmTicket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				69DA58382A97C5C1009CEA28 /* SnapKit in Frameworks */,
+				69CA1CF62A9AD0AF00ED39A2 /* FirebaseCrashlytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +94,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		69CA1CF72A9AE2E700ED39A2 /* UIComponent */ = {
+			isa = PBXGroup;
+			children = (
+				69CA1CF82A9AE39100ED39A2 /* AuthenticationTextField.swift */,
+				69CA1D002A9AF10700ED39A2 /* FindIdPwUILabel.swift */,
+				69CA1D022A9AF38100ED39A2 /* AuthenticationUIButton.swift */,
+			);
+			path = UIComponent;
+			sourceTree = "<group>";
+		};
+		69CA1CFE2A9AF0A500ED39A2 /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				69DA57FE2A96FCB0009CEA28 /* AuthenticationViewController.swift */,
+			);
+			path = SignIn;
+			sourceTree = "<group>";
+		};
+		69CA1CFF2A9AF0B800ED39A2 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				6951713E2A998A9300CC3F5D /* SignUpViewController.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		69CA1D042A9AF54E00ED39A2 /* CommonUIComponent */ = {
+			isa = PBXGroup;
+			children = (
+				69CA1D052A9AF58300ED39A2 /* MenuUILabel.swift */,
+			);
+			path = CommonUIComponent;
+			sourceTree = "<group>";
+		};
 		69DA57EE2A96FCB0009CEA28 = {
 			isa = PBXGroup;
 			children = (
@@ -105,12 +151,14 @@
 		69DA57F92A96FCB0009CEA28 /* NiceFilmTicket */ = {
 			isa = PBXGroup;
 			children = (
+				69CA1D042A9AF54E00ED39A2 /* CommonUIComponent */,
 				69DA58082A96FCB1009CEA28 /* Info.plist */,
 				69DA582B2A96FEA0009CEA28 /* Resource */,
 				69DA582A2A96FE74009CEA28 /* Features */,
 				69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */,
 				69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */,
 				69DA58032A96FCB1009CEA28 /* Assets.xcassets */,
+				69CA1D0B2A9AFB9700ED39A2 /* .gitignore */,
 			);
 			path = NiceFilmTicket;
 			sourceTree = "<group>";
@@ -153,8 +201,9 @@
 		69DA582D2A96FF27009CEA28 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				69DA57FE2A96FCB0009CEA28 /* AuthenticationViewController.swift */,
-				6951713E2A998A9300CC3F5D /* SignUpViewController.swift */,
+				69CA1CF72A9AE2E700ED39A2 /* UIComponent */,
+				69CA1CFF2A9AF0B800ED39A2 /* SignUp */,
+				69CA1CFE2A9AF0A500ED39A2 /* SignIn */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -177,6 +226,7 @@
 				69DA57F32A96FCB0009CEA28 /* Sources */,
 				69DA57F42A96FCB0009CEA28 /* Frameworks */,
 				69DA57F52A96FCB0009CEA28 /* Resources */,
+				69CA1CF32A9A482900ED39A2 /* firebase crashlytics */,
 			);
 			buildRules = (
 			);
@@ -185,6 +235,7 @@
 			name = NiceFilmTicket;
 			packageProductDependencies = (
 				69DA58372A97C5C1009CEA28 /* SnapKit */,
+				69CA1CF52A9AD0AF00ED39A2 /* FirebaseCrashlytics */,
 			);
 			productName = NiceFilmTicket;
 			productReference = 69DA57F72A96FCB0009CEA28 /* NiceFilmTicket.app */;
@@ -260,6 +311,7 @@
 			mainGroup = 69DA57EE2A96FCB0009CEA28;
 			packageReferences = (
 				69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				69CA1CF42A9AD0AF00ED39A2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 69DA57F82A96FCB0009CEA28 /* Products */;
 			projectDirPath = "";
@@ -277,6 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69CA1D0C2A9AFB9700ED39A2 /* .gitignore in Resources */,
 				69DA58072A96FCB1009CEA28 /* LaunchScreen.storyboard in Resources */,
 				69DA58042A96FCB1009CEA28 /* Assets.xcassets in Resources */,
 				69DA58022A96FCB0009CEA28 /* Main.storyboard in Resources */,
@@ -299,16 +352,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		69CA1CF32A9A482900ED39A2 /* firebase crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"$(SRCROOT)/${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(EXECUTABLE_PATH)",
+			);
+			name = "firebase crashlytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		69DA57F32A96FCB0009CEA28 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				69DA57FF2A96FCB0009CEA28 /* AuthenticationViewController.swift in Sources */,
+				69CA1D032A9AF38100ED39A2 /* AuthenticationUIButton.swift in Sources */,
 				69DA57FB2A96FCB0009CEA28 /* AppDelegate.swift in Sources */,
 				69DA57FD2A96FCB0009CEA28 /* SceneDelegate.swift in Sources */,
+				69CA1D012A9AF10700ED39A2 /* FindIdPwUILabel.swift in Sources */,
 				69DA58352A97589F009CEA28 /* SplashViewController.swift in Sources */,
 				6951713F2A998A9300CC3F5D /* SignUpViewController.swift in Sources */,
+				69CA1CF92A9AE39100ED39A2 /* AuthenticationTextField.swift in Sources */,
+				69CA1D062A9AF58300ED39A2 /* MenuUILabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +568,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 26L95KN5AP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NiceFilmTicket/Info.plist;
@@ -654,6 +738,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		69CA1CF42A9AD0AF00ED39A2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -665,6 +757,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		69CA1CF52A9AD0AF00ED39A2 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 69CA1CF42A9AD0AF00ED39A2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
 		69DA58372A97C5C1009CEA28 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 69DA58362A97C5C0009CEA28 /* XCRemoteSwiftPackageReference "SnapKit" */;
