@@ -14,6 +14,7 @@
 		69CA1D032A9AF38100ED39A2 /* AuthenticationUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1D022A9AF38100ED39A2 /* AuthenticationUIButton.swift */; };
 		69CA1D062A9AF58300ED39A2 /* MenuUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69CA1D052A9AF58300ED39A2 /* MenuUILabel.swift */; };
 		69CA1D0C2A9AFB9700ED39A2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 69CA1D0B2A9AFB9700ED39A2 /* .gitignore */; };
+		69CA1D162A9B029C00ED39A2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 69CA1D152A9B029C00ED39A2 /* GoogleService-Info.plist */; };
 		69DA57FB2A96FCB0009CEA28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */; };
 		69DA57FD2A96FCB0009CEA28 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */; };
 		69DA57FF2A96FCB0009CEA28 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DA57FE2A96FCB0009CEA28 /* AuthenticationViewController.swift */; };
@@ -51,6 +52,7 @@
 		69CA1D022A9AF38100ED39A2 /* AuthenticationUIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationUIButton.swift; sourceTree = "<group>"; };
 		69CA1D052A9AF58300ED39A2 /* MenuUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuUILabel.swift; sourceTree = "<group>"; };
 		69CA1D0B2A9AFB9700ED39A2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		69CA1D152A9B029C00ED39A2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		69DA57F72A96FCB0009CEA28 /* NiceFilmTicket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceFilmTicket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69DA57FA2A96FCB0009CEA28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69DA57FC2A96FCB0009CEA28 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		69DA57F92A96FCB0009CEA28 /* NiceFilmTicket */ = {
 			isa = PBXGroup;
 			children = (
+				69CA1D152A9B029C00ED39A2 /* GoogleService-Info.plist */,
 				69CA1D042A9AF54E00ED39A2 /* CommonUIComponent */,
 				69DA58082A96FCB1009CEA28 /* Info.plist */,
 				69DA582B2A96FEA0009CEA28 /* Resource */,
@@ -331,6 +334,7 @@
 			files = (
 				69CA1D0C2A9AFB9700ED39A2 /* .gitignore in Resources */,
 				69DA58072A96FCB1009CEA28 /* LaunchScreen.storyboard in Resources */,
+				69CA1D162A9B029C00ED39A2 /* GoogleService-Info.plist in Resources */,
 				69DA58042A96FCB1009CEA28 /* Assets.xcassets in Resources */,
 				69DA58022A96FCB0009CEA28 /* Main.storyboard in Resources */,
 			);

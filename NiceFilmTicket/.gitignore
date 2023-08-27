@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=xcode,swift,swiftpackagemanager,swiftpm,firebase
 
 ### Firebase ###
-*.GoogleService-Info.plist
+NiceFilmTicket/GoogleService-Info.plist
 
 ### Swift ###
 # Xcode
