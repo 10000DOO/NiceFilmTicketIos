@@ -10,17 +10,22 @@ import SnapKit
 
 class SignUpViewController: UIViewController {
     
+    //leading쪽 공간 확보를 위한 뷰
+    var leadingSpace: UIView{
+        let view = UIView()
+        view.snp.makeConstraints { make in
+            make.width.equalTo(20)
+            make.height.equalTo(70)
+        }
+        return view
+    }
     lazy var logoImageView = UIImageView()
     lazy var signUpText = UILabel()
     lazy var scrollView = UIScrollView()
-    lazy var contentView = UIView()
-    lazy var emailCodeSendingButton = UIButton()
+    lazy var contentView = UIStackView()
+    lazy var emailStackView = UIStackView()
     lazy var emailTextField = UITextField()
-    lazy var idTextField = UITextField()
-    lazy var pwTextField = UITextField()
-    lazy var pwCheckTextField = UITextField()
-    lazy var nickNameTextField = UITextField()
-    lazy var signupButton = UIButton()
+    lazy var emailCodeSendingButton = UIButton()
     lazy var emailCodeTextField = UITextField()
     
     override func viewDidLoad() {
@@ -32,14 +37,21 @@ class SignUpViewController: UIViewController {
         configureLogoImageView()
         signUpLabel()
         configureScrollView(menu: signUpText)
-        sendEmailButton()
+        configureStackView()
         emailTextFieldFunc()
-        emailCodeTextFieldFunc()
-        idTextFieldFunc()
-        passwordTextField()
-        passwordCheckTextField()
-        nickNameTextFieldFunc()
-        authTextField()
+        //이메일 코드 입력 텍스트 필드
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  이메일 인증 코드", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        //아이디 입력 텍스트 필드
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  아이디", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        //비밀번호 입력 텍스트 필드
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        //비밀번호 확인 입력 텍스트 필드
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호 확인", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        //닉네임 입력 텍스트 필드
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  닉네임", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        
+        configSignUpButton(ui: AuthenticationUIButton(title: "Make Account", isHidden: false))
+        
         
         hideKeyboardWhenTappedAround()
     }
@@ -84,7 +96,6 @@ extension SignUpViewController {
     
     // 스크롤뷰 설정
     private func configureScrollView(menu: UILabel) {
-        scrollView = UIScrollView()
         scrollView.backgroundColor = .white
         scrollView.showsVerticalScrollIndicator = false
         view.addSubview(scrollView)
@@ -96,121 +107,156 @@ extension SignUpViewController {
             make.bottom.equalTo(view.snp.bottom)
             make.width.equalTo(view.snp.width)
         }
-        
-        contentView = UIView()
+    }
+    
+    //스택 뷰 설정
+    private func configureStackView() {
+        contentView.axis = .vertical
+        contentView.spacing = 20
         scrollView.addSubview(contentView)
         
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(530)
-        }
-    }
-    
-    private func sendEmailButton() {
-        //인증번호 발송 버튼
-        emailCodeSendingButton = AuthenticationUIButton(title: "인증번호 발송", isHidden: false)
-        //signupButton.addTarget(self, action: #selector(didTapSignupButton), for: .touchUpInside) //회원가입 버튼 눌렀을 때
-        emailCodeSendingButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        contentView.addSubview(emailCodeSendingButton)
-        
-        emailCodeSendingButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
-            make.width.equalTo(100)
-            make.height.equalTo(50)
+            make.trailing.equalTo(scrollView.frameLayoutGuide).inset(30)
         }
     }
     
     private func emailTextFieldFunc() {
-        //이메일 입력 텍스트 필드
+        emailStackView.axis = .horizontal
+        emailStackView.spacing = 10
+        
+        emailStackView.snp.makeConstraints { make in
+            make.height.equalTo(70)
+        }
+        
+        let includeValidationStackView = UIStackView()
+        includeValidationStackView.axis = .vertical
+        
+        let errorLabel: UILabel = {
+            let label = UILabel()
+            label.text = "에러"
+            label.textColor = .red
+            return label
+        }()
+        errorLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+        }
+        
+        let includeValidationStackView2 = UIStackView()
+        includeValidationStackView2.axis = .vertical
+        
+        let errorLabel2: UILabel = {
+            let label = UILabel()
+            label.text = ""
+            return label
+        }()
+        
+        errorLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+        }
+        
+        
+        // 이메일 입력 텍스트 필드 설정
         emailTextField = AuthenticationTextField(placeholder: "  이메일", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(emailTextField)
-
+        
         emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
             make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(emailCodeSendingButton.snp.leading).offset(-20)
+        }
+        
+        // 인증번호 발송 버튼 설정
+        emailCodeSendingButton = AuthenticationUIButton(title: "인증번호 발송", isHidden: false)
+        emailCodeSendingButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+        
+        emailCodeSendingButton.snp.makeConstraints { make in
+            make.width.equalTo(100)
+            make.height.equalTo(50)
+        }
+        
+        contentView.addArrangedSubview(emailStackView)
+        
+        // 이메일 필드와 에러 레이블을 vertical stack view에 추가
+        includeValidationStackView.addArrangedSubview(emailTextField)
+        includeValidationStackView.addArrangedSubview(errorLabel)
+        includeValidationStackView2.addArrangedSubview(emailCodeSendingButton)
+        includeValidationStackView2.addArrangedSubview(errorLabel2)
+        
+        // leading space와 validation stack view를 horizontal stack view에 추가
+        emailStackView.addArrangedSubview(leadingSpace)
+        emailStackView.addArrangedSubview(includeValidationStackView)
+        emailStackView.addArrangedSubview(includeValidationStackView2)
+    }
+    
+    
+    private func configTextFieldFunc(ui:UIView) {
+        let includeEmptyStackView = UIStackView()
+        includeEmptyStackView.axis = .horizontal
+        
+        let includeValidationStackView = UIStackView()
+        includeValidationStackView.axis = .vertical
+        
+        let leadingSpace: UIView = {
+            let view = UIView()
+            return view
+        }()
+        
+        let errorLabel: UILabel = {
+            let label = UILabel()
+            label.text = "에러"
+            label.textColor = .red
+            return label
+        }()
+        
+        ui.snp.makeConstraints { make in
+            make.height.equalTo(50)
+        }
+        
+        contentView.addArrangedSubview(includeEmptyStackView)
+        
+        // Add the space views and the text field to the stack view.
+        includeEmptyStackView.addArrangedSubview(leadingSpace)
+        includeValidationStackView.addArrangedSubview(ui)
+        includeValidationStackView.addArrangedSubview(errorLabel)
+        includeEmptyStackView.addArrangedSubview(includeValidationStackView)
+        
+        // Add constraints to the spaces.
+        leadingSpace.snp.makeConstraints { make in
+            make.width.equalTo(30) // Adjust this value as needed.
         }
     }
     
-    private func emailCodeTextFieldFunc() {
-        //이메일 코드 입력 텍스트 필드
-        emailCodeTextField = AuthenticationTextField(placeholder: "  이메일 인증 코드", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(emailCodeTextField)
-
-        emailCodeTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+    private func configSignUpButton(ui: UIButton) {
+        let SignUpButtonStackView = UIStackView()
+        SignUpButtonStackView.axis = .horizontal
+        
+        let leadingSpace: UIView = {
+            let view = UIView()
+            return view
+        }()
+        
+        let trailingSpace: UIView = {
+            let view = UIView()
+            return view
+        }()
+        
+        ui.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
         }
-    }
-
-    private func idTextFieldFunc() {
-        //아이디 입력 텍스트 필드
-        idTextField = AuthenticationTextField(placeholder: "  아이디", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(idTextField)
-
-        idTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailCodeTextField.snp.bottom).offset(20)
-            make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
+        
+        contentView.addArrangedSubview(SignUpButtonStackView)
+        
+        // Add the space views and the text field to the stack view.
+        SignUpButtonStackView.addArrangedSubview(leadingSpace)
+        SignUpButtonStackView.addArrangedSubview(ui)
+        SignUpButtonStackView.addArrangedSubview(trailingSpace)
+        
+        
+        // Add constraints to the spaces.
+        leadingSpace.snp.makeConstraints { make in
+            make.width.equalTo(80) // Adjust this value as needed.
         }
-    }
-
-    private func passwordTextField() {
-        //비밀번호 입력 텍스트 필드
-        pwTextField = AuthenticationTextField(placeholder: "  비밀번호", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(pwTextField)
-
-        pwTextField.snp.makeConstraints { make in
-            make.top.equalTo(idTextField.snp.bottom).offset(20)
-            make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
-        }
-    }
-
-    private func passwordCheckTextField() {
-        //비밀번호 확인 입력 텍스트 필드
-        pwCheckTextField = AuthenticationTextField(placeholder: "  비밀번호 확인", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(pwCheckTextField)
-
-        pwCheckTextField.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.bottom).offset(20)
-            make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
-        }
-    }
-
-    private func nickNameTextFieldFunc() {
-        //닉네임 입력 텍스트 필드
-        nickNameTextField = AuthenticationTextField(placeholder: "  닉네임", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20))
-        contentView.addSubview(nickNameTextField)
-
-        nickNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(pwCheckTextField.snp.bottom).offset(20)
-            make.height.equalTo(50)
-            make.leading.equalTo(contentView.snp.leading).inset(30)
-            make.trailing.equalTo(contentView.snp.trailing).inset(30)
-        }
-    }
-
-    private func authTextField() {
-        //회원가입 버튼
-        signupButton = AuthenticationUIButton(title: "Make Account", isHidden: false)
-        //signupButton.addTarget(self, action: #selector(didTapSignupButton), for: .touchUpInside) //회원가입 버튼 눌렀을 때
-        contentView.addSubview(signupButton)
-
-        signupButton.snp.makeConstraints { make in
-            make.top.equalTo(nickNameTextField.snp.bottom).offset(30)
-            make.centerX.equalTo(contentView.snp.centerX)
-            make.width.equalTo(220)
-            make.height.equalTo(50)
+        
+        trailingSpace.snp.makeConstraints { make in
+            make.width.equalTo(50) // Adjust this value as needed.
         }
     }
 }
