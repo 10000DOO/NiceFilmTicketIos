@@ -37,14 +37,14 @@ class SplashView: UIView {
         safeAreaView.layer.borderWidth = 8
         safeAreaView.layer.cornerRadius = 10
         safeAreaView.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
-         self.addSubview(safeAreaView)
+        self.addSubview(safeAreaView)
         
-         safeAreaView.snp.makeConstraints { make in
-             make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top :50 , left :50 , bottom :50 , right :50 ))
-         }
-     }
-
-     required init?(coder aDecoder : NSCoder ) {
-         fatalError("SplashView(coder:) has not been implemented")
-     }
+        safeAreaView.snp.makeConstraints { make in
+            make.edges.equalTo(self.safeAreaLayoutGuide).inset(UIEdgeInsets(top :50 , left :50 , bottom :50 , right :50 ))
+        }
+    }
+    
+    required init?(coder aDecoder : NSCoder ) {
+        fatalError("SplashView(coder:) has not been implemented")
+    }
 }

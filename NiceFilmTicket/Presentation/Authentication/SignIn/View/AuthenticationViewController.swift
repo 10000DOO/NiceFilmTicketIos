@@ -13,37 +13,37 @@ class AuthenticationViewController: UIViewController {
     private var authenticationView: AuthenticationView!
     
     override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            authenticationView = AuthenticationView(frame: view.bounds)
-            view.addSubview(authenticationView)
-            
-            setupGestureRecognizers()
-        }
+        super.viewDidLoad()
+        
+        authenticationView = AuthenticationView(frame: view.bounds)
+        view.addSubview(authenticationView)
+        
+        setupGestureRecognizers()
+    }
 }
 
 extension AuthenticationViewController {
     private func setupGestureRecognizers() {
-            // 개인 버튼 탭 제스처 인식기 생성 및 추가
-            let personalTextClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickPersonButton))
-            authenticationView.personalLoginText.addGestureRecognizer(personalTextClickRecognizer)
-            
-            let personalImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickPersonButton))
-            authenticationView.personalLoginImage.addGestureRecognizer(personalImageClickRecognizer)
-            
-             // 비지니스 버튼 탭 제스처 인식기 생성 및 추가
-             let businessTextClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
-             authenticationView.businessLoginText.addGestureRecognizer(businessTextClickRecognizer)
-
-             let businessImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
-             authenticationView.businessLoginImage.addGestureRecognizer(businessImageClickRecognizer)
-
-             // 회원가입 버튼 이벤트 설정
-             authenticationView.signupButton.addTarget(self, action: #selector(didTapSignupButton), for:.touchUpInside)
-             
-             // 키보드 내리기 설정
-             hideKeyboardWhenTappedAround()
-        }
+        // 개인 버튼 탭 제스처 인식기 생성 및 추가
+        let personalTextClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickPersonButton))
+        authenticationView.personalLoginText.addGestureRecognizer(personalTextClickRecognizer)
+        
+        let personalImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickPersonButton))
+        authenticationView.personalLoginImage.addGestureRecognizer(personalImageClickRecognizer)
+        
+        // 비지니스 버튼 탭 제스처 인식기 생성 및 추가
+        let businessTextClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
+        authenticationView.businessLoginText.addGestureRecognizer(businessTextClickRecognizer)
+        
+        let businessImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
+        authenticationView.businessLoginImage.addGestureRecognizer(businessImageClickRecognizer)
+        
+        // 회원가입 버튼 이벤트 설정
+        authenticationView.signupButton.addTarget(self, action: #selector(didTapSignupButton), for:.touchUpInside)
+        
+        // 키보드 내리기 설정
+        hideKeyboardWhenTappedAround()
+    }
     
     //개인 로그인으로 변경
     @objc private func clickPersonButton() {
@@ -63,7 +63,7 @@ extension AuthenticationViewController {
     
     //비즈니스 로그인으로 변경
     @objc private func clickBusinessButton() {
-
+        
         authenticationView.businessLoginImage.image = UIImage(systemName: "bag.fill")
         authenticationView.personalLoginImage.image = UIImage(systemName: "person")
         authenticationView.kakaoImageView.isHidden = true

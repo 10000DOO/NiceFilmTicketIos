@@ -4,11 +4,11 @@
 //
 //  Created by 10000DOO on 2023/08/29.
 //
-
 import UIKit
+import SnapKit
 
 class AuthenticationView: UIView {
-
+    
     lazy var personalLoginImage = UIImageView()
     lazy var businessLoginImage = UIImageView()
     lazy var kakaoImageView = UIImageView()
@@ -25,7 +25,7 @@ class AuthenticationView: UIView {
     lazy var contentView = UIView()
     lazy var personalLoginText = UILabel()
     lazy var businessLoginText = UILabel()
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
@@ -46,8 +46,8 @@ class AuthenticationView: UIView {
     }
     
     required init?(coder aDecoder : NSCoder ) {
-           fatalError("AuthenticationView(coder:) has not been implemented")
-       }
+        fatalError("AuthenticationView(coder:) has not been implemented")
+    }
 }
 
 extension AuthenticationView {
