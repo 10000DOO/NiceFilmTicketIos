@@ -38,17 +38,17 @@ class SignUpViewController: UIViewController {
         signUpLabel()
         configureScrollView(menu: signUpText)
         configureStackView()
-        emailTextFieldFunc()
+        emailTextFieldFunc(errorHidden: true)
         //이메일 코드 입력 텍스트 필드
-        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  이메일 인증 코드", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  이메일 인증 코드", isSecureTextEntry: false, backgroundColor: .clear, isHidden: true, font: UIFont.systemFont(ofSize: 20)), errorHidden: true)
         //아이디 입력 텍스트 필드
-        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  아이디", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  아이디", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)), errorHidden: true)
         //비밀번호 입력 텍스트 필드
-        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)), errorHidden: true)
         //비밀번호 확인 입력 텍스트 필드
-        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호 확인", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  비밀번호 확인", isSecureTextEntry: true, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)), errorHidden: true)
         //닉네임 입력 텍스트 필드
-        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  닉네임", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)))
+        configTextFieldFunc(ui: AuthenticationTextField(placeholder: "  닉네임", isSecureTextEntry: false, backgroundColor: .clear, isHidden: false, font: UIFont.systemFont(ofSize: 20)), errorHidden: true)
         
         configSignUpButton(ui: AuthenticationUIButton(title: "Make Account", isHidden: false))
         
@@ -121,12 +121,24 @@ extension SignUpViewController {
         }
     }
     
-    private func emailTextFieldFunc() {
+    private func emailTextFieldFunc(errorHidden: Bool) {
         emailStackView.axis = .horizontal
         emailStackView.spacing = 10
         
-        emailStackView.snp.makeConstraints { make in
-            make.height.equalTo(70)
+        if errorHidden {
+            leadingSpace.snp.updateConstraints { make in
+                make.height.equalTo(50)
+            }
+            emailStackView.snp.makeConstraints { make in
+                make.height.equalTo(50)
+            }
+        } else {
+            leadingSpace.snp.updateConstraints { make in
+                make.height.equalTo(70)
+            }
+            emailStackView.snp.makeConstraints { make in
+                make.height.equalTo(70)
+            }
         }
         
         let includeValidationStackView = UIStackView()
@@ -176,9 +188,16 @@ extension SignUpViewController {
         
         // 이메일 필드와 에러 레이블을 vertical stack view에 추가
         includeValidationStackView.addArrangedSubview(emailTextField)
-        includeValidationStackView.addArrangedSubview(errorLabel)
+        
+        if !errorHidden {
+            includeValidationStackView.addArrangedSubview(errorLabel)
+        }
+        
         includeValidationStackView2.addArrangedSubview(emailCodeSendingButton)
-        includeValidationStackView2.addArrangedSubview(errorLabel2)
+        
+        if !errorHidden {
+            includeValidationStackView2.addArrangedSubview(errorLabel2)
+        }
         
         // leading space와 validation stack view를 horizontal stack view에 추가
         emailStackView.addArrangedSubview(leadingSpace)
@@ -187,7 +206,7 @@ extension SignUpViewController {
     }
     
     
-    private func configTextFieldFunc(ui:UIView) {
+    private func configTextFieldFunc(ui:UIView, errorHidden: Bool) {
         let includeEmptyStackView = UIStackView()
         includeEmptyStackView.axis = .horizontal
         
@@ -199,10 +218,16 @@ extension SignUpViewController {
             return view
         }()
         
+        // Add constraints to the spaces.
+        leadingSpace.snp.makeConstraints { make in
+            make.width.equalTo(30) // Adjust this value as needed.
+        }
+        
         let errorLabel: UILabel = {
             let label = UILabel()
             label.text = "에러"
             label.textColor = .red
+            label.isHidden = errorHidden
             return label
         }()
         
@@ -210,17 +235,14 @@ extension SignUpViewController {
             make.height.equalTo(50)
         }
         
-        contentView.addArrangedSubview(includeEmptyStackView)
-        
-        // Add the space views and the text field to the stack view.
-        includeEmptyStackView.addArrangedSubview(leadingSpace)
-        includeValidationStackView.addArrangedSubview(ui)
-        includeValidationStackView.addArrangedSubview(errorLabel)
-        includeEmptyStackView.addArrangedSubview(includeValidationStackView)
-        
-        // Add constraints to the spaces.
-        leadingSpace.snp.makeConstraints { make in
-            make.width.equalTo(30) // Adjust this value as needed.
+        if !(ui.isHidden && errorHidden) {
+            contentView.addArrangedSubview(includeEmptyStackView)
+            
+            // Add the space views and the text field to the stack view.
+            includeEmptyStackView.addArrangedSubview(leadingSpace)
+            includeValidationStackView.addArrangedSubview(ui)
+            includeValidationStackView.addArrangedSubview(errorLabel)
+            includeEmptyStackView.addArrangedSubview(includeValidationStackView)
         }
     }
     
