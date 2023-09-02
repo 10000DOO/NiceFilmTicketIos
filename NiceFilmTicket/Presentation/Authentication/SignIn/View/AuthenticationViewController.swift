@@ -80,7 +80,7 @@ extension AuthenticationViewController {
     
     //회원가입 뷰로 이동
     @objc private func didTapSignupButton() {
-        let signUpVC = SignUpViewController()
+        let signUpVC = SignUpViewController(emailSendingViewModel: EmailSendingViewModel(emailService: EmailService(emailRepository: EmailRepository())))
         self.navigationController?.pushViewController(signUpVC, animated: false)
     }
     

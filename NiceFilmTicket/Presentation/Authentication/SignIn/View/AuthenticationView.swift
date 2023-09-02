@@ -164,7 +164,7 @@ extension AuthenticationView {
         
         idTextField.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.top.equalTo(businessLoginImage.snp.bottom).offset(25)
+            make.top.equalTo(businessLoginImage.snp.bottom).offset(40)
             make.leading.equalTo(contentView.snp.leading).inset(30)
             make.trailing.equalTo(contentView.snp.trailing).inset(30)
         }
@@ -176,7 +176,7 @@ extension AuthenticationView {
         contentView.addSubview(pwTextField)
         
         pwTextField.snp.makeConstraints { make in
-            make.top.equalTo(idTextField.snp.bottom).offset(20)
+            make.top.equalTo(idTextField.snp.bottom).offset(30)
             make.height.equalTo(50)
             make.leading.equalTo(contentView.snp.leading).inset(30)
             make.trailing.equalTo(contentView.snp.trailing).inset(30)
@@ -189,7 +189,7 @@ extension AuthenticationView {
         contentView.addSubview(loginButton)
         
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.bottom).offset(20)
+            make.top.equalTo(pwTextField.snp.bottom).offset(40)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(150)
             make.height.equalTo(40)
@@ -203,7 +203,7 @@ extension AuthenticationView {
         contentView.addSubview(orDivider)
         
         orDivider.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(30)
+            make.top.equalTo(loginButton.snp.bottom).offset(40)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(280)
             make.height.equalTo(10)
@@ -216,7 +216,7 @@ extension AuthenticationView {
         contentView.addSubview(signupButton)
         
         signupButton.snp.makeConstraints { make in
-            make.top.equalTo(orDivider.snp.bottom).offset(30)
+            make.top.equalTo(orDivider.snp.bottom).offset(40)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(220)
             make.height.equalTo(50)
