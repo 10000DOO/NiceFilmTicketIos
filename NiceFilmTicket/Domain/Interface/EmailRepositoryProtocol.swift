@@ -9,4 +9,6 @@ import Foundation
 
 protocol EmailRepositoryProtocol {
     func sendEmail(email: EmailSendingReq, completion: @escaping (Result<EmailSendingRes, ErrorResponse>) -> Void)
+    
+    func emailDuplicateCheck(email: String, completion: @escaping (Result<EmailDuplicateTestRes, ErrorResponse>) -> Void)
 }

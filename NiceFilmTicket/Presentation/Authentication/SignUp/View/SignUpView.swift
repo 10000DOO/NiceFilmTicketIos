@@ -178,6 +178,7 @@ extension SignUpView {
         emailStackView.addArrangedSubview(includeValidationStackView2)
     }
     
+    //이메일 코드
     func emailCodeTextFieldFunc(ui: UIView, errorLabel: UILabel) {
         emailCodeStackView.axis = .horizontal
         

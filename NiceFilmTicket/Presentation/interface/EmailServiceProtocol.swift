@@ -9,7 +9,9 @@ import Foundation
 
 protocol EmailServiceProtocol {
     
-    func sendEmail(email: String, completion: @escaping (Int) -> Void)
+    func sendEmail(email: String, completion: @escaping (String) -> Void)
     
     func isEmailValid(email: String) -> Bool
+    
+    func emailDuplicateCheck(email: String, completion: @escaping (String) -> Void)
 }

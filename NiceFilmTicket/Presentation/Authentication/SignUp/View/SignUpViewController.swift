@@ -26,6 +26,7 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        signUpView.emailTextField.delegate = self
         view.addSubview(signUpView)
         
         signUpView.snp.makeConstraints { make in
@@ -39,7 +40,7 @@ class SignUpViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         
         hideKeyboardWhenTappedAround()
-
+        
     }
 }
 
@@ -66,15 +67,44 @@ extension SignUpViewController {
         emailSendingViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
             DispatchQueue.main.async {
                 if emailErrorMessage.isEmpty {
-                    self?.signUpView.emailTextField.resignFirstResponder()
-                    self?.signUpView.emailErrorLabel.textColor = .clear
                     self?.signUpView.emailCodeStackView.isHidden = false
+                    self?.signUpView.emailErrorLabel.textColor = .clear
                     self?.signUpView.emailTextField.isEnabled = false
-                } else {
+                    self?.signUpView.emailTextField.backgroundColor = .lightGray
+                }
+                if emailErrorMessage != ErrorMessage.availableEmail.message {
                     self?.signUpView.emailTextField.resignFirstResponder()
                     self?.signUpView.emailErrorLabel.textColor = .red
                     self?.signUpView.emailErrorLabel.text = emailErrorMessage
-                    self?.signUpView.emailCodeStackView.isHidden = true
+                }
+            }
+        }
+    }
+}
+
+extension SignUpViewController: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == self.signUpView.emailTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            emailSendingViewModel.emailDuplicateCheck(email: updatedText)
+            bindingEmailDuplicate()
+        }
+        return true
+    }
+    
+    func bindingEmailDuplicate() {
+        emailSendingViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
+            DispatchQueue.main.async {
+                if emailErrorMessage == ErrorMessage.availableEmail.message {
+                    self?.signUpView.emailErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+                    self?.signUpView.emailErrorLabel.text = emailErrorMessage
+                } else {
+                    self?.signUpView.emailErrorLabel.textColor = .red
+                    self?.signUpView.emailErrorLabel.text = emailErrorMessage
                 }
             }
         }
