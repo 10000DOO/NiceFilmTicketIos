@@ -98,7 +98,7 @@ class SignUpService: SignUpServiceProtocol {
         }
     }
     
-    func passwordDuplicateCheck(password: String, completion: @escaping (String) -> Void) {
+    func passwordPatternCheck(password: String, completion: @escaping (String) -> Void) {
         if isValidPassword(password: password) {
             completion(ErrorMessage.availablePassword.message)
         } else {

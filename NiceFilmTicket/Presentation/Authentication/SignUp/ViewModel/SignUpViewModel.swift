@@ -49,7 +49,7 @@ class SignUpViewModel: ObservableObject {
     }
     
     func passwordDuplicateCheck(password: String) {
-        signUpService.passwordDuplicateCheck(password: password) { [weak self] message in
+        signUpService.passwordPatternCheck(password: password) { [weak self] message in
             self?.passwordError = message
         }
     }
