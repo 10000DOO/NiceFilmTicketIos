@@ -17,6 +17,8 @@ protocol SignUpServiceProtocol {
     
     func passwordPatternCheck(password: String, completion: @escaping (String) -> Void)
     
+    func passwordMatchingCheck(password: String, passwordForCheck: String, completion: @escaping (String) -> Void)
+    
     func isValidLoginId(loginId: String) -> Bool
     
     func isValidNickName(nickName: String) -> Bool

@@ -101,9 +101,20 @@ class SignUpService: SignUpServiceProtocol {
     func passwordPatternCheck(password: String, completion: @escaping (String) -> Void) {
         if isValidPassword(password: password) {
             completion(ErrorMessage.availablePassword.message)
+            print(ErrorMessage.availablePassword.message)
         } else {
             completion(ErrorMessage.wrongPasswordPattern.message) // 에러 메시지 설정
             print(ErrorMessage.wrongPasswordPattern.message)
+        }
+    }
+    
+    func passwordMatchingCheck(password: String, passwordForCheck: String, completion: @escaping (String) -> Void) {
+        if password == passwordForCheck {
+            completion(ErrorMessage.passwordMatching.message)
+            print(ErrorMessage.passwordMatching.message)
+        } else {
+            completion(ErrorMessage.passwordNotMatching.message) // 에러 메시지 설정
+            print(ErrorMessage.passwordNotMatching.message)
         }
     }
     

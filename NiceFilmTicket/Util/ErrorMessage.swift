@@ -20,6 +20,8 @@ enum ErrorMessage: String {
     case wrongLoginIdPattern = "잘못된 아이디 형식입니다."
     case wrongNickNamePattern = "잘못된 닉네임 형식입니다."
     case wrongPasswordPattern = "대소문자,숫자,특수문자 포함 8~20자리입니다."
+    case passwordMatching = "비밀번호가 일치합니다."
+    case passwordNotMatching = "비밀번호가 일치하지 않습니다."
     
     var message: String {
         return rawValue

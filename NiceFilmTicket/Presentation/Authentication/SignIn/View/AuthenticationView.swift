@@ -86,7 +86,7 @@ extension AuthenticationView {
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView.contentLayoutGuide)
             make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(580)
+            make.height.equalTo(640)
         }
     }
     
@@ -246,32 +246,6 @@ extension AuthenticationView {
         findId.snp.makeConstraints { make in
             make.trailing.equalTo(dividerLine.snp.leading).offset(-65)
             make.top.equalTo(signupButton.snp.bottom).offset(100)
-        }
-    }
-    
-    // 스크롤뷰 설정
-    private func configureScrollView(logoImgView: UIImageView) {
-        scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
-        scrollView.isScrollEnabled = false
-        scrollView.showsVerticalScrollIndicator = false
-        self.addSubview(scrollView)
-        
-        scrollView.snp.makeConstraints { make in
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
-            make.top.equalTo(logoImgView.snp.bottom) // logoImageView 아래에서 시작
-            make.bottom.equalTo(self.snp.bottom)
-            make.width.equalTo(self.snp.width)
-        }
-        
-        contentView = UIView()
-        scrollView.addSubview(contentView)
-        
-        contentView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(580)
         }
     }
     

@@ -267,6 +267,7 @@ extension SignUpView {
             return view
         }()
         
+        ui.backgroundColor = .darkGray
         ui.snp.makeConstraints { make in
             make.height.equalTo(50)
         }

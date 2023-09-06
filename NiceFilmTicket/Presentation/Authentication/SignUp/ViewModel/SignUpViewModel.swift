@@ -25,12 +25,14 @@ class SignUpViewModel: ObservableObject {
     }
     
     func loginIdDuplicateCheck(loginId: String) {
+        self.loginId = loginId
         signUpService.loginIdDuplicateCheck(loginId: loginId) { [weak self] message in
             self?.loginIdError = message
         }
     }
     
     func nickNameDuplicateCheck(nickName: String) {
+        self.nickName = nickName
         signUpService.nickNameDuplicateCheck(nickName: nickName) { [weak self] message in
             self?.nickNameError = message
         }
@@ -48,15 +50,33 @@ class SignUpViewModel: ObservableObject {
         }.store(in: &store)
     }
     
-    func passwordDuplicateCheck(password: String) {
+    func passwordPatternCheck(password: String) {
+        self.password = password
         signUpService.passwordPatternCheck(password: password) { [weak self] message in
             self?.passwordError = message
+        }
+        
+        signUpService.passwordMatchingCheck(password: password, passwordForCheck: passwordCheck) { [weak self] message in
+            self?.passwordCheckError = message
         }
     }
     
     func subscribeToPasswordError(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
         $passwordError.sink { passwordError in
             completion(passwordError)
+        }.store(in: &store)
+    }
+    
+    func passwordMatching(passwordForCheck: String) {
+        self.passwordCheck = passwordForCheck
+        signUpService.passwordMatchingCheck(password: password, passwordForCheck: passwordForCheck) { [weak self] message in
+            self?.passwordCheckError = message
+        }
+    }
+    
+    func subscribeToPasswordMatchingError(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
+        $passwordCheckError.sink { passwordMatchingError in
+            completion(passwordMatchingError)
         }.store(in: &store)
     }
 }

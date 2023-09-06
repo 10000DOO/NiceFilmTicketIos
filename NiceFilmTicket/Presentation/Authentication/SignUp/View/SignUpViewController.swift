@@ -32,7 +32,11 @@ class SignUpViewController: UIViewController {
         signUpView.idTextField.delegate = self
         signUpView.nicknameTextField.delegate = self
         signUpView.pwTextField.delegate = self
+        signUpView.pwCheckTextField.delegate = self
         view.addSubview(signUpView)
+        
+        signUpView.pwTextField.textContentType = .oneTimeCode
+        signUpView.pwCheckTextField.textContentType = .oneTimeCode
         
         signUpView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -121,8 +125,18 @@ extension SignUpViewController: UITextFieldDelegate {
             guard let stringRange = Range(range, in: currentText) else { return false }
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
             
-            signUpViewModel.passwordDuplicateCheck(password: updatedText)
-            bindingPasswordDuplicate()
+            signUpViewModel.passwordPatternCheck(password: updatedText)
+            bindingPasswordPattern()
+            bindingPasswordCheck()
+        }
+        
+        if textField == self.signUpView.pwCheckTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.passwordMatching(passwordForCheck: updatedText)
+            bindingPasswordCheck()
         }
         return true
     }
@@ -169,7 +183,7 @@ extension SignUpViewController: UITextFieldDelegate {
         }
     }
     
-    func bindingPasswordDuplicate() {
+    func bindingPasswordPattern() {
         signUpViewModel.subscribeToPasswordError(store: &cancellables) { [weak self] passwordErrorMessage in
             DispatchQueue.main.async {
                 if passwordErrorMessage == ErrorMessage.availablePassword.message {
@@ -178,6 +192,21 @@ extension SignUpViewController: UITextFieldDelegate {
                 } else {
                     self?.signUpView.pwErrorLabel.textColor = .red
                     self?.signUpView.pwErrorLabel.text = passwordErrorMessage
+                }
+            }
+        }
+    }
+    
+    //비밀번호 일치 확인
+    func bindingPasswordCheck() {
+        signUpViewModel.subscribeToPasswordMatchingError(store: &cancellables) { [weak self] passwordMatchingError in
+            DispatchQueue.main.async {
+                if passwordMatchingError == ErrorMessage.passwordMatching.message {
+                    self?.signUpView.pwCheckErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+                    self?.signUpView.pwCheckErrorLabel.text = passwordMatchingError
+                } else {
+                    self?.signUpView.pwCheckErrorLabel.textColor = .red
+                    self?.signUpView.pwCheckErrorLabel.text = passwordMatchingError
                 }
             }
         }
