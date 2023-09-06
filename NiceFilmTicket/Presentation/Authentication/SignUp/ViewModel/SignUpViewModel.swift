@@ -47,4 +47,16 @@ class SignUpViewModel: ObservableObject {
             completion(nickNameError)
         }.store(in: &store)
     }
+    
+    func passwordDuplicateCheck(password: String) {
+        signUpService.passwordDuplicateCheck(password: password) { [weak self] message in
+            self?.passwordError = message
+        }
+    }
+    
+    func subscribeToPasswordError(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
+        $passwordError.sink { passwordError in
+            completion(passwordError)
+        }.store(in: &store)
+    }
 }

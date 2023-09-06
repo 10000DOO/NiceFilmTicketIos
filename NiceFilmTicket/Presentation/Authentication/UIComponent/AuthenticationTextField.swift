@@ -20,6 +20,7 @@ class AuthenticationTextField: UITextField {
         self.isSecureTextEntry = isSecureTextEntry
         self.placeholder = " \(placeholder)"
         self.isHidden = isHidden
+        self.autocapitalizationType = .none
     }
     
     required init?(coder aDecoder: NSCoder) {

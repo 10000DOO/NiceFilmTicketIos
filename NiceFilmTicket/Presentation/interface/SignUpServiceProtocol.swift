@@ -15,7 +15,11 @@ protocol SignUpServiceProtocol {
     
     func nickNameDuplicateCheck(nickName: String, completion: @escaping (String) -> Void)
     
+    func passwordDuplicateCheck(password: String, completion: @escaping (String) -> Void)
+    
     func isValidLoginId(loginId: String) -> Bool
     
     func isValidNickName(nickName: String) -> Bool
+    
+    func isValidPassword(password: String) -> Bool
 }

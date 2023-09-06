@@ -98,6 +98,15 @@ class SignUpService: SignUpServiceProtocol {
         }
     }
     
+    func passwordDuplicateCheck(password: String, completion: @escaping (String) -> Void) {
+        if isValidPassword(password: password) {
+            completion(ErrorMessage.availablePassword.message)
+        } else {
+            completion(ErrorMessage.wrongPasswordPattern.message) // 에러 메시지 설정
+            print(ErrorMessage.wrongPasswordPattern.message)
+        }
+    }
+    
     func isValidLoginId(loginId: String) -> Bool {
         let loginIdRegex = "^.{5,20}$"
         let loginIdPredicate = NSPredicate(format: "SELF MATCHES %@", loginIdRegex)
@@ -108,5 +117,11 @@ class SignUpService: SignUpServiceProtocol {
         let nickNameRegex = "^.{1,20}$"
         let nickNamePredicate = NSPredicate(format: "SELF MATCHES %@", nickNameRegex)
         return nickNamePredicate.evaluate(with: nickName)
+    }
+    
+    func isValidPassword(password: String) -> Bool {
+        let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[-_.~!@<>()$*?])[A-Za-z\\d-_.~!@<>()$*?]{8,20}$"
+        let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
+        return passwordPredicate.evaluate(with: password)
     }
 }

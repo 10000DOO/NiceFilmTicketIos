@@ -31,6 +31,7 @@ class SignUpViewController: UIViewController {
         signUpView.emailTextField.delegate = self
         signUpView.idTextField.delegate = self
         signUpView.nicknameTextField.delegate = self
+        signUpView.pwTextField.delegate = self
         view.addSubview(signUpView)
         
         signUpView.snp.makeConstraints { make in
@@ -114,6 +115,15 @@ extension SignUpViewController: UITextFieldDelegate {
             signUpViewModel.nickNameDuplicateCheck(nickName: updatedText)
             bindingNickNameDuplicate()
         }
+        
+        if textField == self.signUpView.pwTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.passwordDuplicateCheck(password: updatedText)
+            bindingPasswordDuplicate()
+        }
         return true
     }
     
@@ -154,6 +164,20 @@ extension SignUpViewController: UITextFieldDelegate {
                 } else {
                     self?.signUpView.nicknameErrorLabel.textColor = .red
                     self?.signUpView.nicknameErrorLabel.text = nickNameErrorMessage
+                }
+            }
+        }
+    }
+    
+    func bindingPasswordDuplicate() {
+        signUpViewModel.subscribeToPasswordError(store: &cancellables) { [weak self] passwordErrorMessage in
+            DispatchQueue.main.async {
+                if passwordErrorMessage == ErrorMessage.availablePassword.message {
+                    self?.signUpView.pwErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+                    self?.signUpView.pwErrorLabel.text = passwordErrorMessage
+                } else {
+                    self?.signUpView.pwErrorLabel.textColor = .red
+                    self?.signUpView.pwErrorLabel.text = passwordErrorMessage
                 }
             }
         }
