@@ -8,14 +8,16 @@
 import Foundation
 import Combine
 
-class EmailSendingViewModel: ObservableObject {
+class EmailViewModel: ObservableObject {
     
     private let emailService: EmailServiceProtocol
+    private let signUpService: SignUpServiceProtocol
     @Published var email = ""
     @Published var emailError = ""
     
-    init(emailService: EmailServiceProtocol) {
+    init(emailService: EmailServiceProtocol, signUpService: SignUpServiceProtocol) {
         self.emailService = emailService
+        self.signUpService = signUpService
     }
     
     func sendEmail(email: String) {
@@ -31,7 +33,7 @@ class EmailSendingViewModel: ObservableObject {
     }
     
     func emailDuplicateCheck(email: String) {
-        emailService.emailDuplicateCheck(email: email) { [weak self] message in
+        signUpService.emailDuplicateCheck(email: email) { [weak self] message in
             self?.emailError = message
         }
     }

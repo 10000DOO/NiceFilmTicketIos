@@ -12,6 +12,4 @@ protocol EmailServiceProtocol {
     func sendEmail(email: String, completion: @escaping (String) -> Void)
     
     func isEmailValid(email: String) -> Bool
-    
-    func emailDuplicateCheck(email: String, completion: @escaping (String) -> Void)
 }

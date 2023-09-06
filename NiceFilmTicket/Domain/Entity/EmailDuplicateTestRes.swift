@@ -8,7 +8,7 @@
 import Foundation
 
 //200 정상
-struct EmailDuplicateTestRes: Codable {
+struct SignUpDuplicateTestRes: Codable {
     var status: Int
     var data: String
 }

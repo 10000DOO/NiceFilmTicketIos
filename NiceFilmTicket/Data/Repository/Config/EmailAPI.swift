@@ -8,10 +8,8 @@
 import Foundation
 import Moya
 
-
 enum EmailAPI{
     case sendEmail(email: EmailSendingReq)
-    case emailDuplicateTest(email: String)
 }
 
 extension EmailAPI: TargetType {
@@ -23,8 +21,6 @@ extension EmailAPI: TargetType {
         switch self {
         case .sendEmail:
             return "/email"
-        case .emailDuplicateTest:
-            return "/member/check/email"
         }
     }
     
@@ -32,8 +28,6 @@ extension EmailAPI: TargetType {
         switch self {
         case .sendEmail:
             return .post
-        case .emailDuplicateTest:
-            return .get
         }
     }
     
@@ -41,8 +35,6 @@ extension EmailAPI: TargetType {
         switch self {
         case .sendEmail(let emailSendingReq):
             return .requestJSONEncodable(emailSendingReq)
-        case .emailDuplicateTest(let email):
-            return .requestParameters(parameters: ["email": email], encoding: URLEncoding.queryString)
         }
     }
     
