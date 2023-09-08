@@ -9,9 +9,11 @@ import Foundation
 
 protocol SignUpRepositoryProtocol {
     
-    func emailDuplicateCheck(email: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void)
+    func emailDuplicateCheck(email: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
     
-    func loginIdDuplicateCheck(loginId: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void)
+    func loginIdDuplicateCheck(loginId: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
     
-    func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void)
+    func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
+    
+    func signUp(signUpReq: SignUpReq, emailCode: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
 }

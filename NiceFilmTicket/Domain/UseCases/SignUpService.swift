@@ -22,25 +22,20 @@ class SignUpService: SignUpServiceProtocol {
             signUpRepository.emailDuplicateCheck(email: email) { result in
                 switch result {
                 case .success(_):
-                    print("중복 X")
                     completion(ErrorMessage.availableEmail.message)
                 case .failure(let error):
                     switch error.status {
                     case 400:
-                        print("중복된 이메일")
                         completion(ErrorMessage.duplicateEmail.message)
                     case 500:
-                        print("이메일 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     default:
-                        print("이메일 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     }
                 }
             }
         } else {
             completion(ErrorMessage.wrongEmailPattern.message) // 에러 메시지 설정
-            print(ErrorMessage.wrongEmailPattern.message)
         }
     }
     
@@ -49,25 +44,20 @@ class SignUpService: SignUpServiceProtocol {
             signUpRepository.loginIdDuplicateCheck(loginId: loginId) { result in
                 switch result {
                 case .success(_):
-                    print("중복 X")
                     completion(ErrorMessage.availableLoginId.message)
                 case .failure(let error):
                     switch error.status {
                     case 400:
-                        print("중복된 아이디")
                         completion(ErrorMessage.duplicateLoginId.message)
                     case 500:
-                        print("아이디 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     default:
-                        print("아이디 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     }
                 }
             }
         } else {
             completion(ErrorMessage.wrongLoginIdPattern.message) // 에러 메시지 설정
-            print(ErrorMessage.wrongLoginIdPattern.message)
         }
     }
     
@@ -76,45 +66,36 @@ class SignUpService: SignUpServiceProtocol {
             signUpRepository.nickNameDuplicateCheck(nickName: nickName) { result in
                 switch result {
                 case .success(_):
-                    print("중복 X")
                     completion(ErrorMessage.availableNickName.message)
                 case .failure(let error):
                     switch error.status {
                     case 400:
-                        print("중복된 닉네임")
                         completion(ErrorMessage.duplicateNickName.message)
                     case 500:
-                        print("닉네임 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     default:
-                        print("닉네임 중복 검사 실패")
                         completion(ErrorMessage.serverError.message)
                     }
                 }
             }
         } else {
             completion(ErrorMessage.wrongNickNamePattern.message) // 에러 메시지 설정
-            print(ErrorMessage.wrongNickNamePattern.message)
         }
     }
     
     func passwordPatternCheck(password: String, completion: @escaping (String) -> Void) {
         if isValidPassword(password: password) {
             completion(ErrorMessage.availablePassword.message)
-            print(ErrorMessage.availablePassword.message)
         } else {
             completion(ErrorMessage.wrongPasswordPattern.message) // 에러 메시지 설정
-            print(ErrorMessage.wrongPasswordPattern.message)
         }
     }
     
     func passwordMatchingCheck(password: String, passwordForCheck: String, completion: @escaping (String) -> Void) {
         if password == passwordForCheck {
             completion(ErrorMessage.passwordMatching.message)
-            print(ErrorMessage.passwordMatching.message)
         } else {
             completion(ErrorMessage.passwordNotMatching.message) // 에러 메시지 설정
-            print(ErrorMessage.passwordNotMatching.message)
         }
     }
     
@@ -134,5 +115,56 @@ class SignUpService: SignUpServiceProtocol {
         let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[-_.~!@<>()$*?])[A-Za-z\\d-_.~!@<>()$*?]{8,20}$"
         let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         return passwordPredicate.evaluate(with: password)
+    }
+    
+    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, completion: @escaping (SignUpRes) -> Void) {
+        let signUpReq = SignUpReq(loginId: loginId, password: password, publisherName: nickName, email: email)
+        signUpRepository.signUp(signUpReq: signUpReq, emailCode: emailCode) { result in
+            switch result {
+            case .success(_):
+                var signUpRes = SignUpRes()
+                signUpRes.statusCode = 200
+                completion(signUpRes)
+            case .failure(let error):
+                switch error.status {
+                case 400:
+                    var signUpRes = SignUpRes()
+                    signUpRes.statusCode = 400
+                    for element in error.error {
+                        if element.error.contains("이메일") {
+                            signUpRes.email = ErrorMessage.checkEmailAgain.message
+                            continue
+                        }
+                        if element.error.contains("코드") {
+                            signUpRes.emailCode = ErrorMessage.checkEmailCodeAgain.message
+                            continue
+                        }
+                        if element.error.contains("아이디") {
+                            signUpRes.loginId = ErrorMessage.checkLoginIdAgain.message
+                            continue
+                        }
+                        if element.error.contains("비밀번호") {
+                            signUpRes.password = ErrorMessage.checkPasswordAgain.message
+                            continue
+                        }
+                        if element.error.contains("이름") {
+                            signUpRes.nickName = ErrorMessage.checkNickNameAgain.message
+                            continue
+                        }
+                    }
+                    completion(signUpRes)
+                case 500:
+                    var signUpRes = SignUpRes()
+                    signUpRes.statusCode = 500
+                    signUpRes.serverError = ErrorMessage.serverError.message
+                    completion(signUpRes)
+                default:
+                    var signUpRes = SignUpRes()
+                    signUpRes.statusCode = 500
+                    signUpRes.serverError = ErrorMessage.serverError.message
+                    completion(signUpRes)
+                }
+            }
+        }
     }
 }

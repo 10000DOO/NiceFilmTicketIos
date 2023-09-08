@@ -12,6 +12,7 @@ enum SignUpAPI{
     case loginIdDuplicateTest(loginId: String)
     case emailDuplicateTest(email: String)
     case nickNameDuplicateTest(nickName: String)
+    case signUpReq(signUpReq: SignUpReq, emailCode: String)
 }
 
 extension SignUpAPI: TargetType {
@@ -27,6 +28,8 @@ extension SignUpAPI: TargetType {
             return "/member/check/email"
         case .nickNameDuplicateTest:
             return "/member/check/username"
+        case .signUpReq:
+            return "/signup"
         }
     }
     
@@ -38,6 +41,8 @@ extension SignUpAPI: TargetType {
             return .get
         case .nickNameDuplicateTest:
             return .get
+        case .signUpReq:
+            return .post
         }
     }
     
@@ -49,10 +54,13 @@ extension SignUpAPI: TargetType {
             return .requestParameters(parameters: ["email": email], encoding: URLEncoding.queryString)
         case .nickNameDuplicateTest(let nickName):
             return .requestParameters(parameters: ["username": nickName], encoding: URLEncoding.queryString)
+        case .signUpReq(let signUpReq, let emailCode):
+            let encoded = try! JSONEncoder().encode(signUpReq)
+            return .requestCompositeData(bodyData: encoded, urlParameters: ["code": emailCode])
         }
     }
     
     var headers: [String : String]? {
-        return nil
+        return ["Content-Type": "application/json"]
     }
 }

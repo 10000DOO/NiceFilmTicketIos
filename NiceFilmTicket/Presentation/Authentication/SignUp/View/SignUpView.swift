@@ -266,8 +266,7 @@ extension SignUpView {
             let view = UIView()
             return view
         }()
-        
-        ui.backgroundColor = .darkGray
+    
         ui.snp.makeConstraints { make in
             make.height.equalTo(50)
         }

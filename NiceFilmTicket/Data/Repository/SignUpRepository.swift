@@ -12,17 +12,16 @@ class SignUpRepository: SignUpRepositoryProtocol {
     
     private let provider = MoyaProvider<SignUpAPI>()
     
-    func emailDuplicateCheck(email: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void) {
+    func emailDuplicateCheck(email: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
         provider.request(.emailDuplicateTest(email: email)) { result in
             switch result {
             case let .success(response):
                 switch response.statusCode {
                 case 200...299:
                     do {
-                        let result = try response.map(SignUpDuplicateTestRes.self)
+                        let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        print("이메일 중복 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
@@ -30,11 +29,9 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        print("이메일 중복 아닐 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    print("Unexpected Error status code: \(response.debugDescription)")
                     completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
@@ -44,7 +41,6 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let errorRes = try response.map(ErrorResponse.self)
                         completion(.failure(errorRes))
                     } catch {
-                        print("이메일 중복체크 실패 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 } else {
@@ -54,17 +50,16 @@ class SignUpRepository: SignUpRepositoryProtocol {
         }
     }
     
-    func loginIdDuplicateCheck(loginId: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void) {
+    func loginIdDuplicateCheck(loginId: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
         provider.request(.loginIdDuplicateTest(loginId: loginId)) { result in
             switch result {
             case let .success(response):
                 switch response.statusCode {
                 case 200...299:
                     do {
-                        let result = try response.map(SignUpDuplicateTestRes.self)
+                        let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        print("아이디 중복 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
@@ -72,11 +67,9 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        print("아이디 중복 아닐 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    print("Unexpected Error status code: \(response.debugDescription)")
                     completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
@@ -86,7 +79,6 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let errorRes = try response.map(ErrorResponse.self)
                         completion(.failure(errorRes))
                     } catch {
-                        print("아이디 중복체크 실패 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 } else {
@@ -96,17 +88,16 @@ class SignUpRepository: SignUpRepositoryProtocol {
         }
     }
     
-    func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<SignUpDuplicateTestRes, ErrorResponse>) -> Void) {
+    func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
         provider.request(.nickNameDuplicateTest(nickName: nickName)) { result in
             switch result {
             case let .success(response):
                 switch response.statusCode {
                 case 200...299:
                     do {
-                        let result = try response.map(SignUpDuplicateTestRes.self)
+                        let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        print("닉네임 중복 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
@@ -114,11 +105,9 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        print("닉네임 중복 아닐 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    print("Unexpected Error status code: \(response.debugDescription)")
                     completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
@@ -128,7 +117,44 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let errorRes = try response.map(ErrorResponse.self)
                         completion(.failure(errorRes))
                     } catch {
-                        print("닉네임 중복체크 실패 시 파싱 에러: \(error)")
+                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    }
+                } else {
+                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                }
+            }
+        }
+    }
+    
+    func signUp(signUpReq: SignUpReq, emailCode: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
+        provider.request(.signUpReq(signUpReq: signUpReq, emailCode: emailCode)) { result in
+            switch result {
+            case .success(let response):
+                switch response.statusCode {
+                case 200...299:
+                    do {
+                        let result = try response.map(CommonSuccessRes.self)
+                        completion(.success(result))
+                    } catch {
+                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    }
+                case 400...499:
+                    do {
+                        let result = try response.map(ErrorResponse.self)
+                        completion(.failure(result))
+                    } catch {
+                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    }
+                default:
+                    completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                }
+            case .failure(let error):
+                if case .statusCode(let response) = error,
+                   500...599 ~= response.statusCode {
+                    do {
+                        let errorRes = try response.map(ErrorResponse.self)
+                        completion(.failure(errorRes))
+                    } catch {
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 } else {

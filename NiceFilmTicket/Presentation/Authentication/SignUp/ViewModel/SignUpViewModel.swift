@@ -11,6 +11,11 @@ import Combine
 class SignUpViewModel: ObservableObject {
     
     private let signUpService: SignUpServiceProtocol
+    private let emailService: EmailServiceProtocol
+    @Published var email = ""
+    @Published var emailError = ""
+    @Published var emailCode = ""
+    @Published var emailCodeError = ""
     @Published var loginId = ""
     @Published var loginIdError = ""
     @Published var password = ""
@@ -19,9 +24,29 @@ class SignUpViewModel: ObservableObject {
     @Published var passwordCheckError = ""
     @Published var nickName = ""
     @Published var nickNameError = ""
+    @Published var signUpSuccess = false
     
-    init(signUpService: SignUpServiceProtocol) {
+    init(signUpService: SignUpServiceProtocol, emailService: EmailServiceProtocol) {
         self.signUpService = signUpService
+        self.emailService = emailService
+    }
+    
+    func sendEmail(email: String) {
+        emailService.sendEmail(email: email) { [weak self] message in
+            self?.emailError = message
+        }
+    }
+    
+    func subscribeToEmailError(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
+        $emailError.sink { emailError in
+            completion(emailError)
+        }.store(in: &store)
+    }
+    
+    func emailDuplicateCheck(email: String) {
+        signUpService.emailDuplicateCheck(email: email) { [weak self] message in
+            self?.emailError = message
+        }
     }
     
     func loginIdDuplicateCheck(loginId: String) {
@@ -78,5 +103,43 @@ class SignUpViewModel: ObservableObject {
         $passwordCheckError.sink { passwordMatchingError in
             completion(passwordMatchingError)
         }.store(in: &store)
+    }
+    
+    func subscribeToEmailCodeError(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
+        $emailCodeError.sink { emailCodeError in
+            completion(emailCodeError)
+        }.store(in: &store)
+    }
+    
+    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String) {
+        signUpService.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName) { [weak self] response in
+            if response.serverError.isEmpty {
+                if response.statusCode == 200 {
+                    self?.signUpSuccess = true
+                }
+                if response.statusCode == 400 {
+                    if !response.email.isEmpty {
+                        self?.emailError = response.email
+                    }
+                    if !response.emailCode.isEmpty {
+                        self?.emailCodeError = response.emailCode
+                    }
+                    if !response.loginId.isEmpty {
+                        self?.loginIdError = response.loginId
+                    }
+                    if !response.password.isEmpty {
+                        self?.passwordError = response.password
+                    }
+                    if !response.nickName.isEmpty {
+                        self?.nickNameError = response.nickName
+                    }
+                }
+            } else {
+                self?.emailError = response.serverError
+                self?.loginIdError = response.serverError
+                self?.passwordError = response.serverError
+                self?.nickNameError = response.serverError
+            }
+        }
     }
 }

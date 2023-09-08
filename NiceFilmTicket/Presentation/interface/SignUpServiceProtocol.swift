@@ -24,4 +24,6 @@ protocol SignUpServiceProtocol {
     func isValidNickName(nickName: String) -> Bool
     
     func isValidPassword(password: String) -> Bool
+    
+    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, completion: @escaping (SignUpRes) -> Void)
 }

@@ -12,12 +12,10 @@ import Combine
 class SignUpViewController: UIViewController {
     
     private var signUpView = SignUpView(emailCodeHidden: true)
-    let emailViewModel: EmailViewModel
     let signUpViewModel: SignUpViewModel
     var cancellables = Set<AnyCancellable>()
     
-    init(emailViewModel: EmailViewModel, signUpViewModel: SignUpViewModel){
-        self.emailViewModel = emailViewModel
+    init(signUpViewModel: SignUpViewModel){
         self.signUpViewModel = signUpViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,6 +43,9 @@ class SignUpViewController: UIViewController {
         let emailSendingButtonClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(sendEmail))
         signUpView.emailCodeSendingButton.addGestureRecognizer(emailSendingButtonClickRecognizer)
         
+        let signUpButtonClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(signUp))
+        signUpView.signUpButton.addGestureRecognizer(signUpButtonClickRecognizer)
+        
         //뒤로가기 제스쳐는 살리고 백버튼 지우기
         self.navigationController?.navigationBar.isHidden = true
         
@@ -67,82 +68,123 @@ extension SignUpViewController {
     
     @objc func sendEmail() {
         if let email = self.signUpView.emailTextField.text {
-            emailViewModel.sendEmail(email: email)
+            signUpViewModel.sendEmail(email: email)
             bindingEmailError()
         }
     }
     
-    func bindingEmailError() {
-        emailViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
+    @objc func signUp() {
+        var email: String = ""
+        var emailCode: String = ""
+        var loginId: String = ""
+        var password: String = ""
+        var passwordCheck: String = ""
+        var nickName: String = ""
+        
+        if let emailText = self.signUpView.emailTextField.text {
+            //사용 가능한 이메일인지 검사
+            if self.signUpView.emailErrorLabel.text == ErrorMessage.availableEmail.message {
+                email = emailText
+            } else {
+                self.signUpView.emailErrorLabel.text = ErrorMessage.wrongEmailPattern.message
+            }
+        } else {
+            self.signUpView.emailErrorLabel.text = ErrorMessage.emailNotExist.message
+        }
+        
+        if let emailCodeText = self.signUpView.emailCodeTextField.text {
+            emailCode = emailCodeText
+        } else {
+            self.signUpView.emailCodeErrorLabel.text = ErrorMessage.emailCodeNotExist.message
+        }
+        
+        if let loginIdText = self.signUpView.idTextField.text {
+            //사용 가능한 아이디인지 검사
+            if self.signUpView.idErrorLabel.text == ErrorMessage.availableLoginId.message {
+                loginId = loginIdText
+            } else {
+                self.signUpView.idErrorLabel.text = ErrorMessage.wrongLoginIdPattern.message
+            }
+        } else {
+            self.signUpView.idErrorLabel.text = ErrorMessage.loginIdNotExist.message
+        }
+        
+        if let passwordText = self.signUpView.pwTextField.text {
+            //사용 가능한 비밀번호인지 검사
+            if self.signUpView.pwErrorLabel.text == ErrorMessage.availablePassword.message {
+                password = passwordText
+            } else {
+                self.signUpView.pwErrorLabel.text = ErrorMessage.wrongPasswordPattern.message
+            }
+        } else {
+            self.signUpView.pwErrorLabel.text = ErrorMessage.passwordNotExist.message
+        }
+        
+        if let passwordCheckText = self.signUpView.pwCheckTextField.text {
+            //비밀번호 일치하는지 검사
+            if self.signUpView.pwCheckErrorLabel.text == ErrorMessage.passwordMatching.message {
+                passwordCheck = passwordCheckText
+            } else {
+                self.signUpView.pwCheckErrorLabel.text = ErrorMessage.passwordNotMatching.message
+            }
+        } else {
+            self.signUpView.pwCheckErrorLabel.text = ErrorMessage.passwordCheckNotExist.message
+        }
+        
+        if let nickNameText = self.signUpView.nicknameTextField.text {
+            //닉네임 일치하는지 검사
+            if self.signUpView.nicknameErrorLabel.text == ErrorMessage.availableNickName.message {
+                nickName = nickNameText
+            } else {
+                self.signUpView.nicknameErrorLabel.text = ErrorMessage.wrongNickNamePattern.message
+            }
+        } else {
+            self.signUpView.nicknameErrorLabel.text = ErrorMessage.nickNameNotExist.message
+        }
+        
+        if password == passwordCheck {
+            signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName)
+            bindingEmailError()
+            bindingEmailCodeError()
+            bindingLoginIdDuplicate()
+            bindingPasswordPattern()
+            bindingNickNameDuplicate()
+        }
+    }
+    
+    func bindingEmailCodeError() {
+        signUpViewModel.subscribeToEmailCodeError(store: &cancellables) {
+            [weak self] emailCodeErrorMessage in
             DispatchQueue.main.async {
-                if emailErrorMessage.isEmpty {
+                if emailCodeErrorMessage != ErrorMessage.availableEmail.message {
+                    self?.signUpView.emailTextField.resignFirstResponder()
+                    self?.signUpView.emailErrorLabel.textColor = .red
+                    self?.signUpView.emailErrorLabel.text = emailCodeErrorMessage
+                }
+            }
+        }
+    }
+    
+    
+    func bindingEmailError() {
+        signUpViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
+            DispatchQueue.main.async {
+                if emailErrorMessage != ErrorMessage.availableEmail.message {
+                    self?.signUpView.emailTextField.resignFirstResponder()
+                    self?.signUpView.emailErrorLabel.textColor = .red
+                    self?.signUpView.emailErrorLabel.text = emailErrorMessage
+                } else {
                     self?.signUpView.emailCodeStackView.isHidden = false
                     self?.signUpView.emailErrorLabel.textColor = .clear
                     self?.signUpView.emailTextField.isEnabled = false
                     self?.signUpView.emailTextField.backgroundColor = .lightGray
                 }
-                if emailErrorMessage != ErrorMessage.availableEmail.message {
-                    self?.signUpView.emailTextField.resignFirstResponder()
-                    self?.signUpView.emailErrorLabel.textColor = .red
-                    self?.signUpView.emailErrorLabel.text = emailErrorMessage
-                }
             }
         }
     }
-}
-
-extension SignUpViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if textField == self.signUpView.emailTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
-            emailViewModel.emailDuplicateCheck(email: updatedText)
-            bindingEmailDuplicate()
-        }
-        
-        if textField == self.signUpView.idTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
-            signUpViewModel.loginIdDuplicateCheck(loginId: updatedText)
-            bindingLoginIdDuplicate()
-        }
-        
-        if textField == self.signUpView.nicknameTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
-            signUpViewModel.nickNameDuplicateCheck(nickName: updatedText)
-            bindingNickNameDuplicate()
-        }
-        
-        if textField == self.signUpView.pwTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
-            signUpViewModel.passwordPatternCheck(password: updatedText)
-            bindingPasswordPattern()
-            bindingPasswordCheck()
-        }
-        
-        if textField == self.signUpView.pwCheckTextField {
-            let currentText = textField.text ?? ""
-            guard let stringRange = Range(range, in: currentText) else { return false }
-            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
-            
-            signUpViewModel.passwordMatching(passwordForCheck: updatedText)
-            bindingPasswordCheck()
-        }
-        return true
-    }
     
     func bindingEmailDuplicate() {
-        emailViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
+        signUpViewModel.subscribeToEmailError(store: &cancellables) { [weak self] emailErrorMessage in
             DispatchQueue.main.async {
                 if emailErrorMessage == ErrorMessage.availableEmail.message {
                     self?.signUpView.emailErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
@@ -210,5 +252,56 @@ extension SignUpViewController: UITextFieldDelegate {
                 }
             }
         }
+    }
+}
+
+extension SignUpViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == self.signUpView.emailTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.emailDuplicateCheck(email: updatedText)
+            bindingEmailDuplicate()
+        }
+        
+        if textField == self.signUpView.idTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.loginIdDuplicateCheck(loginId: updatedText)
+            bindingLoginIdDuplicate()
+        }
+        
+        if textField == self.signUpView.nicknameTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.nickNameDuplicateCheck(nickName: updatedText)
+            bindingNickNameDuplicate()
+        }
+        
+        if textField == self.signUpView.pwTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.passwordPatternCheck(password: updatedText)
+            bindingPasswordPattern()
+            bindingPasswordCheck()
+        }
+        
+        if textField == self.signUpView.pwCheckTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            signUpViewModel.passwordMatching(passwordForCheck: updatedText)
+            bindingPasswordCheck()
+        }
+        return true
     }
 }

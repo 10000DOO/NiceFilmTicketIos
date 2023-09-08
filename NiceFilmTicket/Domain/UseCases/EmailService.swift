@@ -21,24 +21,19 @@ class EmailService: EmailServiceProtocol {
             emailRepository.sendEmail(email: emailSendingReq){ result in
                 switch result {
                 case .success(_):
-                    print("이메일 발송 성공")
-                    completion("")
+                    completion(ErrorMessage.availableEmail.message)
                 case .failure(let error):
                     switch error.status {
                     case 400:
-                        print("잘못된 형식의 이메일")
                         completion(ErrorMessage.wrongEmailPattern.message)
                     case 500:
-                        print("이메일 발송 실패")
                         completion(ErrorMessage.serverError.message)
                     default:
-                        print("이메일 발송 실패")
                         completion(ErrorMessage.serverError.message)
                     }
                 }
             }
         } else {
-            print(ErrorMessage.wrongEmailPattern.message)
             completion(ErrorMessage.wrongEmailPattern.message)
         }
         

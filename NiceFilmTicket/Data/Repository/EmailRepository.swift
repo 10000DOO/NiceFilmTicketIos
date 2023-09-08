@@ -22,7 +22,6 @@ class EmailRepository: EmailRepositoryProtocol {
                         let emailRes = try response.map(EmailSendingRes.self)
                         completion(.success(emailRes))
                     } catch {
-                        print("이메일 발송 성공 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
@@ -30,11 +29,9 @@ class EmailRepository: EmailRepositoryProtocol {
                         let errorRes = try response.map(ErrorResponse.self)
                         completion(.failure(errorRes))
                     } catch {
-                        print("이메일 발송 실패 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    print("Unexpected Error status code: \(response.debugDescription)")
                     completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
@@ -44,7 +41,6 @@ class EmailRepository: EmailRepositoryProtocol {
                         let errorRes = try response.map(ErrorResponse.self)
                         completion(.failure(errorRes))
                     } catch {
-                        print("이메일 발송 실패 시 파싱 에러: \(error)")
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 } else {
