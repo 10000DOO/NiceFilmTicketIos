@@ -149,6 +149,9 @@ extension SignUpViewController {
             bindingLoginIdDuplicate()
             bindingPasswordPattern()
             bindingNickNameDuplicate()
+            
+            let AuthenticVC = AuthenticationViewController()
+            self.navigationController?.pushViewController(AuthenticVC, animated: false)
         }
     }
     

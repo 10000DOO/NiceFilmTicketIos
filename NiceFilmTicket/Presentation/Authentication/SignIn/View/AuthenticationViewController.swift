@@ -18,6 +18,8 @@ class AuthenticationViewController: UIViewController {
         authenticationView = AuthenticationView(frame: view.bounds)
         view.addSubview(authenticationView)
         
+        authenticationView.pwTextField.textContentType = .oneTimeCode
+        
         setupGestureRecognizers()
     }
 }
@@ -53,6 +55,7 @@ extension AuthenticationViewController {
         authenticationView.idTextField.isHidden = true
         authenticationView.pwTextField.isHidden = true
         authenticationView.loginButton.isHidden = true
+        authenticationView.loginErrorLabel.isHidden = true
         authenticationView.orDivider.isHidden = true
         authenticationView.signupButton.isHidden = true
         authenticationView.findId.isHidden = true
@@ -63,12 +66,12 @@ extension AuthenticationViewController {
     
     //비즈니스 로그인으로 변경
     @objc private func clickBusinessButton() {
-        
         authenticationView.businessLoginImage.image = UIImage(systemName: "bag.fill")
         authenticationView.personalLoginImage.image = UIImage(systemName: "person")
         authenticationView.kakaoImageView.isHidden = true
         authenticationView.idTextField.isHidden = false
         authenticationView.pwTextField.isHidden = false
+        authenticationView.loginErrorLabel.isHidden = false
         authenticationView.loginButton.isHidden = false
         authenticationView.orDivider.isHidden = false
         authenticationView.signupButton.isHidden = false

@@ -14,6 +14,7 @@ class AuthenticationView: UIView {
     lazy var kakaoImageView = UIImageView()
     lazy var idTextField = UITextField()
     lazy var pwTextField = UITextField()
+    lazy var loginErrorLabel = UILabel()
     lazy var loginButton = UIButton()
     lazy var orDivider = UIImageView()
     lazy var signupButton = UIButton()
@@ -37,6 +38,7 @@ class AuthenticationView: UIView {
         kakaoLoginButton()
         iDTextField()
         passwordTextField()
+        signinErrorLabel()
         createLoginButton()
         createOrDivider()
         createSignUpButton()
@@ -183,13 +185,27 @@ extension AuthenticationView {
         }
     }
     
+    private func signinErrorLabel() {
+        loginErrorLabel.text = ""
+        loginErrorLabel.textColor = .red
+        loginErrorLabel.isHidden = true
+        contentView.addSubview(loginErrorLabel)
+        
+        loginErrorLabel.snp.makeConstraints { make in
+            make.height.equalTo(20)
+            make.top.equalTo(pwTextField.snp.bottom).offset(10)
+            make.leading.equalTo(contentView.snp.leading).inset(30)
+            make.trailing.equalTo(contentView.snp.trailing).inset(30)
+        }
+    }
+    
     private func createLoginButton() {
         //로그인 버튼
         loginButton = AuthenticationUIButton(title: "LogIn", isHidden: true)
         contentView.addSubview(loginButton)
         
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.bottom).offset(40)
+            make.top.equalTo(loginErrorLabel.snp.bottom).offset(10)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(150)
             make.height.equalTo(40)
