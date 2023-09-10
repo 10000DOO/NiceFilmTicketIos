@@ -1,3 +1,10 @@
+//
+//  SplashViewController.swift
+//  NiceFilmTicket
+//
+//  Created by 10000DOO on 2023/09/10.
+//
+
 import UIKit
 import SnapKit
 
@@ -25,13 +32,20 @@ class SplashViewController : UIViewController {
             splashView.imageView.snp.makeConstraints { make in
                 splashView.centerYConstraint = make.centerY.equalTo(splashView.snp.top).offset(170).constraint
             }
-            self.view.layoutIfNeeded()
-            
-        }) { _ in
-            let authenticationVC = AuthenticationViewController()
-            let navigationController = UINavigationController(rootViewController:authenticationVC)
-            self.view.window?.rootViewController=navigationController
-            self.view.window?.makeKeyAndVisible()
-        }
+            self.view.layoutIfNeeded()}) { _ in
+                var rootVC: UIViewController
+                //if UserDefaults.standard.string(forKey: "accessToken") != nil {
+                    //rootVC = SignUpViewController(signUpViewModel: SignUpViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
+                //} else {
+                    rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                //}
+                
+                let navigationController = UINavigationController(rootViewController:rootVC)
+                
+                self.navigationController?.pushViewController(rootVC, animated: false)
+                
+                self.view.window?.rootViewController=navigationController
+                self.view.window?.makeKeyAndVisible()
+            }
     }
 }

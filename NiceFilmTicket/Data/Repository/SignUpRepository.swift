@@ -22,17 +22,17 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
                     do {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
                 if case let .statusCode(response) = error,
@@ -60,17 +60,17 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
                     do {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
                 if case let .statusCode(response) = error,
@@ -98,17 +98,17 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
                     do {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case let .failure(error):
                 if case let .statusCode(response) = error,
@@ -136,17 +136,17 @@ class SignUpRepository: SignUpRepositoryProtocol {
                         let result = try response.map(CommonSuccessRes.self)
                         completion(.success(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
                     do {
                         let result = try response.map(ErrorResponse.self)
                         completion(.failure(result))
                     } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
-                    completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case .failure(let error):
                 if case .statusCode(let response) = error,
