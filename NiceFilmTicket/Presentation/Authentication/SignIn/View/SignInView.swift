@@ -14,12 +14,8 @@ class SignInView: UIView {
     lazy var kakaoImageView = UIImageView()
     lazy var idTextField = UITextField()
     lazy var pwTextField = UITextField()
-<<<<<<< HEAD:NiceFilmTicket/Presentation/Authentication/SignIn/View/SignInView.swift
     lazy var signInErrorLabel = UILabel()
     lazy var signInButton = UIButton()
-=======
-    lazy var loginButton = UIButton()
->>>>>>> parent of 625cc6b... fix : AuthenticationView 수정:NiceFilmTicket/Presentation/Authentication/SignIn/View/AuthenticationView.swift
     lazy var orDivider = UIImageView()
     lazy var signupButton = UIButton()
     lazy var findId = UILabel()
@@ -42,12 +38,8 @@ class SignInView: UIView {
         kakaoLoginButton()
         iDTextField()
         passwordTextField()
-<<<<<<< HEAD:NiceFilmTicket/Presentation/Authentication/SignIn/View/SignInView.swift
         signinErrorLabel()
         createSignInButton()
-=======
-        createLoginButton()
->>>>>>> parent of 625cc6b... fix : AuthenticationView 수정:NiceFilmTicket/Presentation/Authentication/SignIn/View/AuthenticationView.swift
         createOrDivider()
         createSignUpButton()
         createDivider()
@@ -193,7 +185,6 @@ extension SignInView {
         }
     }
     
-<<<<<<< HEAD:NiceFilmTicket/Presentation/Authentication/SignIn/View/SignInView.swift
     private func signinErrorLabel() {
         signInErrorLabel.text = ""
         signInErrorLabel.textColor = .red
@@ -209,20 +200,12 @@ extension SignInView {
     }
     
     private func createSignInButton() {
-=======
-    private func createLoginButton() {
->>>>>>> parent of 625cc6b... fix : AuthenticationView 수정:NiceFilmTicket/Presentation/Authentication/SignIn/View/AuthenticationView.swift
         //로그인 버튼
         signInButton = AuthenticationUIButton(title: "LogIn", isHidden: true)
         contentView.addSubview(signInButton)
         
-<<<<<<< HEAD:NiceFilmTicket/Presentation/Authentication/SignIn/View/SignInView.swift
         signInButton.snp.makeConstraints { make in
             make.top.equalTo(signInErrorLabel.snp.bottom).offset(10)
-=======
-        loginButton.snp.makeConstraints { make in
-            make.top.equalTo(pwTextField.snp.bottom).offset(40)
->>>>>>> parent of 625cc6b... fix : AuthenticationView 수정:NiceFilmTicket/Presentation/Authentication/SignIn/View/AuthenticationView.swift
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(150)
             make.height.equalTo(40)

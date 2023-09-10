@@ -149,12 +149,9 @@ extension SignUpViewController {
             bindingLoginIdDuplicate()
             bindingPasswordPattern()
             bindingNickNameDuplicate()
-<<<<<<< HEAD
             
             let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
             self.navigationController?.pushViewController(signInVC, animated: false)
-=======
->>>>>>> parent of 625cc6b... fix : AuthenticationView 수정
         }
     }
     
