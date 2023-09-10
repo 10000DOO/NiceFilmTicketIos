@@ -106,6 +106,7 @@ extension SignInViewController {
             signInViewModel.signIn(loginId: loginId, password: password)
             bindingSignInError()
         } else {
+            signInView.signInErrorLabel.textColor = .red
             signInView.signInErrorLabel.text = ErrorMessage.signInFail.message
         }
     }
@@ -113,9 +114,11 @@ extension SignInViewController {
     func bindingSignInError() {
         signInViewModel.subscribeSignInError(store: &cancellables) { [weak self] signInMessage in
             if signInMessage == ErrorMessage.signInSuccess.message {
+                self?.signInView.signInErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
                 self?.signInView.signInErrorLabel.text = signInMessage
                 //다음 화면으로 이동
             } else {
+                self?.signInView.signInErrorLabel.textColor = .red
                 self?.signInView.signInErrorLabel.text = signInMessage
             }
         }
