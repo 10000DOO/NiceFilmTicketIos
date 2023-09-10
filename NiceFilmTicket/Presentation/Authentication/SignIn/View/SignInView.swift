@@ -1,5 +1,5 @@
 //
-//  AuthenticationView.swift
+//  SignInView.swift
 //  NiceFilmTicket
 //
 //  Created by 10000DOO on 2023/08/29.
@@ -7,15 +7,15 @@
 import UIKit
 import SnapKit
 
-class AuthenticationView: UIView {
+class SignInView: UIView {
     
-    lazy var personalLoginImage = UIImageView()
-    lazy var businessLoginImage = UIImageView()
+    lazy var personalSignInImage = UIImageView()
+    lazy var businessSignInImage = UIImageView()
     lazy var kakaoImageView = UIImageView()
     lazy var idTextField = UITextField()
     lazy var pwTextField = UITextField()
-    lazy var loginErrorLabel = UILabel()
-    lazy var loginButton = UIButton()
+    lazy var signInErrorLabel = UILabel()
+    lazy var signInButton = UIButton()
     lazy var orDivider = UIImageView()
     lazy var signupButton = UIButton()
     lazy var findId = UILabel()
@@ -24,8 +24,8 @@ class AuthenticationView: UIView {
     lazy var scrollView = UIScrollView()
     lazy var logoImageView = UIImageView()
     lazy var contentView = UIView()
-    lazy var personalLoginText = UILabel()
-    lazy var businessLoginText = UILabel()
+    lazy var personalSignInText = UILabel()
+    lazy var businessSignInText = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,7 +39,7 @@ class AuthenticationView: UIView {
         iDTextField()
         passwordTextField()
         signinErrorLabel()
-        createLoginButton()
+        createSignInButton()
         createOrDivider()
         createSignUpButton()
         createDivider()
@@ -52,7 +52,7 @@ class AuthenticationView: UIView {
     }
 }
 
-extension AuthenticationView {
+extension SignInView {
     //로고 만들기
     func configureLogoImageView() {
         logoImageView = UIImageView(image: UIImage(named: "Logo"))
@@ -94,12 +94,12 @@ extension AuthenticationView {
     
     private func setGeneralLogin(){
         // 개인로그인 이미지 뷰 생성
-        personalLoginImage = UIImageView(image: UIImage(systemName: "person.fill"))
-        personalLoginImage.isUserInteractionEnabled = true
-        personalLoginImage.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-        contentView.addSubview(personalLoginImage)
+        personalSignInImage = UIImageView(image: UIImage(systemName: "person.fill"))
+        personalSignInImage.isUserInteractionEnabled = true
+        personalSignInImage.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+        contentView.addSubview(personalSignInImage)
         
-        personalLoginImage.snp.makeConstraints { make in
+        personalSignInImage.snp.makeConstraints { make in
             make.width.equalTo(40)
             make.height.equalTo(40)
             make.leading.equalTo(contentView.snp.leading).offset(60)
@@ -107,37 +107,37 @@ extension AuthenticationView {
         }
         
         // 개인로그인 텍스트 레이블 생성
-        personalLoginText = MenuUILabel(text: "일반", size: UIFont.boldSystemFont(ofSize: 25))
-        personalLoginText.isUserInteractionEnabled = true
-        contentView.addSubview(personalLoginText)
+        personalSignInText = MenuUILabel(text: "일반", size: UIFont.boldSystemFont(ofSize: 25))
+        personalSignInText.isUserInteractionEnabled = true
+        contentView.addSubview(personalSignInText)
         
         // 개인로그인 텍스트 제약 조건
-        personalLoginText.snp.makeConstraints { make in
-            make.leading.equalTo(personalLoginImage.snp.trailing).offset(0)
+        personalSignInText.snp.makeConstraints { make in
+            make.leading.equalTo(personalSignInImage.snp.trailing).offset(0)
             make.top.equalTo(contentView.snp.top).offset(55)
         }
     }
     
     private func setBusinessLogin() {
         // 비지니스로그인 텍스트 레이블 생성
-        businessLoginText = MenuUILabel(text: "비즈니스", size: UIFont.boldSystemFont(ofSize: 25))
-        businessLoginText.isUserInteractionEnabled = true
-        contentView.addSubview(businessLoginText)
+        businessSignInText = MenuUILabel(text: "비즈니스", size: UIFont.boldSystemFont(ofSize: 25))
+        businessSignInText.isUserInteractionEnabled = true
+        contentView.addSubview(businessSignInText)
         
         // 비지니스로그인 텍스트 제약 조건
-        businessLoginText.snp.makeConstraints { make in
+        businessSignInText.snp.makeConstraints { make in
             make.trailing.equalTo(contentView.snp.trailing).inset(60)
             make.top.equalTo(contentView.snp.top).offset(55)
         }
         
         // 비지니스로그인 이미지 뷰 생성
-        businessLoginImage = UIImageView(image: UIImage(systemName: "bag"))
-        businessLoginImage.isUserInteractionEnabled = true
-        businessLoginImage.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-        contentView.addSubview(businessLoginImage)
+        businessSignInImage = UIImageView(image: UIImage(systemName: "bag"))
+        businessSignInImage.isUserInteractionEnabled = true
+        businessSignInImage.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
+        contentView.addSubview(businessSignInImage)
         
-        businessLoginImage.snp.makeConstraints { make in
-            make.trailing.equalTo(businessLoginText.snp.leading)
+        businessSignInImage.snp.makeConstraints { make in
+            make.trailing.equalTo(businessSignInText.snp.leading)
             make.top.equalTo(contentView.snp.top).offset(50)
             make.width.equalTo(40)
             make.height.equalTo(40)
@@ -152,7 +152,7 @@ extension AuthenticationView {
         
         // 카카오 로그인 뷰의 제약 조건 설정
         kakaoImageView.snp.makeConstraints { make in
-            make.top.equalTo(personalLoginText.snp.bottom).offset(150)
+            make.top.equalTo(personalSignInText.snp.bottom).offset(150)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(250)
             make.height.equalTo(60)
@@ -166,7 +166,7 @@ extension AuthenticationView {
         
         idTextField.snp.makeConstraints { make in
             make.height.equalTo(50)
-            make.top.equalTo(businessLoginImage.snp.bottom).offset(40)
+            make.top.equalTo(businessSignInImage.snp.bottom).offset(40)
             make.leading.equalTo(contentView.snp.leading).inset(30)
             make.trailing.equalTo(contentView.snp.trailing).inset(30)
         }
@@ -186,12 +186,12 @@ extension AuthenticationView {
     }
     
     private func signinErrorLabel() {
-        loginErrorLabel.text = ""
-        loginErrorLabel.textColor = .red
-        loginErrorLabel.isHidden = true
-        contentView.addSubview(loginErrorLabel)
+        signInErrorLabel.text = ""
+        signInErrorLabel.textColor = .red
+        signInErrorLabel.isHidden = true
+        contentView.addSubview(signInErrorLabel)
         
-        loginErrorLabel.snp.makeConstraints { make in
+        signInErrorLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
             make.top.equalTo(pwTextField.snp.bottom).offset(10)
             make.leading.equalTo(contentView.snp.leading).inset(30)
@@ -199,13 +199,13 @@ extension AuthenticationView {
         }
     }
     
-    private func createLoginButton() {
+    private func createSignInButton() {
         //로그인 버튼
-        loginButton = AuthenticationUIButton(title: "LogIn", isHidden: true)
-        contentView.addSubview(loginButton)
+        signInButton = AuthenticationUIButton(title: "LogIn", isHidden: true)
+        contentView.addSubview(signInButton)
         
-        loginButton.snp.makeConstraints { make in
-            make.top.equalTo(loginErrorLabel.snp.bottom).offset(10)
+        signInButton.snp.makeConstraints { make in
+            make.top.equalTo(signInErrorLabel.snp.bottom).offset(10)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(150)
             make.height.equalTo(40)
@@ -213,13 +213,13 @@ extension AuthenticationView {
     }
     
     private func createOrDivider() {
-        //login버튼 아래 or
+        //signIn버튼 아래 or
         orDivider = UIImageView(image: UIImage(named: "OrDivider"))
         orDivider.isHidden = true
         contentView.addSubview(orDivider)
         
         orDivider.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.snp.bottom).offset(40)
+            make.top.equalTo(signInButton.snp.bottom).offset(40)
             make.centerX.equalTo(contentView.snp.centerX)
             make.width.equalTo(280)
             make.height.equalTo(10)

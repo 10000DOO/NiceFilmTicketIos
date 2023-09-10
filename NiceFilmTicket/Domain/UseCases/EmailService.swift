@@ -9,7 +9,7 @@ import Foundation
 
 class EmailService: EmailServiceProtocol {
     
-    let emailRepository: EmailRepositoryProtocol
+    private let emailRepository: EmailRepositoryProtocol
     
     init(emailRepository: EmailRepositoryProtocol) {
         self.emailRepository = emailRepository

@@ -11,11 +11,11 @@ import Combine
 
 class SignUpViewController: UIViewController {
     
-    private var signUpView = SignUpView(emailCodeHidden: true)
+    private let signUpView = SignUpView(emailCodeHidden: true)
     let signUpViewModel: SignUpViewModel
     var cancellables = Set<AnyCancellable>()
     
-    init(signUpViewModel: SignUpViewModel){
+    init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -57,7 +57,7 @@ class SignUpViewController: UIViewController {
 extension SignUpViewController {
     //키보드 내리기
     func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(AuthenticationViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SignInViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
@@ -150,8 +150,8 @@ extension SignUpViewController {
             bindingPasswordPattern()
             bindingNickNameDuplicate()
             
-            let AuthenticVC = AuthenticationViewController()
-            self.navigationController?.pushViewController(AuthenticVC, animated: false)
+            let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+            self.navigationController?.pushViewController(signInVC, animated: false)
         }
     }
     

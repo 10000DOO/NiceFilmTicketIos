@@ -9,8 +9,8 @@ import Foundation
 
 class SignUpService: SignUpServiceProtocol {
         
-    let signUpRepository: SignUpRepositoryProtocol
-    let emailService: EmailServiceProtocol
+    private let signUpRepository: SignUpRepositoryProtocol
+    private let emailService: EmailServiceProtocol
     
     init(signUpRepository: SignUpRepositoryProtocol, emailService: EmailServiceProtocol) {
         self.signUpRepository = signUpRepository

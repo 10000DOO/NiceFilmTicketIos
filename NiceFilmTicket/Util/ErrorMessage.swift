@@ -33,6 +33,8 @@ enum ErrorMessage: String {
     case checkLoginIdAgain = "아이디를 다시 확인해 주세요."
     case checkPasswordAgain = "비밀번호를 다시 확인해 주세요."
     case checkNickNameAgain = "닉네임을 다시 확인해 주세요."
+    case signInSuccess = "로그인 성공했습니다."
+    case signInFail = "아이디 비밀번호를 다시 확인해 주세요."
     
     var message: String {
         return rawValue
