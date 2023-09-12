@@ -35,7 +35,7 @@ class SplashViewController : UIViewController {
             self.view.layoutIfNeeded()}) { _ in
                 var rootVC: UIViewController
                 if UserDefaults.standard.string(forKey: "accessToken") != nil {
-                    let PublisherTabbarVC = PublisherTapbarViewController()
+                    let PublisherTabbarVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
                     
                     PublisherTabbarVC.modalPresentationStyle = .fullScreen
                     self.present(PublisherTabbarVC, animated: true, completion: nil)

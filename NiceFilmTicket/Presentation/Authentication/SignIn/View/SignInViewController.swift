@@ -65,34 +65,12 @@ extension SignInViewController {
     @objc private func clickPersonButton() {
         signInView.personalSignInImage.image = UIImage(systemName: "person.fill")
         signInView.businessSignInImage.image = UIImage(systemName: "bag")
-        signInView.kakaoImageView.isHidden = false
-        signInView.idTextField.isHidden = true
-        signInView.pwTextField.isHidden = true
-        signInView.signInButton.isHidden = true
-        signInView.signInErrorLabel.isHidden = true
-        signInView.orDivider.isHidden = true
-        signInView.signupButton.isHidden = true
-        signInView.findId.isHidden = true
-        signInView.findPw.isHidden = true
-        signInView.dividerLine.isHidden = true
-        signInView.scrollView.isScrollEnabled = false
     }
     
     //비즈니스 로그인으로 변경
     @objc private func clickBusinessButton() {
         signInView.businessSignInImage.image = UIImage(systemName: "bag.fill")
         signInView.personalSignInImage.image = UIImage(systemName: "person")
-        signInView.kakaoImageView.isHidden = true
-        signInView.idTextField.isHidden = false
-        signInView.pwTextField.isHidden = false
-        signInView.signInErrorLabel.isHidden = false
-        signInView.signInButton.isHidden = false
-        signInView.orDivider.isHidden = false
-        signInView.signupButton.isHidden = false
-        signInView.findId.isHidden = false
-        signInView.findPw.isHidden = false
-        signInView.dividerLine.isHidden = false
-        signInView.scrollView.isScrollEnabled = true
     }
     
     //회원가입 뷰로 이동
