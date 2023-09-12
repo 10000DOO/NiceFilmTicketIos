@@ -34,18 +34,20 @@ class SplashViewController : UIViewController {
             }
             self.view.layoutIfNeeded()}) { _ in
                 var rootVC: UIViewController
-                //if UserDefaults.standard.string(forKey: "accessToken") != nil {
-                    //rootVC = SignUpViewController(signUpViewModel: SignUpViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
-                //} else {
+                if UserDefaults.standard.string(forKey: "accessToken") != nil {
+                    let PublisherTabbarVC = PublisherTapbarViewController()
+                    
+                    PublisherTabbarVC.modalPresentationStyle = .fullScreen
+                    self.present(PublisherTabbarVC, animated: true, completion: nil)
+                } else {
                     rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
-                //}
-                
-                let navigationController = UINavigationController(rootViewController:rootVC)
-                
-                self.navigationController?.pushViewController(rootVC, animated: false)
-                
-                self.view.window?.rootViewController=navigationController
-                self.view.window?.makeKeyAndVisible()
+                    let navigationController = UINavigationController(rootViewController:rootVC)
+                    
+                    self.navigationController?.pushViewController(rootVC, animated: false)
+                    
+                    self.view.window?.rootViewController = navigationController
+                    self.view.window?.makeKeyAndVisible()
+                }
             }
     }
 }
