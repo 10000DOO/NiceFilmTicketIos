@@ -19,8 +19,8 @@ class SignInViewModel: ObservableObject {
         self.signInService = signInService
     }
     
-    func signIn(loginId: String, password: String) {
-        signInService.signIn(loginId: loginId, password: password) { [weak self] message in
+    func signIn(loginId: String, password: String, memberType: String) {
+        signInService.signIn(loginId: loginId, password: password, memberType: memberType) { [weak self] message in
             self?.signInError = message
         }
     }

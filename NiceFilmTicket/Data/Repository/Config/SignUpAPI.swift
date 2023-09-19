@@ -12,7 +12,7 @@ enum SignUpAPI{
     case loginIdDuplicateTest(loginId: String)
     case emailDuplicateTest(email: String)
     case nickNameDuplicateTest(nickName: String)
-    case signUpReq(signUpReq: SignUpReq, emailCode: String)
+    case signUpReq(signUpReq: SignUpReq, emailCode: String, memberType: String)
 }
 
 extension SignUpAPI: TargetType {
@@ -54,9 +54,9 @@ extension SignUpAPI: TargetType {
             return .requestParameters(parameters: ["email": email], encoding: URLEncoding.queryString)
         case .nickNameDuplicateTest(let nickName):
             return .requestParameters(parameters: ["username": nickName], encoding: URLEncoding.queryString)
-        case .signUpReq(let signUpReq, let emailCode):
+        case .signUpReq(let signUpReq, let emailCode, let memberType):
             let encoded = try! JSONEncoder().encode(signUpReq)
-            return .requestCompositeData(bodyData: encoded, urlParameters: ["code": emailCode])
+            return .requestCompositeData(bodyData: encoded, urlParameters: ["code": emailCode, "role": memberType])
         }
     }
     

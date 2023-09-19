@@ -21,7 +21,7 @@ class SignInViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("AuthenticationViewController(coder:) has not been implemented")
+        fatalError("SignInViewController(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -65,23 +65,26 @@ extension SignInViewController {
     @objc private func clickPersonButton() {
         signInView.personalSignInImage.image = UIImage(systemName: "person.fill")
         signInView.businessSignInImage.image = UIImage(systemName: "bag")
+        UserDefaults.standard.set("USER", forKey: "memberType")
     }
     
     //비즈니스 로그인으로 변경
     @objc private func clickBusinessButton() {
         signInView.businessSignInImage.image = UIImage(systemName: "bag.fill")
         signInView.personalSignInImage.image = UIImage(systemName: "person")
+        UserDefaults.standard.set("PUBLISHER", forKey: "memberType")
     }
     
     //회원가입 뷰로 이동
     @objc private func didTapSignupButton() {
         let signUpVC = SignUpViewController(signUpViewModel: SignUpViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
+        
         self.navigationController?.pushViewController(signUpVC, animated: false)
     }
     
     @objc func signIn() {
         if let loginId = signInView.idTextField.text, let password = signInView.pwTextField.text {
-            signInViewModel.signIn(loginId: loginId, password: password)
+            signInViewModel.signIn(loginId: loginId, password: password, memberType: UserDefaults.standard.string(forKey: "memberType")!)
             bindingSignInError()
         } else {
             signInView.signInErrorLabel.textColor = .red
@@ -93,9 +96,11 @@ extension SignInViewController {
         signInViewModel.subscribeSignInError(store: &cancellables) { [weak self] signInMessage in
             if signInMessage == ErrorMessage.signInSuccess.message {
                 //다음 화면으로 이동
-                let PublisherTabbarVC = PublisherTapbarViewController()
-                PublisherTabbarVC.modalPresentationStyle = .fullScreen
-                self?.present(PublisherTabbarVC, animated: true, completion: nil)
+                if (UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER") {
+                    let PublisherTabbarVC = PublisherTapbarViewController()
+                    PublisherTabbarVC.modalPresentationStyle = .fullScreen
+                    self?.present(PublisherTabbarVC, animated: true, completion: nil)
+                }
             } else {
                 self?.signInView.signInErrorLabel.textColor = .red
                 self?.signInView.signInErrorLabel.text = signInMessage

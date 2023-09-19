@@ -12,7 +12,7 @@ class PublisherTapbarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let publisherMainVC = PublisherMainViewController()
+        let publisherMainVC = PublisherMainViewController(publisherMainViewModel: PublisherMainViewModel(publisherMainService: PublisherMainService(publisherMainRepository: PublisherMainRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         let presentVC = PresentViewController()
         let eventVC = EventViewController()
         let myPageVC = MyPageViewController()

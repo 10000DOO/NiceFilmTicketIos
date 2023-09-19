@@ -32,22 +32,25 @@ class SplashViewController : UIViewController {
             splashView.imageView.snp.makeConstraints { make in
                 splashView.centerYConstraint = make.centerY.equalTo(splashView.snp.top).offset(170).constraint
             }
-            self.view.layoutIfNeeded()}) { _ in
-                var rootVC: UIViewController
-                if UserDefaults.standard.string(forKey: "accessToken") != nil {
-                    let PublisherTabbarVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+            self.view.layoutIfNeeded()
+            
+        }) { _ in
+            if UserDefaults.standard.string(forKey: "accessToken") != nil {
+                if UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER" {
+                    let PublisherTabbarVC = PublisherTapbarViewController()
                     
                     PublisherTabbarVC.modalPresentationStyle = .fullScreen
                     self.present(PublisherTabbarVC, animated: true, completion: nil)
-                } else {
-                    rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
-                    let navigationController = UINavigationController(rootViewController:rootVC)
-                    
-                    self.navigationController?.pushViewController(rootVC, animated: false)
-                    
-                    self.view.window?.rootViewController = navigationController
-                    self.view.window?.makeKeyAndVisible()
                 }
+            } else {
+                let rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let navigationController = UINavigationController(rootViewController:rootVC)
+                
+                self.navigationController?.pushViewController(rootVC, animated: false)
+                
+                self.view.window?.rootViewController = navigationController
+                self.view.window?.makeKeyAndVisible()
             }
+        }
     }
 }

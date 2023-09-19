@@ -1,45 +1,45 @@
 //
-//  SignInRepository.swift
+//  PublisherMainRepository.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/10.
+//  Created by 10000DOO on 2023/09/15.
 //
 
 import Foundation
 import Moya
 
-class SignInRepository: SignInRepositoryProtocol {
+class PublisherMainRepository: PublisherMainRepositoryProtocol {
     
-    private let provider = MoyaProvider<SignInAPI>()
+    private let provider = MoyaProvider<PublisherMainAPI>()
     
-    func signIn(signInReq: SignInReq, memberType: String, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void) {
-        provider.request(.signIn(signInReq: signInReq, memberType: memberType)) { result in
+    func getNfts(page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void) {
+        provider.request(.getNfts(page: page, size: size)) { result in
             switch result {
             case .success(let response):
                 switch response.statusCode {
                 case 200...299:
                     do {
-                        let signInRes = try response.map(SignInResponse.self)
-                        completion(.success(signInRes))
+                        let result = try response.map(NFTList.self)
+                        completion(.success(result))
                     } catch {
                         completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 case 400...499:
                     do {
-                        let signInErrorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(signInErrorRes))
+                        let result = try response.map(ErrorResponse.self)
+                        completion(.failure(result))
                     } catch {
                         completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
                 default:
                     completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
-            case let .failure(error):
+            case .failure(let error):
                 if case let .statusCode(response) = error,
                    500...599 ~= response.statusCode {
                     do {
-                        let signInErrorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(signInErrorRes))
+                        let errorRes = try response.map(ErrorResponse.self)
+                        completion(.failure(errorRes))
                     } catch {
                         completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                     }
@@ -50,3 +50,4 @@ class SignInRepository: SignInRepositoryProtocol {
         }
     }
 }
+

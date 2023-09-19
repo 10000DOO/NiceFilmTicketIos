@@ -15,13 +15,13 @@ class SignInService: SignInServiceProtocol {
         self.signInRepository = signInRepository
     }
     
-    func signIn(loginId: String, password: String, completion: @escaping (String) -> Void) {
+    func signIn(loginId: String, password: String, memberType: String, completion: @escaping (String) -> Void) {
         let signInReq = SignInReq(loginId: loginId, password: password)
-        signInRepository.signIn(signInReq: signInReq) { result in
+        signInRepository.signIn(signInReq: signInReq, memberType: memberType) { result in
             switch result {
             case .success(let response):
-                UserDefaults.standard.set(response.data.accessToken, forKey: "accessToken")
-                UserDefaults.standard.set(response.data.refreshToken, forKey: "refreshToken")
+                UserDefaults.standard.set("Bearer[\(response.data.accessToken)]", forKey: "accessToken")
+                UserDefaults.standard.set("Bearer[\(response.data.refreshToken)]", forKey: "refreshToken")
                 UserDefaults.standard.set(response.data.username, forKey: "username")
                 completion(ErrorMessage.signInSuccess.message)
             case .failure(let error):

@@ -12,7 +12,7 @@ class PublisherMainView: UIView {
     
     var logoImageView = UIImageView()
     var viewTitle = MenuUILabel(text: "[  NFT 등록 목록  ]", size: UIFont.boldSystemFont(ofSize: 40))
-    //var tableView = UITableView()
+    var tableView = UITableView()
     var nftNum = UILabel()
     var movieTitle = UILabel()
     var moviePrice = UILabel()
@@ -47,11 +47,10 @@ extension PublisherMainView {
         setNftNum()
         setNftStock()
         setMoviePrice()
-        setSalePeriod()
         setMovieTitle()
         setDividLine()
         setRegisterButton()
-        //setupTableView()
+        setupTableView()
     }
     
     private func setLogo() {
@@ -107,19 +106,7 @@ extension PublisherMainView {
         
         moviePrice.snp.makeConstraints { make in
             make.top.equalTo(viewTitle.snp.bottom).offset(30)
-            make.centerX.equalTo(self.snp.centerX).offset(-35)
-        }
-    }
-    
-    private func setSalePeriod() {
-        salePeriod.text = "판매기간"
-        salePeriod.font = .boldSystemFont(ofSize: 20)
-        
-        self.addSubview(salePeriod)
-        
-        salePeriod.snp.makeConstraints { make in
-            make.top.equalTo(viewTitle.snp.bottom).offset(30)
-            make.leading.equalTo(moviePrice.snp.trailing).offset(35)
+            make.centerX.equalTo(self.snp.centerX).offset(45)
         }
     }
     
@@ -131,7 +118,7 @@ extension PublisherMainView {
         
         movieTitle.snp.makeConstraints { make in
             make.top.equalTo(viewTitle.snp.bottom).offset(30)
-            make.trailing.equalTo(moviePrice.snp.leading).offset(-35)
+            make.centerX.equalTo(self.snp.centerX).offset(-75)
         }
     }
     
@@ -158,34 +145,15 @@ extension PublisherMainView {
     }
 
     
-//    private func setupTableView() {
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-//
-//        self.addSubview(tableView)
-//
-//        tableView.snp.makeConstraints { make in
-//            make.top.equalTo(viewTitle.snp.bottom).offset(30) // viewTitle 밑에 추가
-//            make.leading.trailing.bottom.equalToSuperview()
-//        }
-//
-//    }
-}
+    private func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.addSubview(tableView)
 
-//extension PublisherMainView: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 10 // 예시: 10개의 행
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-//        cell.textLabel?.text = "Row \(indexPath.row)"
-//        return cell
-//    }
-//}
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(lineView.snp.bottom)// viewTitle 밑에 추가
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(registerButton.snp.top).offset(-10)
+        }
+
+    }
+}

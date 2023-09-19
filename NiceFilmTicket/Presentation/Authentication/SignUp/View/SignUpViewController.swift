@@ -141,17 +141,22 @@ extension SignUpViewController {
         } else {
             self.signUpView.nicknameErrorLabel.text = ErrorMessage.nickNameNotExist.message
         }
-        
+
         if password == passwordCheck {
-            signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName)
+            guard let memberType = UserDefaults.standard.string(forKey: "memberType") else { return }
+            signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType)
             bindingEmailError()
             bindingEmailCodeError()
             bindingLoginIdDuplicate()
             bindingPasswordPattern()
             bindingNickNameDuplicate()
             
-            let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
-            self.navigationController?.pushViewController(signInVC, animated: false)
+            signUpViewModel.$signUpSuccess.sink { [weak self] result in
+                if result {
+                    let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                    self?.navigationController?.pushViewController(signInVC, animated: false)
+                }
+            }.store(in: &cancellables)
         }
     }
     
@@ -179,8 +184,6 @@ extension SignUpViewController {
                 } else {
                     self?.signUpView.emailCodeStackView.isHidden = false
                     self?.signUpView.emailErrorLabel.textColor = .clear
-                    self?.signUpView.emailTextField.isEnabled = false
-                    self?.signUpView.emailTextField.backgroundColor = .lightGray
                 }
             }
         }
