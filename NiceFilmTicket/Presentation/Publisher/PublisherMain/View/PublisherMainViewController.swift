@@ -42,12 +42,6 @@ class PublisherMainViewController: UIViewController {
                 self?.present(signInVC, animated: true, completion: nil)
             }
         }.store(in: &cancellable)
-        publisherMainView.tableView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
     }
 }
 
@@ -58,7 +52,11 @@ extension PublisherMainViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 15
+        if publisherMainViewModel.nftList.count == 0 {
+            return 15
+        } else {
+            return publisherMainViewModel.nftList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -81,5 +79,14 @@ extension PublisherMainViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 45
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if publisherMainView.tableView.contentOffset.y > (publisherMainView.tableView.contentSize.height - publisherMainView.tableView.bounds.size.height) * 0.8 {
+            if publisherMainViewModel.fetchMoreResult {
+                publisherMainViewModel.getIssuedNft()
+                publisherMainView.tableView.reloadData()
+            }
+        }
     }
 }

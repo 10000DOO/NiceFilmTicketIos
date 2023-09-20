@@ -16,6 +16,7 @@ class PublisherMainViewModel: ObservableObject {
     @Published var refreshTokenExpired = false
     var cancellables = Set<AnyCancellable>()
     var page = 0
+    var fetchMoreResult = false
     
     init(publisherMainService: PublisherMainServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
         self.publisherMainService = publisherMainService
@@ -23,10 +24,15 @@ class PublisherMainViewModel: ObservableObject {
     }
     
     func getIssuedNft() {
+        fetchMoreResult = false
         publisherMainService.getNfts(page: page, size: 15) { [weak self] result in
             switch result {
             case .success(let response):
                 self?.nftList.append(contentsOf: response.nftListDtos)
+                if response.hasNext {
+                    self?.fetchMoreResult = true
+                    self?.page += 1
+                }
             case .failure(let error):
                 if error.error[0].error == ErrorMessage.expiredToken.message {
                     self?.refreshTokenService.issueNewToken()
