@@ -17,7 +17,7 @@ class PublisherTapbarViewController: UITabBarController {
         let eventVC = EventViewController()
         let myPageVC = MyPageViewController()
         
-        self.viewControllers = [publisherMainVC, presentVC, eventVC, myPageVC]
+        self.viewControllers = [UINavigationController(rootViewController: publisherMainVC), presentVC, eventVC, myPageVC]
         
         UITabBar.appearance().backgroundColor = UIColor(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         
