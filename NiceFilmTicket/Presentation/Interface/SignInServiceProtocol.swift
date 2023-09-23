@@ -9,5 +9,5 @@ import Foundation
 
 protocol SignInServiceProtocol {
     
-    func signIn(loginId: String, password: String, completion: @escaping (String) -> Void)
+    func signIn(loginId: String, password: String, memberType: String, completion: @escaping (String) -> Void)
 }

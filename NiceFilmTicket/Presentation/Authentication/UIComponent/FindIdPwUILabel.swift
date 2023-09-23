@@ -16,7 +16,6 @@ class FindIdPwUILabel: UILabel {
         self.font = UIFont.boldSystemFont(ofSize: 15)
         self.textColor = .darkGray
         self.isUserInteractionEnabled = true //클릭 이벤트 허용
-        self.isHidden = true
     }
     
     required init?(coder: NSCoder) {

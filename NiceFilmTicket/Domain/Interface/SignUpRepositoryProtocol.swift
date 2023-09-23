@@ -15,5 +15,6 @@ protocol SignUpRepositoryProtocol {
     
     func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
     
-    func signUp(signUpReq: SignUpReq, emailCode: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
+    func signUp(signUpReq: SignUpReq, emailCode: String, memberType: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
 }
+

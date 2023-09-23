@@ -35,6 +35,9 @@ enum ErrorMessage: String {
     case checkNickNameAgain = "닉네임을 다시 확인해 주세요."
     case signInSuccess = "로그인 성공했습니다."
     case signInFail = "아이디 비밀번호를 다시 확인해 주세요."
+    case expiredToken = "만료된 토큰입니다."
+    case expiredRefreshToken = "토큰이 만료 되었습니다. 다시 로그인 해주세요."
+    case reIssueToken = "토큰 재발급 완료."
     
     var message: String {
         return rawValue

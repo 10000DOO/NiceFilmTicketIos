@@ -10,6 +10,6 @@ import Foundation
 struct SignUpReq: Codable {
     let loginId: String
     let password: String
-    let publisherName: String
+    let username: String
     let email: String
 }

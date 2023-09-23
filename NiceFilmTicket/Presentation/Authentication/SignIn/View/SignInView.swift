@@ -11,7 +11,6 @@ class SignInView: UIView {
     
     lazy var personalSignInImage = UIImageView()
     lazy var businessSignInImage = UIImageView()
-    lazy var kakaoImageView = UIImageView()
     lazy var idTextField = UITextField()
     lazy var pwTextField = UITextField()
     lazy var signInErrorLabel = UILabel()
@@ -35,7 +34,6 @@ class SignInView: UIView {
         configureScrollView(logoImageView: logoImageView)
         setGeneralLogin()
         setBusinessLogin()
-        kakaoLoginButton()
         iDTextField()
         passwordTextField()
         signinErrorLabel()
@@ -70,7 +68,6 @@ extension SignInView {
     private func configureScrollView(logoImageView: UIImageView) {
         scrollView = UIScrollView()
         scrollView.backgroundColor = .white
-        scrollView.isScrollEnabled = false
         scrollView.showsVerticalScrollIndicator = false
         self.addSubview(scrollView)
         
@@ -144,24 +141,9 @@ extension SignInView {
         }
     }
     
-    private func kakaoLoginButton() {
-        //카카오 로그인 버튼
-        kakaoImageView = UIImageView(image: UIImage(named: "KakaoLogin"))
-        kakaoImageView.isUserInteractionEnabled = true
-        contentView.addSubview(kakaoImageView)
-        
-        // 카카오 로그인 뷰의 제약 조건 설정
-        kakaoImageView.snp.makeConstraints { make in
-            make.top.equalTo(personalSignInText.snp.bottom).offset(150)
-            make.centerX.equalTo(contentView.snp.centerX)
-            make.width.equalTo(250)
-            make.height.equalTo(60)
-        }
-    }
-    
     private func iDTextField() {
         //ID 입력 텍스트 필드
-        idTextField = AuthenticationTextField(placeholder: "  ID", isSecureTextEntry: false, backgroundColor: UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1), isHidden: true, font: UIFont.systemFont(ofSize: 20))
+        idTextField = AuthenticationTextField(placeholder: "  ID", isSecureTextEntry: false, backgroundColor: UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1), isHidden: false, font: UIFont.systemFont(ofSize: 20))
         contentView.addSubview(idTextField)
         
         idTextField.snp.makeConstraints { make in
@@ -174,7 +156,7 @@ extension SignInView {
     
     private func passwordTextField() {
         //비밀번호 입력 텍스트 필드
-        pwTextField = AuthenticationTextField(placeholder: "  PW", isSecureTextEntry: true, backgroundColor: UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1), isHidden: true, font: UIFont.systemFont(ofSize: 20))
+        pwTextField = AuthenticationTextField(placeholder: "  PW", isSecureTextEntry: true, backgroundColor: UIColor(red: 217/255, green: 217/255, blue: 217/255, alpha: 1), isHidden: false, font: UIFont.systemFont(ofSize: 20))
         contentView.addSubview(pwTextField)
         
         pwTextField.snp.makeConstraints { make in
@@ -188,7 +170,6 @@ extension SignInView {
     private func signinErrorLabel() {
         signInErrorLabel.text = ""
         signInErrorLabel.textColor = .red
-        signInErrorLabel.isHidden = true
         contentView.addSubview(signInErrorLabel)
         
         signInErrorLabel.snp.makeConstraints { make in
@@ -201,7 +182,7 @@ extension SignInView {
     
     private func createSignInButton() {
         //로그인 버튼
-        signInButton = AuthenticationUIButton(title: "LogIn", isHidden: true)
+        signInButton = AuthenticationUIButton(title: "LogIn", isHidden: false)
         contentView.addSubview(signInButton)
         
         signInButton.snp.makeConstraints { make in
@@ -215,7 +196,6 @@ extension SignInView {
     private func createOrDivider() {
         //signIn버튼 아래 or
         orDivider = UIImageView(image: UIImage(named: "OrDivider"))
-        orDivider.isHidden = true
         contentView.addSubview(orDivider)
         
         orDivider.snp.makeConstraints { make in
@@ -228,7 +208,7 @@ extension SignInView {
     
     private func createSignUpButton() {
         //회원가입 버튼
-        signupButton = AuthenticationUIButton(title: "Make Account", isHidden: true)
+        signupButton = AuthenticationUIButton(title: "Make Account", isHidden: false)
         contentView.addSubview(signupButton)
         
         signupButton.snp.makeConstraints { make in
@@ -242,7 +222,6 @@ extension SignInView {
     private func createDivider() {
         //아이디 찾기 비밀번호 찾기 분리선
         dividerLine = UIImageView(image: UIImage(named: "Line"))
-        dividerLine.isHidden = true
         contentView.addSubview(dividerLine)
         
         dividerLine.snp.makeConstraints { make in
