@@ -42,6 +42,9 @@ class PublisherMainViewController: UIViewController {
                 self?.present(signInVC, animated: true, completion: nil)
             }
         }.store(in: &cancellable)
+        
+        publisherMainView.registerButton.addTarget(self, action: #selector(moveToIssueNftView), for: .touchUpInside)
+        self.navigationController?.navigationBar.isHidden = true
     }
 }
 
@@ -88,5 +91,13 @@ extension PublisherMainViewController: UITableViewDelegate, UITableViewDataSourc
                 publisherMainView.tableView.reloadData()
             }
         }
+    }
+}
+
+extension PublisherMainViewController {
+    @objc func moveToIssueNftView() {
+        let IssueNftViewControler = UIStoryboard(name: "IssueNft", bundle: nil).instantiateViewController(withIdentifier: "IssueNftViewController") as! IssueNftViewController
+        IssueNftViewControler.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(IssueNftViewControler, animated: false)
     }
 }
