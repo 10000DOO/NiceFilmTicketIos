@@ -38,8 +38,6 @@ class SplashViewController : UIViewController {
             if UserDefaults.standard.string(forKey: "accessToken") != nil {
                 if UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER" {
                     let PublisherTabbarVC = PublisherTapbarViewController()
-                    print(UserDefaults.standard.string(forKey: "accessToken"))
-                    print(UserDefaults.standard.string(forKey: "refreshToken"))
                     PublisherTabbarVC.modalPresentationStyle = .fullScreen
                     self.present(PublisherTabbarVC, animated: true, completion: nil)
                 }

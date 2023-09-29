@@ -9,6 +9,8 @@ import UIKit
 
 class IssueNftViewController: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollProgressView: UIProgressView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var movieTitleTextField: UITextField!
     @IBOutlet weak var genreTextField: UITextField!
@@ -28,6 +30,8 @@ class IssueNftViewController: UIViewController {
         
         setView()
         hideKeyboardWhenTappedAround()
+        scrollView.delegate = self
+        scrollProgressView.progress = 0.0
     }
 }
 
@@ -147,6 +151,20 @@ extension IssueNftViewController {
     @objc func doneButtonTapped() {
         // 완료 버튼을 눌렀을 때 수행할 작업 추가
         releaseDateTextField.resignFirstResponder() // DatePicker 닫기
+    }
+}
+
+extension IssueNftViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // 스크롤 위치를 감지하고 프로그레스 바를 업데이트합니다.
+        let yOffset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let progressBarHeight = scrollView.frame.size.height
+        
+        // 스크롤 위치를 0.0에서 1.0 사이의 값으로 변환하여 프로그레스 바에 설정합니다.
+        let progress = min(max(yOffset / (contentHeight - progressBarHeight), 0.0), 1.0)
+        scrollProgressView.progress = Float(progress)
     }
 }
 

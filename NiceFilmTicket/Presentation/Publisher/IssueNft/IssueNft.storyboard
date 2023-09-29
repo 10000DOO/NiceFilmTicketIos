@@ -45,13 +45,13 @@
                                     <constraint firstAttribute="height" constant="10" id="7WG-BG-nNK"/>
                                 </constraints>
                                 <color key="progressTintColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="trackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="trackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </progressView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nDC-FX-IXx">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDC-FX-IXx">
                                 <rect key="frame" x="0.0" y="159" width="393" height="1307"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lWi-bg-yiV">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1500"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="1275"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="영화명" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wok-H0-08T">
                                                 <rect key="frame" x="20" y="5" width="78" height="36"/>
@@ -207,13 +207,13 @@
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="Tug-lH-5kf" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="0Wy-Pp-1Vc"/>
-                                            <constraint firstAttribute="height" constant="1500" id="1sY-5w-yzD"/>
                                             <constraint firstItem="UX4-D2-sxs" firstAttribute="top" secondItem="nh8-ka-fr5" secondAttribute="bottom" constant="10" id="2EB-RL-8e5"/>
                                             <constraint firstItem="A1R-L5-vAB" firstAttribute="top" secondItem="UX4-D2-sxs" secondAttribute="bottom" constant="10" id="3h3-cw-lca"/>
                                             <constraint firstAttribute="trailing" secondItem="7V7-YZ-9uG" secondAttribute="trailing" constant="20" id="3l3-uX-BhX"/>
                                             <constraint firstItem="Qvp-Vy-dSe" firstAttribute="top" secondItem="8t8-EV-zBk" secondAttribute="bottom" constant="10" id="5ar-Gm-HtQ"/>
                                             <constraint firstItem="fhz-Cf-O9R" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="5kG-DU-VzI"/>
                                             <constraint firstItem="A1R-L5-vAB" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="6yg-Pe-i56"/>
+                                            <constraint firstAttribute="bottom" secondItem="R7T-KE-tiu" secondAttribute="bottom" constant="10" id="72O-Rn-cPh"/>
                                             <constraint firstItem="yVW-vr-zkC" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="FUv-H7-siH"/>
                                             <constraint firstAttribute="trailing" secondItem="hF3-pe-Szv" secondAttribute="trailing" constant="20" id="GRo-kd-uat"/>
                                             <constraint firstItem="Wok-H0-08T" firstAttribute="top" secondItem="lWi-bg-yiV" secondAttribute="top" constant="5" id="GX5-xG-uVa"/>
@@ -305,6 +305,8 @@
                         <outlet property="runningTimeTextField" destination="lJL-Hl-6tW" id="Pvo-nU-sZT"/>
                         <outlet property="saleEndDateTextField" destination="zBa-Ih-PGw" id="Geo-oZ-sPq"/>
                         <outlet property="saleStartTextField" destination="0Hx-ee-cO2" id="rhL-sX-9Up"/>
+                        <outlet property="scrollProgressView" destination="GeS-ed-DJi" id="D3p-Fv-pYN"/>
+                        <outlet property="scrollView" destination="nDC-FX-IXx" id="1q9-54-MN1"/>
                         <outlet property="storyLineTextView" destination="R7T-KE-tiu" id="vS1-Q0-iyA"/>
                         <outlet property="titleLabel" destination="to1-1U-2sm" id="hr6-lU-EBb"/>
                     </connections>
