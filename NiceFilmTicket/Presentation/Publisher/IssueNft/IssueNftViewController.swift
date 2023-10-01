@@ -321,13 +321,13 @@ extension IssueNftViewController: UIImagePickerControllerDelegate, UINavigationC
                 DispatchQueue.main.async {
                     switch targetImageView {
                     case 0: self?.posterImageView.image = image
-                        self?.posterDefaultImageView.isHidden = true
+                        self?.posterDefaultImageView.image = nil
                     case 1: self?.normalNftImageView.image = image
-                        self?.normalNftDefaultImageView.isHidden = true
+                        self?.normalNftDefaultImageView.image = nil
                     case 2: self?.rareNftImageView.image = image
-                        self?.rareNftDefaultImageView.isHidden = true
+                        self?.rareNftDefaultImageView.image = nil
                     case 3: self?.legendNftImageView.image = image
-                        self?.legendNftDefaultImageView.isHidden = true
+                        self?.legendNftDefaultImageView.image = nil
                     default:
                         return
                     }
