@@ -49,11 +49,6 @@ class PublisherMainViewController: UIViewController {
 }
 
 extension PublisherMainViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if publisherMainViewModel.nftList.count == 0 {
             return 15

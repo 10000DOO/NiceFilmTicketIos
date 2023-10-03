@@ -41,10 +41,17 @@ class IssueNftViewController: UIViewController {
     @IBOutlet weak var rareNftCountTextField: UITextField!
     @IBOutlet weak var legendLabel: UILabel!
     @IBOutlet weak var legendNftCountTextField: UITextField!
-    @IBOutlet weak var previewButton: UIButton!
     @IBOutlet weak var nftIssueButton: UIButton!
     let storyLineTextViewPlaceHolder = " 줄거리를 입력해주세요."
     let picker = UIImagePickerController()
+
+    @IBAction func setGenre(_ sender: Any) {
+        let GenreOptionViewController = GenreOptionViewController()
+        self.present(GenreOptionViewController, animated: true, completion: nil)
+    }
+    
+    @IBAction func setAgeLimit(_ sender: Any) {
+    }
     
     private let issueNftViewModel = IssueNftViewModel()
 
@@ -111,7 +118,6 @@ extension IssueNftViewController {
         setLegendNftImageView()
         setRareNftCountTextField()
         setLegendNftCountTextField()
-        setPreviewButton()
         setNftIssueButton()
     }
     
@@ -130,12 +136,16 @@ extension IssueNftViewController {
         genreTextField.layer.cornerRadius = 10
         genreTextField.layer.borderWidth = 2
         genreTextField.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
+        genreTextField.isEnabled = false
     }
+    
+    
     
     func setAgeLimitTextField() {
         ageLimitTextField.layer.cornerRadius = 10
         ageLimitTextField.layer.borderWidth = 2
         ageLimitTextField.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
+        ageLimitTextField.isEnabled = false
     }
     
     func setReleaseDateTextField() {
@@ -230,16 +240,12 @@ extension IssueNftViewController {
         legendNftCountTextField.keyboardType = .numberPad
     }
     
-    func setPreviewButton() {
-        previewButton.layer.borderWidth = 2
-        previewButton.layer.cornerRadius = 10
-        previewButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
-    }
-    
     func setNftIssueButton() {
         nftIssueButton.layer.borderWidth = 2
         nftIssueButton.layer.cornerRadius = 10
-        nftIssueButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
+//        nftIssueButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
+        nftIssueButton.layer.borderColor = UIColor.lightGray.cgColor
+        nftIssueButton.backgroundColor = .lightGray
     }
     
     @objc func selectPosterImage() {
@@ -280,6 +286,10 @@ extension IssueNftViewController {
     @objc func doneButtonTapped() {
         // 완료 버튼을 눌렀을 때 수행할 작업 추가
         releaseDateTextField.resignFirstResponder() // DatePicker 닫기
+    }
+    
+    func registerNft() {
+        movieTitleTextField
     }
 }
 

@@ -29,11 +29,6 @@ class PublisherMainView: UIView {
     required init?(coder aDecoder : NSCoder ) {
         fatalError("PublisherMainView(coder:) has not been implemented")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-    }
 }
 
 extension PublisherMainView {
@@ -146,7 +141,6 @@ extension PublisherMainView {
 
     
     private func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
@@ -154,6 +148,5 @@ extension PublisherMainView {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(registerButton.snp.top).offset(-10)
         }
-
     }
 }

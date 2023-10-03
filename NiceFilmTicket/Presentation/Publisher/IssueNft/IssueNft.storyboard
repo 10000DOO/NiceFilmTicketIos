@@ -73,16 +73,16 @@
                                                 <color key="textColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  장르를 입력해주세요." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fhz-Cf-O9R">
-                                                <rect key="frame" x="20" y="157" width="353" height="50"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  장르를 선택해주세요." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fhz-Cf-O9R">
+                                                <rect key="frame" x="20" y="157" width="273" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="QZe-8j-bwd"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  연령 제한을 입력해주세요." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7V7-YZ-9uG">
-                                                <rect key="frame" x="20" y="263" width="353" height="50"/>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="  연령 제한을 선택해주세요." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7V7-YZ-9uG">
+                                                <rect key="frame" x="20" y="263" width="273" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="3lH-Ov-pjY"/>
                                                 </constraints>
@@ -322,28 +322,8 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gzk-z4-dMZ">
-                                                <rect key="frame" x="18.333333333333329" y="1959" width="160" height="40"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="40" id="aW2-Jd-08e"/>
-                                                    <constraint firstAttribute="width" constant="160" id="px7-NL-BjV"/>
-                                                </constraints>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain">
-                                                    <attributedString key="attributedTitle">
-                                                        <fragment content="미리보기">
-                                                            <attributes>
-                                                                <font key="NSFont" size="20" name="AppleSDGothicNeo-SemiBold"/>
-                                                                <font key="NSOriginalFont" size="12" name="Helvetica"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
-                                                    <color key="baseForegroundColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                </buttonConfiguration>
-                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mLE-fD-o4m">
-                                                <rect key="frame" x="214.66666666666663" y="1959" width="160" height="40"/>
+                                                <rect key="frame" x="116.66666666666669" y="1959" width="160" height="40"/>
                                                 <color key="backgroundColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="160" id="eHh-N8-RbF"/>
@@ -362,28 +342,60 @@
                                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </buttonConfiguration>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lqR-Gc-7pH">
+                                                <rect key="frame" x="303" y="157" width="70" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="70" id="3Bl-i7-tFK"/>
+                                                    <constraint firstAttribute="height" constant="50" id="FCf-MH-gyx"/>
+                                                </constraints>
+                                                <color key="tintColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="선택">
+                                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="22"/>
+                                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="baseBackgroundColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="setGenre:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="ysP-pE-ijQ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yjx-ug-3ih">
+                                                <rect key="frame" x="303" y="263" width="70" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="70" id="ifZ-NP-PCh"/>
+                                                    <constraint firstAttribute="height" constant="50" id="lgT-gI-SCq"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="filled" title="선택">
+                                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="22"/>
+                                                    <color key="baseBackgroundColor" red="0.031372549020000001" green="0.1176470588" blue="0.36078431370000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="setAgeLimit:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="OcB-mp-ybU"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
+                                            <constraint firstItem="lqR-Gc-7pH" firstAttribute="leading" secondItem="fhz-Cf-O9R" secondAttribute="trailing" constant="10" id="0VC-Pl-azY"/>
                                             <constraint firstItem="Ftt-gJ-sQ4" firstAttribute="top" secondItem="pB4-hR-YqD" secondAttribute="bottom" constant="10" id="0WY-kx-Soj"/>
                                             <constraint firstItem="Tug-lH-5kf" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="0Wy-Pp-1Vc"/>
                                             <constraint firstItem="UX4-D2-sxs" firstAttribute="top" secondItem="nh8-ka-fr5" secondAttribute="bottom" constant="10" id="2EB-RL-8e5"/>
                                             <constraint firstItem="1KH-u6-4YD" firstAttribute="top" secondItem="PGo-Ke-bqr" secondAttribute="bottom" constant="10" id="2JQ-Za-Kzn"/>
-                                            <constraint firstItem="gzk-z4-dMZ" firstAttribute="top" secondItem="oOX-2w-nxt" secondAttribute="bottom" constant="20" id="3dZ-us-RrE"/>
                                             <constraint firstItem="A1R-L5-vAB" firstAttribute="top" secondItem="UX4-D2-sxs" secondAttribute="bottom" constant="10" id="3h3-cw-lca"/>
-                                            <constraint firstAttribute="trailing" secondItem="7V7-YZ-9uG" secondAttribute="trailing" constant="20" id="3l3-uX-BhX"/>
                                             <constraint firstItem="mLE-fD-o4m" firstAttribute="top" secondItem="1KH-u6-4YD" secondAttribute="bottom" constant="20" id="3wq-T5-Zid"/>
                                             <constraint firstItem="PCv-OW-T2w" firstAttribute="top" secondItem="Ftt-gJ-sQ4" secondAttribute="bottom" constant="20" id="4cg-Fr-SOg"/>
                                             <constraint firstItem="PGm-Iu-k84" firstAttribute="centerY" secondItem="PCv-OW-T2w" secondAttribute="centerY" id="53L-LE-cDe"/>
                                             <constraint firstItem="Qvp-Vy-dSe" firstAttribute="top" secondItem="8t8-EV-zBk" secondAttribute="bottom" constant="10" id="5ar-Gm-HtQ"/>
                                             <constraint firstItem="fhz-Cf-O9R" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="5kG-DU-VzI"/>
                                             <constraint firstItem="A1R-L5-vAB" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="6yg-Pe-i56"/>
+                                            <constraint firstAttribute="trailing" secondItem="lqR-Gc-7pH" secondAttribute="trailing" constant="20" id="8FI-HG-7BT"/>
                                             <constraint firstItem="sfc-SO-Ag6" firstAttribute="centerY" secondItem="yCd-FD-QFm" secondAttribute="centerY" id="Ahf-xA-nOc"/>
                                             <constraint firstItem="dOr-sc-knx" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="0.5" id="Ari-nA-aJ6"/>
                                             <constraint firstItem="MvS-wo-GVs" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="0.5" id="BUq-BH-tdi"/>
-                                            <constraint firstItem="gzk-z4-dMZ" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="0.5" id="DHg-x9-d2o"/>
+                                            <constraint firstItem="yjx-ug-3ih" firstAttribute="leading" secondItem="7V7-YZ-9uG" secondAttribute="trailing" constant="10" id="DYX-aG-f6h"/>
                                             <constraint firstItem="sfc-SO-Ag6" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="1.5" id="Dme-Qz-cBe"/>
-                                            <constraint firstItem="mLE-fD-o4m" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="1.5" id="ECX-8V-GMv"/>
+                                            <constraint firstItem="mLE-fD-o4m" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" id="ECX-8V-GMv"/>
                                             <constraint firstItem="yVW-vr-zkC" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="FUv-H7-siH"/>
                                             <constraint firstItem="dOr-sc-knx" firstAttribute="centerY" secondItem="MvS-wo-GVs" secondAttribute="centerY" id="GBg-PU-TDi"/>
                                             <constraint firstAttribute="trailing" secondItem="hF3-pe-Szv" secondAttribute="trailing" constant="20" id="GRo-kd-uat"/>
@@ -408,6 +420,7 @@
                                             <constraint firstItem="yCd-FD-QFm" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="1.5" id="SWP-X5-czn"/>
                                             <constraint firstItem="oOX-2w-nxt" firstAttribute="top" secondItem="5hF-Ll-fEn" secondAttribute="bottom" constant="10" id="USK-qL-pYU"/>
                                             <constraint firstItem="Wmm-3D-7AL" firstAttribute="centerY" secondItem="U5m-jR-Bt0" secondAttribute="centerY" id="Uus-vg-lxj"/>
+                                            <constraint firstItem="lqR-Gc-7pH" firstAttribute="top" secondItem="Tug-lH-5kf" secondAttribute="bottom" constant="10" id="Uv3-5I-v7B"/>
                                             <constraint firstAttribute="trailing" secondItem="A1R-L5-vAB" secondAttribute="trailing" constant="20" id="VWi-ro-3Dc"/>
                                             <constraint firstItem="hF3-pe-Szv" firstAttribute="top" secondItem="yVW-vr-zkC" secondAttribute="bottom" constant="10" id="ViM-Xu-rAX"/>
                                             <constraint firstItem="nh8-ka-fr5" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="WqT-Oa-QXb"/>
@@ -424,7 +437,7 @@
                                             <constraint firstItem="Wok-H0-08T" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="cZE-1I-B8l"/>
                                             <constraint firstItem="oGP-Jv-Ih9" firstAttribute="top" secondItem="zBa-Ih-PGw" secondAttribute="bottom" constant="10" id="cpa-E8-dyD"/>
                                             <constraint firstAttribute="trailing" secondItem="nh8-ka-fr5" secondAttribute="trailing" constant="20" id="cx0-wt-h3t"/>
-                                            <constraint firstAttribute="trailing" secondItem="fhz-Cf-O9R" secondAttribute="trailing" constant="20" id="dZx-5b-l2D"/>
+                                            <constraint firstAttribute="trailing" secondItem="yjx-ug-3ih" secondAttribute="trailing" constant="20" id="d8Q-tv-V5b"/>
                                             <constraint firstItem="zBa-Ih-PGw" firstAttribute="top" secondItem="0Hx-ee-cO2" secondAttribute="bottom" constant="10" id="dxx-Vq-MLc"/>
                                             <constraint firstItem="R7T-KE-tiu" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="elp-cJ-w7y"/>
                                             <constraint firstItem="Qvp-Vy-dSe" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="epn-g8-Iaa"/>
@@ -435,6 +448,7 @@
                                             <constraint firstItem="7V7-YZ-9uG" firstAttribute="top" secondItem="VL3-63-cTM" secondAttribute="bottom" constant="10" id="hJw-b1-4gN"/>
                                             <constraint firstItem="sKj-RA-MbD" firstAttribute="top" secondItem="7V7-YZ-9uG" secondAttribute="bottom" constant="10" id="hOF-9Q-iJs"/>
                                             <constraint firstItem="VL3-63-cTM" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="is1-wK-jaE"/>
+                                            <constraint firstItem="yjx-ug-3ih" firstAttribute="top" secondItem="VL3-63-cTM" secondAttribute="bottom" constant="10" id="kR7-y5-a1Y"/>
                                             <constraint firstItem="R7T-KE-tiu" firstAttribute="top" secondItem="oGP-Jv-Ih9" secondAttribute="bottom" constant="10" id="lQa-6G-8XB"/>
                                             <constraint firstItem="U5m-jR-Bt0" firstAttribute="centerX" secondItem="lWi-bg-yiV" secondAttribute="centerX" multiplier="1.5" id="mF2-OA-M54"/>
                                             <constraint firstItem="hF3-pe-Szv" firstAttribute="leading" secondItem="lWi-bg-yiV" secondAttribute="leading" constant="20" id="nhq-qO-msF"/>
@@ -510,7 +524,6 @@
                         <outlet property="posterDefaultImageView" destination="dOr-sc-knx" id="0Mo-KW-uMw"/>
                         <outlet property="posterImageLabel" destination="x4I-DQ-nzZ" id="IUT-kK-nBs"/>
                         <outlet property="posterImageView" destination="MvS-wo-GVs" id="kXv-GA-1TN"/>
-                        <outlet property="previewButton" destination="gzk-z4-dMZ" id="kmd-yc-a94"/>
                         <outlet property="rareLabel" destination="5hF-Ll-fEn" id="X7M-4A-tgv"/>
                         <outlet property="rareNftCountTextField" destination="oOX-2w-nxt" id="wDN-Dx-R9p"/>
                         <outlet property="rareNftDefaultImageView" destination="PGm-Iu-k84" id="gVk-ES-6Ep"/>

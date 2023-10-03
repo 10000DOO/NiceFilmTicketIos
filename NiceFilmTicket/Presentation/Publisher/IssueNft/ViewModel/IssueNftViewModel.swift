@@ -34,4 +34,8 @@ class IssueNftViewModel: ObservableObject {
     func reverseLegendImageIsSelected() {
         legendImageIsSelected = !legendImageIsSelected
     }
+    
+    func issueNft() {
+        
+    }
 }
