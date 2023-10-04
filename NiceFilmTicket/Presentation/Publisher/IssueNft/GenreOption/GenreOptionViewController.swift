@@ -11,7 +11,8 @@ import SnapKit
 class GenreOptionViewController: UIViewController {
     
     private let genreOptionView = GenreOptionView()
-    let allGenres: [MoiveGenre] = [
+    weak var issueNftDelegate: IssueNftViewDelegate?
+    private let allGenres: [MoiveGenre] = [
         .action,
         .adventure,
         .fantasy,
@@ -63,7 +64,7 @@ class GenreOptionViewController: UIViewController {
 
 extension GenreOptionViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 26
+        return allGenres.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,5 +74,11 @@ extension GenreOptionViewController: UITableViewDelegate, UITableViewDataSource 
         cell.textLabel?.text = genre.rawValue
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedGenre = allGenres[indexPath.row]
+        issueNftDelegate?.setGenre(genre: selectedGenre)
+        self.dismiss(animated: true, completion: nil)
     }
 }

@@ -46,11 +46,15 @@ class IssueNftViewController: UIViewController {
     let picker = UIImagePickerController()
 
     @IBAction func setGenre(_ sender: Any) {
-        let GenreOptionViewController = GenreOptionViewController()
-        self.present(GenreOptionViewController, animated: true, completion: nil)
+        let genreOptionViewController = GenreOptionViewController()
+        genreOptionViewController.issueNftDelegate = self
+        self.present(genreOptionViewController, animated: true)
     }
     
     @IBAction func setAgeLimit(_ sender: Any) {
+        let ageLimitViewController = AgeLimitViewController()
+        ageLimitViewController.issueNftDelegate = self
+        self.present(ageLimitViewController, animated: true)
     }
     
     private let issueNftViewModel = IssueNftViewModel()
@@ -288,9 +292,9 @@ extension IssueNftViewController {
         releaseDateTextField.resignFirstResponder() // DatePicker 닫기
     }
     
-    func registerNft() {
-        movieTitleTextField
-    }
+//    func registerNft() {
+//        movieTitleTextField
+//    }
 }
 
 extension IssueNftViewController: UIScrollViewDelegate {
@@ -360,5 +364,15 @@ extension IssueNftViewController: UITextViewDelegate {
             storyLineTextView.text = storyLineTextViewPlaceHolder
             storyLineTextView.textColor = .lightGray
         }
+    }
+}
+
+extension IssueNftViewController: IssueNftViewDelegate {
+    func setGenre(genre: MoiveGenre) {
+        genreTextField.text = genre.rawValue
+    }
+    
+    func setAgeLimit(age: AgeLimit) {
+        ageLimitTextField.text = age.rawValue
     }
 }
