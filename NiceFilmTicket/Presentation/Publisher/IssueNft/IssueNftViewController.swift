@@ -43,8 +43,9 @@ class IssueNftViewController: UIViewController {
     @IBOutlet weak var legendNftCountTextField: UITextField!
     @IBOutlet weak var nftIssueButton: UIButton!
     let storyLineTextViewPlaceHolder = " 줄거리를 입력해주세요."
+    var keyHeight: CGFloat?
     let picker = UIImagePickerController()
-
+    
     @IBAction func setGenre(_ sender: Any) {
         let genreOptionViewController = GenreOptionViewController()
         genreOptionViewController.issueNftDelegate = self
@@ -58,7 +59,21 @@ class IssueNftViewController: UIViewController {
     }
     
     private let issueNftViewModel = IssueNftViewModel()
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //name으로 하나씩 지우기
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -73,13 +88,13 @@ class IssueNftViewController: UIViewController {
         
         posterImageView.isUserInteractionEnabled = true
         posterDefaultImageView.isUserInteractionEnabled = true
-
+        
         normalNftImageView.isUserInteractionEnabled = true
         normalNftDefaultImageView.isUserInteractionEnabled = true
-
+        
         rareNftImageView.isUserInteractionEnabled = true
         rareNftDefaultImageView.isUserInteractionEnabled = true
-
+        
         legendNftImageView.isUserInteractionEnabled = true
         legendNftDefaultImageView.isUserInteractionEnabled = true
         
@@ -247,9 +262,7 @@ extension IssueNftViewController {
     func setNftIssueButton() {
         nftIssueButton.layer.borderWidth = 2
         nftIssueButton.layer.cornerRadius = 10
-//        nftIssueButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
-        nftIssueButton.layer.borderColor = UIColor.lightGray.cgColor
-        nftIssueButton.backgroundColor = .lightGray
+        nftIssueButton.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
     }
     
     @objc func selectPosterImage() {
@@ -267,6 +280,20 @@ extension IssueNftViewController {
     @objc func selectLegendImage() {
         issueNftViewModel.reverseLegendImageIsSelected()
         self.present(picker, animated: true, completion: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+                let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                keyHeight = keyboardHeight
+
+                self.view.frame.size.height -= keyboardHeight
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.view.frame.size.height += keyHeight ?? 0
     }
 }
 
@@ -292,9 +319,9 @@ extension IssueNftViewController {
         releaseDateTextField.resignFirstResponder() // DatePicker 닫기
     }
     
-//    func registerNft() {
-//        movieTitleTextField
-//    }
+    //    func registerNft() {
+    //        movieTitleTextField
+    //    }
 }
 
 extension IssueNftViewController: UIScrollViewDelegate {

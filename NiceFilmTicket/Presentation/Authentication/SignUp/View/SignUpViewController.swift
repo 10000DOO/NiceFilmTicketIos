@@ -14,6 +14,7 @@ class SignUpViewController: UIViewController {
     private let signUpView = SignUpView(emailCodeHidden: true)
     let signUpViewModel: SignUpViewModel
     var cancellables = Set<AnyCancellable>()
+    var keyHeight: CGFloat?
     
     init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel
@@ -22,6 +23,20 @@ class SignUpViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("SignUpViewController(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //name으로 하나씩 지우기
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewDidLoad() {
@@ -64,6 +79,20 @@ extension SignUpViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyHeight = keyboardHeight
+        
+        self.view.frame.size.height -= keyboardHeight
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        self.view.frame.size.height += keyHeight ?? 0
     }
     
     @objc func sendEmail() {
@@ -141,7 +170,7 @@ extension SignUpViewController {
         } else {
             self.signUpView.nicknameErrorLabel.text = ErrorMessage.nickNameNotExist.message
         }
-
+        
         if password == passwordCheck {
             guard let memberType = UserDefaults.standard.string(forKey: "memberType") else { return }
             signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType)
