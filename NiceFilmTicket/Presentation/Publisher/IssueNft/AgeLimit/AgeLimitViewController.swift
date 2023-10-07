@@ -12,10 +12,10 @@ class AgeLimitViewController: UIViewController {
     private let ageLimitView = AgeLimitView()
     weak var issueNftDelegate: IssueNftViewDelegate?
     private let ageLimit: [AgeLimit] = [
-        .gRated,
-        .pg12,
-        .pg15,
-        .pg18
+        .G_RATED,
+        .PG12,
+        .PG15,
+        .PG18
     ]
 
     init() {

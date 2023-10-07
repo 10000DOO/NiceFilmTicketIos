@@ -4,9 +4,10 @@
 //
 //  Created by 이건준 on 2023/09/27.
 //
-
+import Foundation
 import UIKit
 import SnapKit
+import Combine
 
 class IssueNftViewController: UIViewController {
     
@@ -44,7 +45,9 @@ class IssueNftViewController: UIViewController {
     @IBOutlet weak var nftIssueButton: UIButton!
     let storyLineTextViewPlaceHolder = " 줄거리를 입력해주세요."
     var keyHeight: CGFloat?
+    var originFrameHeight: CGFloat?
     let picker = UIImagePickerController()
+    var cancellable: Set<AnyCancellable> = []
     
     @IBAction func setGenre(_ sender: Any) {
         let genreOptionViewController = GenreOptionViewController()
@@ -58,7 +61,10 @@ class IssueNftViewController: UIViewController {
         self.present(ageLimitViewController, animated: true)
     }
     
-    private let issueNftViewModel = IssueNftViewModel()
+    @IBAction func registerNft(_ sender: Any) {
+        registerNft()
+    }
+    private let issueNftViewModel = IssueNftViewModel(issueNftService: IssueNftService(issueNftRepository: IssueNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()))
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -98,6 +104,8 @@ class IssueNftViewController: UIViewController {
         legendNftImageView.isUserInteractionEnabled = true
         legendNftDefaultImageView.isUserInteractionEnabled = true
         
+        originFrameHeight = self.view.frame.size.height
+        
         let selectPosterImage = UITapGestureRecognizer(target: self, action: #selector(selectPosterImage))
         posterImageView.addGestureRecognizer(selectPosterImage)
         posterDefaultImageView.addGestureRecognizer(selectPosterImage)
@@ -113,6 +121,20 @@ class IssueNftViewController: UIViewController {
         let selectLegendImage = UITapGestureRecognizer(target: self, action: #selector(selectLegendImage))
         legendNftImageView.addGestureRecognizer(selectLegendImage)
         legendNftDefaultImageView.addGestureRecognizer(selectLegendImage)
+        
+        issueNftViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
+            if result {
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                signInVC.modalPresentationStyle = .fullScreen
+                self?.present(signInVC, animated: true, completion: nil)
+            }
+        }
+        
+        issueNftViewModel.registerIsSuccess(store: &cancellable) { [weak self] result in
+            if result {
+                self?.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 }
 
@@ -284,16 +306,20 @@ extension IssueNftViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo:NSDictionary = notification.userInfo! as NSDictionary
-                let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
-                let keyboardRectangle = keyboardFrame.cgRectValue
-                let keyboardHeight = keyboardRectangle.height
-                keyHeight = keyboardHeight
-
-                self.view.frame.size.height -= keyboardHeight
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyHeight = keyboardHeight
+        
+        if originFrameHeight! <= self.view.frame.size.height {
+            self.view.frame.size.height -= keyboardHeight
+        }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.size.height += keyHeight ?? 0
+        if originFrameHeight! > self.view.frame.size.height {
+            self.view.frame.size.height += keyHeight ?? 0
+        }
     }
 }
 
@@ -308,20 +334,108 @@ extension IssueNftViewController {
         view.endEditing(true)
     }
     
-    @objc func datePickerValueChanged(_ sender: UIDatePicker) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        releaseDateTextField.text = dateFormatter.string(from: sender.date)
+    func scrollToTextFieldIfNeeded(_ textField: UITextField) -> Bool {
+        if textField.text == "" || textField.text?.isEmpty == true {
+            let scrollPoint = CGPoint(x: 0, y: textField.frame.origin.y - 20)
+            scrollView.setContentOffset(scrollPoint, animated: true)
+            return false
+        } else {
+            return true
+        }
     }
     
-    @objc func doneButtonTapped() {
-        // 완료 버튼을 눌렀을 때 수행할 작업 추가
-        releaseDateTextField.resignFirstResponder() // DatePicker 닫기
+    func scrollToTextViewIfNeeded(_ textView: UITextView) -> Bool {
+        if textView.text == "" || textView.text?.isEmpty == true {
+            let scrollPoint = CGPoint(x: 0, y: textView.frame.origin.y - 20)
+            scrollView.setContentOffset(scrollPoint, animated: true)
+            return false
+        } else {
+            return true
+        }
     }
     
-    //    func registerNft() {
-    //        movieTitleTextField
-    //    }
+    func scrollToImageViewIfNeeded(_ imageView: UIImageView) -> Bool {
+        if imageView.image == nil {
+            let scrollPoint = CGPoint(x: 0, y: imageView.frame.origin.y - 20)
+            scrollView.setContentOffset(scrollPoint, animated: true)
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func registerNft() {
+        if scrollToTextFieldIfNeeded(movieTitleTextField)
+            && scrollToTextFieldIfNeeded(genreTextField)
+            && scrollToTextFieldIfNeeded(ageLimitTextField)
+            && scrollToTextFieldIfNeeded(releaseDateTextField)
+            && scrollToTextFieldIfNeeded(directorTextField)
+            && scrollToTextFieldIfNeeded(actorsTextField)
+            && scrollToTextFieldIfNeeded(runningTimeTextField)
+            && scrollToTextFieldIfNeeded(normalPriceTextField)
+            && scrollToTextFieldIfNeeded(saleStartTextField)
+            && scrollToTextFieldIfNeeded(saleEndDateTextField)
+            && scrollToTextViewIfNeeded(storyLineTextView)
+            && scrollToTextFieldIfNeeded(normalNftCountTextField)
+            && scrollToTextFieldIfNeeded(rareNftCountTextField)
+            && scrollToTextFieldIfNeeded(legendNftCountTextField)
+            && scrollToImageViewIfNeeded(posterImageView)
+            && scrollToImageViewIfNeeded(normalNftImageView)
+            && scrollToImageViewIfNeeded(rareNftImageView)
+            && scrollToImageViewIfNeeded(legendNftImageView) {
+            
+            guard let genre = MovieGenre(rawValue: genreTextField.text!) else { return }
+            guard let ageLimit = AgeLimit(rawValue: ageLimitTextField.text!) else { return }
+            
+            if issueNftViewModel.actorPatternCheck(actor: actorsTextField.text!) == nil {
+                let scrollPoint = CGPoint(x: 0, y: actorsTextField.frame.origin.y - 20)
+                scrollView.setContentOffset(scrollPoint, animated: true)
+                return
+            }
+            
+            if !issueNftViewModel.datePatternCheck(date: releaseDateTextField.text!) {
+                let scrollPoint = CGPoint(x: 0, y: releaseDateTextField.frame.origin.y - 20)
+                scrollView.setContentOffset(scrollPoint, animated: true)
+                return
+            }
+            
+            if !issueNftViewModel.datePatternCheck(date: saleStartTextField.text!) {
+                let scrollPoint = CGPoint(x: 0, y: saleStartTextField.frame.origin.y - 20)
+                scrollView.setContentOffset(scrollPoint, animated: true)
+                return
+            }
+            
+            if !issueNftViewModel.datePatternCheck(date: saleEndDateTextField.text!) {
+                let scrollPoint = CGPoint(x: 0, y: saleEndDateTextField.frame.origin.y - 20)
+                scrollView.setContentOffset(scrollPoint, animated: true)
+                return
+            }
+            
+            let issueNftReq = IssueNFTReq(movieTitle: movieTitleTextField.text!, movieGenre: "\(genre)", filmRating: "\(ageLimit)", releaseDate: releaseDateTextField.text!, director: directorTextField.text!, actors: issueNftViewModel.actorPatternCheck(actor: actorsTextField.text!)!, runningTime: Int(runningTimeTextField.text!)!, normalNFTPrice: Int(normalPriceTextField.text!)!, saleStartDate: saleStartTextField.text!, saleEndDate: saleEndDateTextField.text!, overView: storyLineTextView.text!)
+            
+            let countNftReq = CountNFTReq(normalCount: Int(normalNftCountTextField.text!)!, rareCount: Int(rareNftCountTextField.text!)!, legendCount: Int(legendNftCountTextField.text!)!)
+            
+            issueNftViewModel.issueNft(issueNftReq: issueNftReq, countNftReq: countNftReq,
+                                       posterImage: [issueNftViewModel.posterImageName: uiImageToData(image: posterImageView.image!, imageName: issueNftViewModel.posterImageName)],
+                                       normalNftImage: [issueNftViewModel.normalImageName: uiImageToData(image: normalNftImageView.image!, imageName: issueNftViewModel.normalImageName)],
+                                       rareNftImage: [issueNftViewModel.rareImageName: uiImageToData(image: rareNftImageView.image!, imageName: issueNftViewModel.rareImageName)],
+                                       legendNftImage: [issueNftViewModel.legendImageName: uiImageToData(image: legendNftImageView.image!, imageName: issueNftViewModel.legendImageName)])
+        }
+    }
+    
+    func uiImageToData(image: UIImage, imageName: String) -> Foundation.Data {
+        var result: Foundation.Data?
+        if imageName.hasSuffix("png") {
+            if let imageData = image.pngData() {
+                result = imageData
+            }
+        } else if imageName.hasSuffix("jpeg") || imageName.hasSuffix("JPG") {
+            if let imageData = image.jpegData(compressionQuality: 1.0) {
+                result = imageData
+            }
+        }
+        return result!
+    }
 }
 
 extension IssueNftViewController: UIScrollViewDelegate {
@@ -342,20 +456,25 @@ extension IssueNftViewController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         var targetImageView = 0
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            let imageName = info[UIImagePickerController.InfoKey.imageURL] as? URL
             self.dismiss(animated: false, completion: { [weak self] in
                 if (self?.issueNftViewModel.posterImageIsSelected == true) {
+                    self?.issueNftViewModel.posterImageName(name: URL(fileURLWithPath: imageName!.lastPathComponent).pathExtension.description)
                     targetImageView = 0
                     self?.issueNftViewModel.reversePosterImageIsSelected()
                 }
                 if (self?.issueNftViewModel.normalImageIsSelected == true) {
+                    self?.issueNftViewModel.normalImageName(name: URL(fileURLWithPath: imageName!.lastPathComponent).pathExtension.description)
                     targetImageView = 1
                     self?.issueNftViewModel.reverseNormalImageIsSelected()
                 }
                 if (self?.issueNftViewModel.rareImageIsSelected == true) {
+                    self?.issueNftViewModel.rareImageName(name: URL(fileURLWithPath: imageName!.lastPathComponent).pathExtension.description)
                     targetImageView = 2
                     self?.issueNftViewModel.reverseRareImageIsSelected()
                 }
                 if (self?.issueNftViewModel.legendImageIsSelected == true) {
+                    self?.issueNftViewModel.legendImageName(name: URL(fileURLWithPath: imageName!.lastPathComponent).pathExtension.description)
                     targetImageView = 3
                     self?.issueNftViewModel.reverseLegendImageIsSelected()
                 }
@@ -395,7 +514,7 @@ extension IssueNftViewController: UITextViewDelegate {
 }
 
 extension IssueNftViewController: IssueNftViewDelegate {
-    func setGenre(genre: MoiveGenre) {
+    func setGenre(genre: MovieGenre) {
         genreTextField.text = genre.rawValue
     }
     

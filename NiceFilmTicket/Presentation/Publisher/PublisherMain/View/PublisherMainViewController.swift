@@ -33,18 +33,22 @@ class PublisherMainViewController: UIViewController {
         publisherMainView.tableView.dataSource = self
         publisherMainView.tableView.register(PublisherMainTableViewCell.self, forCellReuseIdentifier: "publishedNftCell")
         
-        publisherMainViewModel.getIssuedNft()
-        
-        publisherMainViewModel.$refreshTokenExpired.sink { [weak self] refreshTokenExpired in
-            if refreshTokenExpired {
+        publisherMainViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
+            if result {
                 let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
                 signInVC.modalPresentationStyle = .fullScreen
                 self?.present(signInVC, animated: true, completion: nil)
             }
-        }.store(in: &cancellable)
+        }
         
         publisherMainView.registerButton.addTarget(self, action: #selector(moveToIssueNftView), for: .touchUpInside)
         self.navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        publisherMainViewModel.getIssuedNft(store: &cancellable)
     }
 }
 
@@ -82,7 +86,7 @@ extension PublisherMainViewController: UITableViewDelegate, UITableViewDataSourc
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if publisherMainView.tableView.contentOffset.y > (publisherMainView.tableView.contentSize.height - publisherMainView.tableView.bounds.size.height) * 0.8 {
             if publisherMainViewModel.fetchMoreResult {
-                publisherMainViewModel.getIssuedNft()
+                publisherMainViewModel.getIssuedNft(store: &cancellable)
                 publisherMainView.tableView.reloadData()
             }
         }

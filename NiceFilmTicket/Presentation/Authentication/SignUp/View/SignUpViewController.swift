@@ -15,6 +15,7 @@ class SignUpViewController: UIViewController {
     let signUpViewModel: SignUpViewModel
     var cancellables = Set<AnyCancellable>()
     var keyHeight: CGFloat?
+    var originFrameHeight: CGFloat?
     
     init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel
@@ -88,11 +89,15 @@ extension SignUpViewController {
         let keyboardHeight = keyboardRectangle.height
         keyHeight = keyboardHeight
         
-        self.view.frame.size.height -= keyboardHeight
+        if originFrameHeight! <= self.view.frame.size.height {
+            self.view.frame.size.height -= keyboardHeight
+        }
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
-        self.view.frame.size.height += keyHeight ?? 0
+        if originFrameHeight! > self.view.frame.size.height {
+            self.view.frame.size.height += keyHeight ?? 0
+        }
     }
     
     @objc func sendEmail() {

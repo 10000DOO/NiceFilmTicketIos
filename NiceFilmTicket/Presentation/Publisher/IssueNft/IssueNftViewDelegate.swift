@@ -8,7 +8,7 @@
 import Foundation
 
 protocol IssueNftViewDelegate: AnyObject {
-    func setGenre(genre: MoiveGenre)
+    func setGenre(genre: MovieGenre)
     
     func setAgeLimit(age: AgeLimit)
 }

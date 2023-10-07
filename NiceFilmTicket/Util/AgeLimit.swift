@@ -8,10 +8,10 @@
 import Foundation
 
 enum AgeLimit: String {
-    case gRated = "전체관람가"
-    case pg12 = "12세 이상 관람가"
-    case pg15 = "15세 이상 관람가"
-    case pg18 = "18세 이상 관람가"
+    case G_RATED = "전체관람가"
+    case PG12 = "12세 이상 관람가"
+    case PG15 = "15세 이상 관람가"
+    case PG18 = "18세 이상 관람가"
     
     var name: String {
         return rawValue
