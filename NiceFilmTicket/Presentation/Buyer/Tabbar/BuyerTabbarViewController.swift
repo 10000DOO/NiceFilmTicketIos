@@ -1,21 +1,22 @@
 //
-//  PublisherTapbarViewController.swift
+//  BuyerTabbarViewController.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/12.
+//  Created by 이건준 on 2023/10/08.
 //
 
 import UIKit
 
-class PublisherTapbarViewController: UITabBarController {
-    
+class BuyerTabbarViewController: UITabBarController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let publisherMainVC = PublisherMainViewController(publisherMainViewModel: PublisherMainViewModel(publisherMainService: PublisherMainService(publisherMainRepository: PublisherMainRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+
+        let buyerMainVC = BuyerMainViewController()
+        let drawNftVC = DrawNftViewController()
         let myPageVC = MyPageViewController()
         
-        self.viewControllers = [UINavigationController(rootViewController: publisherMainVC), myPageVC]
+        self.viewControllers = [UINavigationController(rootViewController: buyerMainVC), drawNftVC, myPageVC]
         
         UITabBar.appearance().backgroundColor = UIColor(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         
@@ -26,10 +27,16 @@ class PublisherTapbarViewController: UITabBarController {
                 items[0].image = UIImage(systemName: "house.fill")
             }
             
-            if let myPageFillImage = UIImage(systemName: "person.fill") {
+            if let myPageFillImage = UIImage(systemName: "arrow.2.squarepath") {
                 let blueMyPageFillImage = myPageFillImage.withTintColor(UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)).withRenderingMode(.alwaysOriginal)
                 items[1].selectedImage = blueMyPageFillImage
-                items[1].image = UIImage(systemName: "person.fill")
+                items[1].image = UIImage(systemName: "arrow.2.squarepath")
+            }
+            
+            if let myPageFillImage = UIImage(systemName: "person.fill") {
+                let blueMyPageFillImage = myPageFillImage.withTintColor(UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)).withRenderingMode(.alwaysOriginal)
+                items[2].selectedImage = blueMyPageFillImage
+                items[2].image = UIImage(systemName: "person.fill")
             }
         }
     }

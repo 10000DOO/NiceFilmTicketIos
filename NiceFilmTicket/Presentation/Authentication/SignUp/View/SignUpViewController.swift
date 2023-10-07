@@ -56,6 +56,8 @@ class SignUpViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
+        originFrameHeight = self.view.frame.size.height
+        
         let emailSendingButtonClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(sendEmail))
         signUpView.emailCodeSendingButton.addGestureRecognizer(emailSendingButtonClickRecognizer)
         

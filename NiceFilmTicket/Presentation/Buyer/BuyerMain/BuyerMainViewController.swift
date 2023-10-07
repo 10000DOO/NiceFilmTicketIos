@@ -1,17 +1,16 @@
 //
-//  NFTIssueViewController.swift
+//  BuyerMainViewController.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/12.
+//  Created by 이건준 on 2023/10/08.
 //
 
 import UIKit
 
-class PresentViewController: UIViewController {
+class BuyerMainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
 
         // Do any additional setup after loading the view.
     }

@@ -37,9 +37,14 @@ class SplashViewController : UIViewController {
         }) { _ in
             if UserDefaults.standard.string(forKey: "accessToken") != nil {
                 if UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER" {
-                    let PublisherTabbarVC = PublisherTapbarViewController()
-                    PublisherTabbarVC.modalPresentationStyle = .fullScreen
-                    self.present(PublisherTabbarVC, animated: true, completion: nil)
+                    let publisherTabbarVC = PublisherTapbarViewController()
+                    publisherTabbarVC.modalPresentationStyle = .fullScreen
+                    self.present(publisherTabbarVC, animated: true, completion: nil)
+                }
+                if UserDefaults.standard.string(forKey: "memberType") == "USER" {
+                    let buyerTabbarVC = BuyerTabbarViewController()
+                    buyerTabbarVC.modalPresentationStyle = .fullScreen
+                    self.present(buyerTabbarVC, animated: true, completion: nil)
                 }
             } else {
                 let rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
