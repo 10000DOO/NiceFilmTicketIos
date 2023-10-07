@@ -23,8 +23,9 @@ class PublisherMainViewModel: ObservableObject {
         self.refreshTokenService = refreshTokenService
     }
     
-    func getIssuedNft() {
+    func getIssuedNft(store: inout Set<AnyCancellable>) {
         fetchMoreResult = false
+        var storeCopy = store
         publisherMainService.getNfts(page: page, size: 15) { [weak self] result in
             switch result {
             case .success(let response):
@@ -40,12 +41,13 @@ class PublisherMainViewModel: ObservableObject {
                             if tokenResult == ErrorMessage.expiredRefreshToken.message {
                                 self?.refreshTokenExpired = true
                             } else {
-                                self?.getIssuedNft()
+                                self?.getIssuedNft(store: &storeCopy)
                             }
-                        }).store(in: &self!.cancellables)
+                        }).store(in: &storeCopy)
                 }
             }
         }
+        store = storeCopy
     }
     
     func getNftList(index: Int, store: inout Set<AnyCancellable>, completion: @escaping (NFTItem) -> Void) {
@@ -54,5 +56,12 @@ class PublisherMainViewModel: ObservableObject {
             .sink { nfts in
             completion(nfts[index])
         }.store(in: &store)
+    }
+    
+    func refreshTokenExpired(store: inout Set<AnyCancellable>, completion: @escaping (Bool) -> Void) {
+        $refreshTokenExpired
+            .sink { result in
+                completion(result)
+            }.store(in: &store)
     }
 }
