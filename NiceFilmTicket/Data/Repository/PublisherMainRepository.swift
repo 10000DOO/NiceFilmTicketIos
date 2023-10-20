@@ -10,7 +10,7 @@ import Moya
 
 class PublisherMainRepository: PublisherMainRepositoryProtocol {
     
-    private let provider = MoyaProvider<PublisherMainAPI>()
+    private let provider = MoyaProvider<PublisherGetNftAPI>()
     
     func getNfts(page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void) {
         provider.request(.getNfts(page: page, size: size)) { result in

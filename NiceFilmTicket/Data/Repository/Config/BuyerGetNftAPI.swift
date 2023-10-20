@@ -1,18 +1,18 @@
 //
-//  PublisherMainAPI.swift
+//  NftListAPI.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/15.
+//  Created by 이건준 on 10/20/23.
 //
 
 import Foundation
 import Moya
 
-enum PublisherMainAPI{
+enum BuyerGetNftAPI{
     case getNfts(page: Int, size: Int)
 }
 
-extension PublisherMainAPI: TargetType {
+extension BuyerGetNftAPI: TargetType {
     var baseURL: URL {
         return URL(string: ServerInfo.serverURL)!
     }
@@ -42,3 +42,5 @@ extension PublisherMainAPI: TargetType {
         return ["Content-Type": "application/json", "Authorization" : UserDefaults.standard.string(forKey: "accessToken")!]
     }
 }
+
+

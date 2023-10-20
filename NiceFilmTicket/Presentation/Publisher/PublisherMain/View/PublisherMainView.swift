@@ -10,7 +10,7 @@ import SnapKit
 
 class PublisherMainView: UIView {
     
-    var logoImageView = UIImageView()
+    var logoImageView = UIImageView(image: UIImage(named: "Logo"))
     var viewTitle = MenuUILabel(text: "[  NFT 등록 목록  ]", size: UIFont.boldSystemFont(ofSize: 40))
     var tableView = UITableView()
     var nftNum = UILabel()
@@ -49,7 +49,6 @@ extension PublisherMainView {
     }
     
     private func setLogo() {
-        logoImageView = UIImageView(image: UIImage(named: "Logo"))
         self.addSubview(logoImageView)
         
         logoImageView.snp.makeConstraints { make in
