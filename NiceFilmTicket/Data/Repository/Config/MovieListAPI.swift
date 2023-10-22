@@ -1,5 +1,5 @@
 //
-//  PublisherGetNftAPI.swift
+//  MovieListAPI.swift
 //  NiceFilmTicket
 //
 //  Created by 이건준 on 10/20/23.
@@ -8,33 +8,33 @@
 import Foundation
 import Moya
 
-enum PublisherGetNftAPI{
-    case getNfts(page: Int, size: Int)
+enum MovieListAPI{
+    case getMovies(sortType: String, page: Int, size: Int)
 }
 
-extension PublisherGetNftAPI: TargetType {
+extension MovieListAPI: TargetType {
     var baseURL: URL {
         return URL(string: ServerInfo.serverURL)!
     }
     
     var path: String {
         switch self {
-        case .getNfts:
-            return "/nft"
+        case .getMovies:
+            return "/movie"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getNfts:
+        case .getMovies:
             return .get
         }
     }
     
     var task: Task {
         switch self {
-        case .getNfts(let page, let size):
-            return .requestParameters(parameters: ["sortType": "최신순", "page": page, "size": size], encoding: URLEncoding.queryString)
+        case .getMovies(let sortType, let page, let size):
+            return .requestParameters(parameters: ["sortType": sortType, "page": page, "size": size], encoding: URLEncoding.queryString)
         }
     }
     

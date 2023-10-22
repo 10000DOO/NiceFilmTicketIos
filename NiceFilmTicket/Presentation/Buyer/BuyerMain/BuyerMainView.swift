@@ -97,23 +97,6 @@ extension BuyerMainView {
         
         listUpButton.setAttributedTitle(attributedTitle, for:.normal)
         
-        let optionHandler = { [weak self](action: UIAction) in
-            print(action.title)
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.boldSystemFont(ofSize: 16),
-                .foregroundColor: UIColor(red: 8/255, green: 30/255, blue: 92/255,alpha: 1)
-            ]
-            
-            let attributedTitle = NSAttributedString(string: action.title, attributes :attributes)
-            
-            self?.listUpButton.setAttributedTitle(attributedTitle, for:.normal)
-        }
-        
-        listUpButton.menu = UIMenu(children: [UIAction(title:"최신순", state: .on, handler: optionHandler),
-                                              UIAction(title:"이름순", handler: optionHandler)])
-        listUpButton.showsMenuAsPrimaryAction = true
-        listUpButton.changesSelectionAsPrimaryAction = true
-        
         self.addSubview(listUpButton)
         
         listUpButton.snp.makeConstraints { make in

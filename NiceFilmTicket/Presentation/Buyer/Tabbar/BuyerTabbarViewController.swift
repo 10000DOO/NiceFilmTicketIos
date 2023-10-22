@@ -12,7 +12,7 @@ class BuyerTabbarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let buyerMainVC = BuyerMainViewController()
+        let buyerMainVC = BuyerMainViewController(buyerMainViewModel: BuyerMainViewModel(movieListService: MovieListService(movieListRepository: MovieListRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         let drawNftVC = DrawNftViewController()
         let myPageVC = MyPageViewController()
         
