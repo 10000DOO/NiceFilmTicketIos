@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Combine
+import Kingfisher
 
 class BuyerMainViewController: UIViewController {
     
@@ -111,7 +112,17 @@ extension BuyerMainViewController {
     }
 }
 
-extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource {
+extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, BuyerMainTableViewCellDelegate {
+    func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
+        if let indexPath = buyerMainView.tableView.indexPath(for :cell){
+            if imageViewIndex == 0 {
+                print(buyerMainViewModel.movieData[indexPath.row].leftMovieId)
+            } else if imageViewIndex == 1 {
+                print(buyerMainViewModel.movieData[indexPath.row].rightMovieId)
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if buyerMainViewModel.movieData.count == 0 {
             return 4
@@ -122,21 +133,23 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "buyerMainTableViewCell", for: indexPath) as! BuyerMainTableViewCell
+        cell.selectionStyle = .none
+        cell.delegate = self
         
-        buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { [weak self] movieData in
+        buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
             cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
-            self?.downloadImage(url: movieData.leftMoviePoster) { image in
-                if let image = image {
-                    cell.leftMovieImage.image = image
-                }
+            if let url = URL(string: movieData.leftMoviePoster) {
+                cell.leftMovieImage.kf.setImage(with: url)
             }
-            if let url = movieData.rightMoviePoster {
-                cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
-                self?.downloadImage(url: url) { image in
-                    if let image = image {
-                        cell.rightMovieImage.image = image
-                    }
+            
+            if movieData.rightMovieId != nil {
+                if let url = URL(string: movieData.rightMoviePoster!) {
+                    cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
+                    cell.rightMovieImage.kf.setImage(with:url)
                 }
+            } else {
+                cell.rightMoiveTitle.text = ""
+                cell.rightMovieImage.image = nil
             }
         }
         return cell
@@ -146,13 +159,10 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource {
         return 275
     }
     
-    
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if buyerMainView.tableView.contentOffset.y > (buyerMainView.tableView.contentSize.height - buyerMainView.tableView.bounds.size.height) * 0.8 {
             if buyerMainViewModel.fetchMoreResult {
                 buyerMainViewModel.getMovies(sortType: buyerMainViewModel.sortType)
-                buyerMainView.tableView.reloadData()
             }
         }
     }

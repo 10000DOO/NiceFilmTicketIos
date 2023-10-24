@@ -10,28 +10,33 @@ import SnapKit
 import Combine
 
 class BuyerMainTableViewCell: UITableViewCell {
-
+    
     var leftMoiveTitle = UILabel()
     var rightMoiveTitle = UILabel()
     var leftMovieImage = UIImageView()
     var rightMovieImage = UIImageView()
     var cancellable: Set<AnyCancellable> = []
+    weak var delegate: BuyerMainTableViewCellDelegate?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        let leftTapGesture = UITapGestureRecognizer(target: self, action: #selector(leftImageTapped))
+        let rightTapGesture = UITapGestureRecognizer(target: self, action: #selector(rightImageTapped))
+        
+        leftMovieImage.isUserInteractionEnabled = true
+        rightMovieImage.isUserInteractionEnabled = true
+        
+        leftMovieImage.addGestureRecognizer(leftTapGesture)
+        rightMovieImage.addGestureRecognizer(rightTapGesture)
+        
         setView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("BuyerMainTableViewCell(coder:) has not been implemented")
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellable.removeAll()
@@ -39,6 +44,15 @@ class BuyerMainTableViewCell: UITableViewCell {
 }
 
 extension BuyerMainTableViewCell {
+    
+    @objc func leftImageTapped() {
+        delegate?.imageViewTapped(in:self, imageViewIndex:0)
+    }
+    
+    @objc func rightImageTapped() {
+        delegate?.imageViewTapped(in:self, imageViewIndex:1)
+    }
+    
     private func setView() {
         contentView.addSubview(leftMoiveTitle)
         contentView.addSubview(rightMoiveTitle)
