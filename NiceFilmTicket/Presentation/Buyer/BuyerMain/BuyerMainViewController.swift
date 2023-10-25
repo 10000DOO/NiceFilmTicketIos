@@ -116,9 +116,11 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
     func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
         if let indexPath = buyerMainView.tableView.indexPath(for :cell){
             if imageViewIndex == 0 {
-                print(buyerMainViewModel.movieData[indexPath.row].leftMovieId)
+                let detailVC = BuyerDetailViewController()
+                self.navigationController?.pushViewController(detailVC, animated: false)
             } else if imageViewIndex == 1 {
-                print(buyerMainViewModel.movieData[indexPath.row].rightMovieId)
+                let detailVC = BuyerDetailViewController()
+                self.navigationController?.pushViewController(detailVC, animated: false)
             }
         }
     }
