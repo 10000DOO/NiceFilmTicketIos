@@ -96,7 +96,6 @@ extension BuyerDetailView {
     }
     
     private func setMovieImage() {
-        movieImage.image = UIImage(named: "Logo")
         contentView.addSubview(movieImage)
         
         movieImage.snp.makeConstraints { make in
@@ -108,7 +107,6 @@ extension BuyerDetailView {
     }
     
     private func setMovieTitle() {
-        movieTitle.text = "스미스 머신"
         movieTitle.font = .boldSystemFont(ofSize: 40)
         
         contentView.addSubview(movieTitle)
@@ -120,7 +118,6 @@ extension BuyerDetailView {
     }
     
     private func setNftLevel() {
-        nftLevel.text = "NORMAL"
         nftLevel.font = .boldSystemFont(ofSize: 25)
         nftLevel.textColor = UIColor(red: 95/255, green: 159/255, blue: 255/255, alpha: 1)
         
@@ -144,7 +141,6 @@ extension BuyerDetailView {
     }
     
     private func setSalePeriod() {
-        salePeriod.text = "23.11.11 ~ 23.12.13"
         salePeriod.font = .boldSystemFont(ofSize: 20)
         contentView.addSubview(salePeriod)
         
@@ -189,7 +185,6 @@ extension BuyerDetailView {
     }
     
     private func setDirectorContent() {
-        directorContent.text = "이건준"
         directorContent.font = .boldSystemFont(ofSize: 20)
         contentView.addSubview(directorContent)
         
@@ -211,23 +206,25 @@ extension BuyerDetailView {
     }
     
     private func setActorContent() {
-        actorContent.text = "만두"
+        actorContent.numberOfLines = 0
         actorContent.font = .boldSystemFont(ofSize: 20)
         contentView.addSubview(actorContent)
         
         actorContent.snp.makeConstraints { make in
             make.top.equalTo(director.snp.bottom).offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.leading.equalTo(actors.snp.trailing).offset(10)
         }
     }
     
     private func setMovieInfo() {
-        movieInfo.text = "23.11.11 | 12세 관람가 | 120분 | 액션"
+        movieInfo.numberOfLines = 0
         movieInfo.font = .boldSystemFont(ofSize: 20)
         contentView.addSubview(movieInfo)
         
         movieInfo.snp.makeConstraints { make in
             make.top.equalTo(actorContent.snp.bottom).offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.leading.equalToSuperview().offset(20)
         }
     }
@@ -245,7 +242,6 @@ extension BuyerDetailView {
     
     private func setPlotContent() {
         plotContent.numberOfLines = 0
-        plotContent.text = "어느 한적한 마을의 조그마한 약재상."
         plotContent.font = .boldSystemFont(ofSize: 20)
         contentView.addSubview(plotContent)
         

@@ -116,10 +116,12 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
     func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
         if let indexPath = buyerMainView.tableView.indexPath(for :cell){
             if imageViewIndex == 0 {
-                let detailVC = BuyerDetailViewController()
+                let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].leftMovieId
                 self.navigationController?.pushViewController(detailVC, animated: false)
             } else if imageViewIndex == 1 {
-                let detailVC = BuyerDetailViewController()
+                let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].rightMovieId
                 self.navigationController?.pushViewController(detailVC, animated: false)
             }
         }
