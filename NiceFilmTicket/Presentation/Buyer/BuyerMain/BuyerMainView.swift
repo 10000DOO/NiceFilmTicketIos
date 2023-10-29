@@ -14,7 +14,8 @@ class BuyerMainView: UIView {
     var searchTextField = UITextField()
     var listUpButton = UIButton(type: .system)
     var tableView = UITableView()
-    
+    var searchTableView = UITableView()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -35,13 +36,14 @@ extension BuyerMainView {
         setSearchTextField()
         setListUpButton()
         setTableView()
+        setSearchTableView()
     }
     
     private func setLogo() {
         self.addSubview(logoImageView)
         
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(-30)
+            make.top.equalTo(self.safeAreaLayoutGuide.snp.top)
             make.centerX.equalTo(self.snp.centerX)
             make.width.equalTo(100)
             make.height.equalTo(50)
@@ -110,6 +112,17 @@ extension BuyerMainView {
         self.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
+            make.top.equalTo(listUpButton.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(10)
+        }
+    }
+    
+    private func setSearchTableView() {
+        searchTableView.separatorStyle = .none
+        self.addSubview(searchTableView)
+
+        searchTableView.snp.makeConstraints { make in
             make.top.equalTo(listUpButton.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(10)

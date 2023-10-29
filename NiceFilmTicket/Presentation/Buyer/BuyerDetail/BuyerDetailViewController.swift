@@ -56,6 +56,6 @@ class BuyerDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        buyerDetailViewModel.getMovie(id: movieId!)
+        buyerDetailViewModel.getMovie(id: movieId ?? 1)
     }
 }

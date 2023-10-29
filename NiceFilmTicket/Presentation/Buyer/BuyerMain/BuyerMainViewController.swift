@@ -28,11 +28,16 @@ class BuyerMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.navigationController?.navigationBar.isHidden = true
         view.addSubview(buyerMainView)
         listUpButtonSet()
         
+        buyerMainView.searchTextField.delegate = self
         buyerMainView.tableView.delegate = self
         buyerMainView.tableView.dataSource = self
+        buyerMainView.searchTableView.delegate = self
+        buyerMainView.searchTableView.dataSource = self
+        buyerMainView.searchTableView.register(BuyerMainTableViewCell.self, forCellReuseIdentifier: "buyerMainTableViewCell")
         buyerMainView.tableView.register(BuyerMainTableViewCell.self, forCellReuseIdentifier: "buyerMainTableViewCell")
         hideKeyboardWhenTappedAround()
         
@@ -50,12 +55,23 @@ class BuyerMainViewController: UIViewController {
                 self?.buyerMainView.tableView.reloadData()
             }
             .store(in: &cancellable)
+        
+        buyerMainViewModel.$searchedMovieData
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.buyerMainView.tableView.reloadData()
+            }
+            .store(in: &cancellable)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        buyerMainViewModel.getMovies(sortType: "최신순")
+        if buyerMainView.searchTextField.text == "" {
+            buyerMainView.searchTableView.isHidden = true
+            if buyerMainViewModel.movieData.count == 0 {
+                buyerMainViewModel.getMovies(sortType: "최신순")
+            }
+        }
     }
 }
 
@@ -114,24 +130,48 @@ extension BuyerMainViewController {
 
 extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, BuyerMainTableViewCellDelegate {
     func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
-        if let indexPath = buyerMainView.tableView.indexPath(for :cell){
-            if imageViewIndex == 0 {
-                let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
-                detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].leftMovieId
-                self.navigationController?.pushViewController(detailVC, animated: false)
-            } else if imageViewIndex == 1 {
-                let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
-                detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].rightMovieId
-                self.navigationController?.pushViewController(detailVC, animated: false)
+        if buyerMainView.searchTableView.isHidden {
+            if let indexPath = buyerMainView.tableView.indexPath(for :cell){
+                if imageViewIndex == 0 {
+                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                    detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].leftMovieId
+                    self.navigationController?.pushViewController(detailVC, animated: false)
+                } else if imageViewIndex == 1 {
+                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                    detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].rightMovieId
+                    self.navigationController?.pushViewController(detailVC, animated: false)
+                }
+            }
+        } else {
+            if let indexPath = buyerMainView.searchTableView.indexPath(for :cell){
+                if indexPath.row < buyerMainViewModel.searchedMovieData.count {
+                    if imageViewIndex == 0 {
+                        let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                        detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].leftMovieId
+                        self.navigationController?.pushViewController(detailVC, animated: false)
+                    } else if imageViewIndex == 1 {
+                        let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                        detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId
+                        self.navigationController?.pushViewController(detailVC, animated: false)
+                    }
+                }
             }
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if buyerMainViewModel.movieData.count == 0 {
-            return 4
+        if tableView == buyerMainView.tableView {
+            if buyerMainViewModel.movieData.count == 0 {
+                return 4
+            } else {
+                return buyerMainViewModel.movieData.count
+            }
         } else {
-            return buyerMainViewModel.movieData.count
+            if buyerMainViewModel.searchedMovieData.count == 0 {
+                return 4
+            } else {
+                return buyerMainViewModel.searchedMovieData.count
+            }
         }
     }
     
@@ -140,22 +180,42 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
         cell.selectionStyle = .none
         cell.delegate = self
         
-        buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
-            cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
-            if let url = URL(string: movieData.leftMoviePoster) {
-                cell.leftMovieImage.kf.setImage(with: url)
-            }
-            
-            if movieData.rightMovieId != nil {
-                if let url = URL(string: movieData.rightMoviePoster!) {
-                    cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
-                    cell.rightMovieImage.kf.setImage(with:url)
+        if tableView == buyerMainView.tableView {
+            buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
+                cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
+                if let url = URL(string: movieData.leftMoviePoster) {
+                    cell.leftMovieImage.kf.setImage(with: url)
                 }
-            } else {
-                cell.rightMoiveTitle.text = ""
-                cell.rightMovieImage.image = nil
+                
+                if movieData.rightMovieId != nil {
+                    if let url = URL(string: movieData.rightMoviePoster!) {
+                        cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
+                        cell.rightMovieImage.kf.setImage(with:url)
+                    }
+                } else {
+                    cell.rightMoiveTitle.text = ""
+                    cell.rightMovieImage.image = nil
+                }
+            }
+        } else {
+            buyerMainViewModel.updateSearchedMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
+                cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
+                if let url = URL(string: movieData.leftMoviePoster) {
+                    cell.leftMovieImage.kf.setImage(with: url)
+                }
+                
+                if movieData.rightMovieId != nil {
+                    if let url = URL(string: movieData.rightMoviePoster!) {
+                        cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
+                        cell.rightMovieImage.kf.setImage(with:url)
+                    }
+                } else {
+                    cell.rightMoiveTitle.text = ""
+                    cell.rightMovieImage.image = nil
+                }
             }
         }
+        
         return cell
     }
     
@@ -164,10 +224,42 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if buyerMainView.tableView.contentOffset.y > (buyerMainView.tableView.contentSize.height - buyerMainView.tableView.bounds.size.height) * 0.8 {
-            if buyerMainViewModel.fetchMoreResult {
-                buyerMainViewModel.getMovies(sortType: buyerMainViewModel.sortType)
+        if buyerMainView.searchTableView.isHidden {
+            if buyerMainView.tableView.contentOffset.y > (buyerMainView.tableView.contentSize.height - buyerMainView.tableView.bounds.size.height) * 0.8 {
+                if buyerMainViewModel.fetchMoreResult {
+                    buyerMainViewModel.getMovies(sortType: buyerMainViewModel.sortType)
+                }
+            }
+        } else {
+            if buyerMainView.searchTableView.contentOffset.y > (buyerMainView.searchTableView.contentSize.height - buyerMainView.searchTableView.bounds.size.height) * 0.8 {
+                if buyerMainViewModel.fetchMoreSearchedMovieData {
+                    buyerMainViewModel.searchMovie(movieTitle: buyerMainView.searchTextField.text ?? "")
+                }
             }
         }
+    }
+}
+
+extension BuyerMainViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        guard let stringRange = Range(range, in: currentText) else { return false }
+        let searchText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        if searchText != "" {
+            buyerMainView.tableView.isHidden = true
+            buyerMainView.searchTableView.isHidden = false
+            buyerMainViewModel.searchMovie(movieTitle: searchText)
+        } else {
+            buyerMainViewModel.searchedMovieData = [Movie]()
+            buyerMainView.tableView.isHidden = false
+            buyerMainView.searchTableView.isHidden = true
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
