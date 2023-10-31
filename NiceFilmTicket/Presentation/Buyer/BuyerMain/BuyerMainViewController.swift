@@ -59,7 +59,7 @@ class BuyerMainViewController: UIViewController {
         buyerMainViewModel.$searchedMovieData
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.buyerMainView.tableView.reloadData()
+                self?.buyerMainView.searchTableView.reloadData()
             }
             .store(in: &cancellable)
     }
@@ -150,9 +150,11 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
                         detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].leftMovieId
                         self.navigationController?.pushViewController(detailVC, animated: false)
                     } else if imageViewIndex == 1 {
-                        let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
-                        detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId
-                        self.navigationController?.pushViewController(detailVC, animated: false)
+                        if buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId != nil {
+                            let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                            detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId
+                            self.navigationController?.pushViewController(detailVC, animated: false)
+                        }
                     }
                 }
             }
@@ -245,16 +247,16 @@ extension BuyerMainViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         guard let stringRange = Range(range, in: currentText) else { return false }
         let searchText = currentText.replacingCharacters(in: stringRange, with: string)
-        
+
         if searchText != "" {
             buyerMainView.tableView.isHidden = true
             buyerMainView.searchTableView.isHidden = false
             buyerMainViewModel.searchMovie(movieTitle: searchText)
         } else {
-            buyerMainViewModel.searchedMovieData = [Movie]()
             buyerMainView.tableView.isHidden = false
             buyerMainView.searchTableView.isHidden = true
         }
+        buyerMainViewModel.searchedMovieData.removeAll()
         return true
     }
     
