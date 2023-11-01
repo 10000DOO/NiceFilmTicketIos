@@ -132,7 +132,7 @@ class IssueNftViewController: UIViewController {
         
         issueNftViewModel.registerIsSuccess(store: &cancellable) { [weak self] result in
             if result {
-                self?.dismiss(animated: true, completion: nil)
+                self?.navigationController?.popViewController(animated: true)
             }
         }
     }
@@ -325,7 +325,7 @@ extension IssueNftViewController {
 
 extension IssueNftViewController {
     func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(SignInViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(IssueNftViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }

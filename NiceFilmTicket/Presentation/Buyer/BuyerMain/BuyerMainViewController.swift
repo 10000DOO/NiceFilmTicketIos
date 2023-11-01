@@ -77,7 +77,7 @@ class BuyerMainViewController: UIViewController {
 
 extension BuyerMainViewController {
     func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(SignInViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(BuyerMainViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
@@ -244,10 +244,11 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
 
 extension BuyerMainViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        guard let stringRange = Range(range, in: currentText) else { return false }
-        let searchText = currentText.replacingCharacters(in: stringRange, with: string)
-
+        let searchText = textField.text ?? ""
+//        guard let stringRange = Range(range, in: currentText) else { return false }
+//        var searchText = currentText.replacingCharacters(in: stringRange, with: string)
+        
+        print(searchText)
         buyerMainViewModel.fetchForPaging = false
         buyerMainViewModel.fetchMoreSearchedMovieData = false
         buyerMainViewModel.searchPage = 0

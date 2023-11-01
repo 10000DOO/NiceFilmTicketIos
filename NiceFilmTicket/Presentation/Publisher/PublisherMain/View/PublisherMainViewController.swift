@@ -49,6 +49,7 @@ class PublisherMainViewController: UIViewController {
         super.viewWillAppear(animated)
         
         publisherMainViewModel.getIssuedNft(store: &cancellable)
+        publisherMainView.tableView.reloadData()
     }
 }
 
