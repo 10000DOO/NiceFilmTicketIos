@@ -248,15 +248,18 @@ extension BuyerMainViewController: UITextFieldDelegate {
         guard let stringRange = Range(range, in: currentText) else { return false }
         let searchText = currentText.replacingCharacters(in: stringRange, with: string)
 
+        buyerMainViewModel.fetchForPaging = false
+        buyerMainViewModel.fetchMoreSearchedMovieData = false
+        buyerMainViewModel.searchPage = 0
         if searchText != "" {
+            buyerMainViewModel.searchMovie(movieTitle: searchText)
             buyerMainView.tableView.isHidden = true
             buyerMainView.searchTableView.isHidden = false
-            buyerMainViewModel.searchMovie(movieTitle: searchText)
         } else {
             buyerMainView.tableView.isHidden = false
             buyerMainView.searchTableView.isHidden = true
         }
-        buyerMainViewModel.searchedMovieData.removeAll()
+        buyerMainViewModel.fetchForPaging = true
         return true
     }
     

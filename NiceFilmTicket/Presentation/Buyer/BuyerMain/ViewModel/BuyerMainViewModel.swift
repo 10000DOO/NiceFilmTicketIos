@@ -20,6 +20,7 @@ class BuyerMainViewModel: ObservableObject {
     var searchPage = 0
     var fetchMoreResult = false
     var fetchMoreSearchedMovieData = false
+    var fetchForPaging = false
     var sortType = "최신순"
     var cancellables = Set<AnyCancellable>()
     
@@ -59,6 +60,9 @@ class BuyerMainViewModel: ObservableObject {
     }
     
     func searchMovie(movieTitle: String) {
+        if !fetchForPaging {
+            searchedMovieData = []
+        }
         fetchMoreSearchedMovieData = false
         searchMovieService.searchMovie(page: searchPage, size: 8, movieTitle: movieTitle)
             .sink { [weak self] completion in
