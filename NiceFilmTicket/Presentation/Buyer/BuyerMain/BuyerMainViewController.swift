@@ -243,15 +243,15 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
 }
 
 extension BuyerMainViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let searchText = textField.text ?? ""
-//        guard let stringRange = Range(range, in: currentText) else { return false }
-//        var searchText = currentText.replacingCharacters(in: stringRange, with: string)
-        
-        print(searchText)
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         buyerMainViewModel.fetchForPaging = false
         buyerMainViewModel.fetchMoreSearchedMovieData = false
         buyerMainViewModel.searchPage = 0
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let searchText = textField.text ?? ""
         if searchText != "" {
             buyerMainViewModel.searchMovie(movieTitle: searchText)
             buyerMainView.tableView.isHidden = true
@@ -261,7 +261,6 @@ extension BuyerMainViewController: UITextFieldDelegate {
             buyerMainView.searchTableView.isHidden = true
         }
         buyerMainViewModel.fetchForPaging = true
-        return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
