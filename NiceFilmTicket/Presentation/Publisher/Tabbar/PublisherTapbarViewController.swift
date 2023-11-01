@@ -13,11 +13,9 @@ class PublisherTapbarViewController: UITabBarController {
         super.viewDidLoad()
         
         let publisherMainVC = PublisherMainViewController(publisherMainViewModel: PublisherMainViewModel(publisherMainService: PublisherMainService(publisherMainRepository: PublisherMainRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
-        let presentVC = PresentViewController()
-        let eventVC = EventViewController()
         let myPageVC = MyPageViewController()
         
-        self.viewControllers = [UINavigationController(rootViewController: publisherMainVC), presentVC, eventVC, myPageVC]
+        self.viewControllers = [UINavigationController(rootViewController: publisherMainVC), myPageVC]
         
         UITabBar.appearance().backgroundColor = UIColor(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)
         
@@ -28,22 +26,10 @@ class PublisherTapbarViewController: UITabBarController {
                 items[0].image = UIImage(systemName: "house.fill")
             }
             
-            if let giftFillImage = UIImage(systemName: "gift.fill") {
-                let blueGiftFillImage = giftFillImage.withTintColor(UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)).withRenderingMode(.alwaysOriginal)
-                items[1].selectedImage = blueGiftFillImage
-                items[1].image = UIImage(systemName: "gift.fill")
-            }
-            
-            if let eventFillImage = UIImage(systemName: "megaphone.fill") {
-                let blueEventFillImage = eventFillImage.withTintColor(UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)).withRenderingMode(.alwaysOriginal)
-                items[2].selectedImage = blueEventFillImage
-                items[2].image = UIImage(systemName: "megaphone.fill")
-            }
-            
             if let myPageFillImage = UIImage(systemName: "person.fill") {
                 let blueMyPageFillImage = myPageFillImage.withTintColor(UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)).withRenderingMode(.alwaysOriginal)
-                items[3].selectedImage = blueMyPageFillImage
-                items[3].image = UIImage(systemName: "person.fill")
+                items[1].selectedImage = blueMyPageFillImage
+                items[1].image = UIImage(systemName: "person.fill")
             }
         }
     }

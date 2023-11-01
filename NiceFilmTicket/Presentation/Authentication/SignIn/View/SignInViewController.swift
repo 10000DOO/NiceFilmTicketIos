@@ -30,6 +30,7 @@ class SignInViewController: UIViewController {
         signInView = SignInView(frame: view.bounds)
         view.addSubview(signInView)
         
+        UserDefaults.standard.set("USER", forKey: "memberType")
         signInView.pwTextField.textContentType = .oneTimeCode
         
         setupGestureRecognizers()
@@ -97,9 +98,14 @@ extension SignInViewController {
             if signInMessage == ErrorMessage.signInSuccess.message {
                 //다음 화면으로 이동
                 if (UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER") {
-                    let PublisherTabbarVC = PublisherTapbarViewController()
-                    PublisherTabbarVC.modalPresentationStyle = .fullScreen
-                    self?.present(PublisherTabbarVC, animated: true, completion: nil)
+                    let publisherTabbarVC = PublisherTapbarViewController()
+                    publisherTabbarVC.modalPresentationStyle = .fullScreen
+                    self?.present(publisherTabbarVC, animated: true, completion: nil)
+                }
+                if (UserDefaults.standard.string(forKey: "memberType") == "USER") {
+                    let buyerTabbarVC = BuyerTabbarViewController()
+                    buyerTabbarVC.modalPresentationStyle = .fullScreen
+                    self?.present(buyerTabbarVC, animated: true, completion: nil)
                 }
             } else {
                 self?.signInView.signInErrorLabel.textColor = .red
