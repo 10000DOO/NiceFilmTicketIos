@@ -180,7 +180,6 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "buyerMainTableViewCell", for: indexPath) as! BuyerMainTableViewCell
         cell.selectionStyle = .none
-        cell.delegate = self
         
         if tableView == buyerMainView.tableView {
             buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in

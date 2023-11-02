@@ -8,22 +8,51 @@
 import UIKit
 
 class DrawNftViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+    private let drawNftView = DrawNftView()
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    required init?(coder: NSCoder) {
+        fatalError("DrawNftViewController(coder:) has not been implemented")
     }
-    */
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        view.addSubview(drawNftView)
+        
+        drawNftView.firstNFT.isUserInteractionEnabled = true
+        drawNftView.secondNFT.isUserInteractionEnabled = true
+        drawNftView.thirdNFT.isUserInteractionEnabled = true
+        
+        let selectFirstNFT = UITapGestureRecognizer(target: self, action: #selector(selectFirstNFT))
+        drawNftView.firstNFT.addGestureRecognizer(selectFirstNFT)
+        
+        let selectSecondNFT = UITapGestureRecognizer(target: self, action: #selector(selectSecondNFT))
+        drawNftView.secondNFT.addGestureRecognizer(selectSecondNFT)
+        
+        let selectThirdNFT = UITapGestureRecognizer(target: self, action: #selector(selectThirdNFT))
+        drawNftView.thirdNFT.addGestureRecognizer(selectThirdNFT)
+    }
+}
 
+extension DrawNftViewController {
+    
+    @objc func selectFirstNFT() {
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        self.present(myNftVc, animated: true, completion: nil)
+    }
+    
+    @objc func selectSecondNFT() {
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        self.present(myNftVc, animated: true, completion: nil)
+    }
+    
+    @objc func selectThirdNFT() {
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        self.present(myNftVc, animated: true, completion: nil)
+    }
 }
