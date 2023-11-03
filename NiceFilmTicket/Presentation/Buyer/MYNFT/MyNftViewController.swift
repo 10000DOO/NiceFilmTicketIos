@@ -14,6 +14,7 @@ class MyNftViewController: UIViewController {
 
     private let myNftView = MyNftView()
     private let myNftViewModel: MyNftViewModel
+    weak var delegate: DrawNftViewDelegate?
     var cancellables = Set<AnyCancellable>()
     
     init(myNftViewModel: MyNftViewModel) {
@@ -53,7 +54,6 @@ class MyNftViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(UserDefaults.standard.string(forKey: "username")!)
         myNftViewModel.getMyNft(username: UserDefaults.standard.string(forKey: "username")!, size: 8)
     }
 }
@@ -96,6 +96,12 @@ extension MyNftViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 130
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedNft = myNftViewModel.nftData[indexPath.row]
+        delegate?.setSelectedNft(nftInfo: selectedNft)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

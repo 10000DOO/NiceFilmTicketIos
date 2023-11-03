@@ -13,7 +13,7 @@ class BuyerTabbarViewController: UITabBarController {
         super.viewDidLoad()
 
         let buyerMainVC = BuyerMainViewController(buyerMainViewModel: BuyerMainViewModel(movieListService: MovieListService(movieListRepository: MovieListRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), searchMovieService: SearchMovieService(searchMovieRepository: SearchMovieRepository())))
-        let drawNftVC = DrawNftViewController()
+        let drawNftVC = DrawNftViewController(drawNftViewModel: DrawNftViewModel())
         let myPageVC = MyPageViewController()
         
         self.viewControllers = [UINavigationController(rootViewController: buyerMainVC), drawNftVC, myPageVC]

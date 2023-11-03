@@ -29,12 +29,6 @@ class MyNftTableViewCell: UITableViewCell {
         super.prepareForReuse()
         cancellables.removeAll()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 }
 
 extension MyNftTableViewCell {

@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 class DrawNftViewController: UIViewController {
     
     private let drawNftView = DrawNftView()
-    
-    init() {
+    private let drawNftViewModel: DrawNftViewModel
+    init(drawNftViewModel: DrawNftViewModel) {
+        self.drawNftViewModel = drawNftViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,17 +44,51 @@ class DrawNftViewController: UIViewController {
 extension DrawNftViewController {
     
     @objc func selectFirstNFT() {
+        drawNftViewModel.firstNftSelected = true
         let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
     }
     
     @objc func selectSecondNFT() {
+        drawNftViewModel.secondNftSelected = true
         let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
     }
     
     @objc func selectThirdNFT() {
+        drawNftViewModel.thirdNftSelected = true
         let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
+    }
+}
+
+extension DrawNftViewController: DrawNftViewDelegate {
+    func setSelectedNft(nftInfo: NFTPickDto) {
+        if drawNftViewModel.firstNftSelected {
+            drawNftViewModel.firstNft = nftInfo
+            if let url = URL(string: nftInfo.poster) {
+                drawNftView.firstNFT.kf.setImage(with: url)
+            }
+            drawNftViewModel.firstNftSelected = false
+        }
+        
+        if drawNftViewModel.secondNftSelected {
+            drawNftViewModel.secondNft = nftInfo
+            if let url = URL(string: nftInfo.poster) {
+                drawNftView.secondNFT.kf.setImage(with: url)
+            }
+            drawNftViewModel.secondNftSelected = false
+        }
+        
+        if drawNftViewModel.thirdNftSelected {
+            drawNftViewModel.thirdNft = nftInfo
+            if let url = URL(string: nftInfo.poster) {
+                drawNftView.thirdNFT.kf.setImage(with: url)
+            }
+            drawNftViewModel.thirdNftSelected = false
+        }
     }
 }
