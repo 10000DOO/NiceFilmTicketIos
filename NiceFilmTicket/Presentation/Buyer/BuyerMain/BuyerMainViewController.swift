@@ -132,7 +132,6 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
     func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
         if buyerMainView.searchTableView.isHidden {
             if let indexPath = buyerMainView.tableView.indexPath(for :cell){
-                print(indexPath.row)
                 if imageViewIndex == 0 {
                     let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
                     detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].leftMovieId

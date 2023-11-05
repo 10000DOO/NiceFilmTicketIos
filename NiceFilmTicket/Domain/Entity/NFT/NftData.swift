@@ -21,9 +21,13 @@ struct NFTInfo: Codable {
     let legendCount: Int
 }
 
-struct NFTPickDto: Codable {
+struct NFTPickDto: Codable, Equatable {
     let poster: String
     let movieTitle: String
     let nftLevel: String
     let nftSerialnum: String
+    
+    static func == (lhs: NFTPickDto, rhs: NFTPickDto) -> Bool {
+        return lhs.poster == rhs.poster && lhs.movieTitle == rhs.movieTitle
+    }
 }
