@@ -12,4 +12,6 @@ import Moya
 protocol MovieDetailRepositoryProtocol {
  
     func getMovieDetails(id: Int) -> AnyPublisher<MovieDetail, ErrorResponse>
+    
+    func buyNft(id: Int) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
 }

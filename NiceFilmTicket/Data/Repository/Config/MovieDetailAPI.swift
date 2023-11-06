@@ -10,6 +10,7 @@ import Moya
 
 enum MovieDetailAPI{
     case getMovieDetail(id: Int)
+    case buyMovie(id: Int)
 }
 
 extension MovieDetailAPI: TargetType {
@@ -21,6 +22,8 @@ extension MovieDetailAPI: TargetType {
         switch self {
         case .getMovieDetail(let id):
             return "/movie/detail/\(id)"
+        case .buyMovie(let id):
+            return "/nft/buy/\(id)"
         }
     }
     
@@ -28,12 +31,16 @@ extension MovieDetailAPI: TargetType {
         switch self {
         case .getMovieDetail:
             return .get
+        case .buyMovie:
+            return .post
         }
     }
     
     var task: Task {
         switch self {
         case .getMovieDetail:
+            return .requestPlain
+        case .buyMovie:
             return .requestPlain
         }
     }

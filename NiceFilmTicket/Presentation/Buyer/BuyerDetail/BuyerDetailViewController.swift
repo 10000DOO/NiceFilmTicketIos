@@ -52,10 +52,39 @@ class BuyerDetailViewController: UIViewController {
             self?.buyerDetailView.movieInfo.text = "\(movieData.createdAt) | \(movieData.filmRating) | \(movieData.runningTime)분 | \(movieData.movieGenre)"
             self?.buyerDetailView.plotContent.text = movieData.description
         }
+        
+        let purchaseNft = UITapGestureRecognizer(target: self, action: #selector(purchaseNft))
+        buyerDetailView.buyButton.addGestureRecognizer(purchaseNft)
+        
+        buyerDetailViewModel.isBuySuccess(store: &cancellable) { [weak self] result in
+            if !result {
+                let alert = UIAlertController(title: "구매 실패", message: "존재하지 않는 NFT입니다.", preferredStyle: .alert)
+                let confirm = UIAlertAction(title: "확인", style: .cancel, handler: nil)
+                
+                alert.addAction(confirm)
+                
+                self?.present(alert, animated: true)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         buyerDetailViewModel.getMovie(id: movieId ?? 1)
+    }
+}
+
+extension BuyerDetailViewController {
+    @objc func purchaseNft() {
+        let alert = UIAlertController(title: "구매하시겠습니까?", message: "구매 후 취소하실 수 없습니다.", preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "네", style: .default) { [weak self] action in
+            self?.buyerDetailViewModel.buyNft(id: self?.movieId ?? 1)
+        }
+        let cancel = UIAlertAction(title: "아니오", style: .cancel, handler: nil)
+        
+        alert.addAction(confirm)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true)
     }
 }

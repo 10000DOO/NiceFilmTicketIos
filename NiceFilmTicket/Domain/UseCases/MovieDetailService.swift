@@ -34,4 +34,20 @@ class MovieDetailService: MovieDetailServiceProtocol {
                 }.store(in: &self!.cancellables)
         }.eraseToAnyPublisher()
     }
+    
+    func buyNFt(id: Int) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
+        return Future<CommonSuccessRes, ErrorResponse> { [weak self] promise in
+            self?.movieDetailRepository.buyNft(id: id)
+                .sink { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                } receiveValue: { response in
+                    promise(.success(response))
+                }.store(in: &self!.cancellables)
+        }.eraseToAnyPublisher()
+    }
 }

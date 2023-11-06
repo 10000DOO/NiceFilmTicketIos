@@ -10,4 +10,6 @@ import Combine
 
 protocol MovieDetailServiceProtocol {
     func getMovieDetails(id: Int) -> AnyPublisher<MovieDataDTO, ErrorResponse>
+    
+    func buyNFt(id: Int) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
 }
