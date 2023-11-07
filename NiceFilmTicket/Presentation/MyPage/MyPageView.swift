@@ -18,10 +18,7 @@ class MyPageView: UIView {
     var normalCount = UILabel()
     var rareCount = UILabel()
     var legendCount = UILabel()
-    var searchTextField = UITextField()
-    var listUpButton = UIButton(type: .system)
     var tableView = UITableView()
-    var searchTableView = UITableView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,8 +38,6 @@ extension MyPageView {
         }
         setLogo()
         setTitleLabel()
-        setSearchTextField()
-        setListUpButton()
         setNormalNft()
         setRareNft()
         setLegendNft()
@@ -50,7 +45,6 @@ extension MyPageView {
         setRareCount()
         setLegendCount()
         setTableView()
-        setSearchTableView()
     }
     
     private func setLogo() {
@@ -76,63 +70,6 @@ extension MyPageView {
         }
     }
     
-    private func setSearchTextField() {
-        let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        imageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        imageView.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-        
-        let paddingView = UIView()
-        paddingView.addSubview(imageView)
-        
-        paddingView.snp.makeConstraints { make in
-            make.width.equalTo(40)
-            make.height.equalTo(30)
-        }
-        
-        imageView.snp.makeConstraints { make in
-            make.top.equalTo(paddingView.snp.top).inset(5)
-            make.leading.equalTo(paddingView.snp.leading).inset(10)
-        }
-        
-        imageView.isUserInteractionEnabled = false
-        paddingView.isUserInteractionEnabled = false
-        
-        searchTextField.leftView = paddingView
-        searchTextField.leftViewMode = .always
-        searchTextField.layer.cornerRadius = 10
-        searchTextField.layer.borderWidth = 2
-        searchTextField.layer.borderColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1).cgColor
-        self.addSubview(searchTextField)
-        
-        searchTextField.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
-            make.centerX.equalTo(self.snp.centerX)
-            make.width.equalTo(200)
-            make.height.equalTo(30)
-        }
-    }
-    
-    private func setListUpButton() {
-        let config = UIButton.Configuration.plain()
-        listUpButton = UIButton(configuration: config)
-        listUpButton.tintColor = UIColor(red: 8/255, green: 30/255, blue: 92/255,alpha: 1)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.boldSystemFont(ofSize: 16),
-            .foregroundColor: UIColor(red: 8/255, green: 30/255, blue: 92/255,alpha: 1)
-        ]
-        
-        let attributedTitle = NSAttributedString(string: "정렬조건", attributes :attributes)
-        
-        listUpButton.setAttributedTitle(attributedTitle, for:.normal)
-        
-        self.addSubview(listUpButton)
-        
-        listUpButton.snp.makeConstraints { make in
-            make.leading.equalTo(searchTextField.snp.trailing).offset(-5)
-            make.centerY.equalTo(searchTextField.snp.centerY)
-        }
-    }
-    
     private func setNormalNft() {
         normalNft.text = "NORMAL"
         normalNft.font = .boldSystemFont(ofSize: 15)
@@ -140,7 +77,7 @@ extension MyPageView {
         self.addSubview(normalNft)
         
         normalNft.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(15)
+            make.top.equalTo(titleLabel.snp.bottom).offset(15)
             make.centerX.equalTo(self.snp.centerX).multipliedBy(0.5)
         }
     }
@@ -152,7 +89,7 @@ extension MyPageView {
         self.addSubview(rareNft)
         
         rareNft.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(15)
+            make.top.equalTo(titleLabel.snp.bottom).offset(15)
             make.centerX.equalTo(self.snp.centerX)
         }
     }
@@ -164,7 +101,7 @@ extension MyPageView {
         self.addSubview(legendNft)
         
         legendNft.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(15)
+            make.top.equalTo(titleLabel.snp.bottom).offset(15)
             make.centerX.equalTo(self.snp.centerX).multipliedBy(1.5)
         }
     }
@@ -207,17 +144,6 @@ extension MyPageView {
         self.addSubview(tableView)
 
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(rareCount.snp.bottom).offset(10)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(10)
-        }
-    }
-    
-    private func setSearchTableView() {
-        searchTableView.separatorStyle = .none
-        self.addSubview(searchTableView)
-
-        searchTableView.snp.makeConstraints { make in
             make.top.equalTo(rareCount.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.safeAreaLayoutGuide.snp.bottom).inset(10)

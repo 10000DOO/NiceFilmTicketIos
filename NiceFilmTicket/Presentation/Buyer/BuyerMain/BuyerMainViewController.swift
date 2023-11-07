@@ -107,25 +107,6 @@ extension BuyerMainViewController {
         buyerMainView.listUpButton.showsMenuAsPrimaryAction = true
         buyerMainView.listUpButton.changesSelectionAsPrimaryAction = true
     }
-    
-    func downloadImage(url: String, completion: @escaping (UIImage?) -> Void) {
-        if let url = URL(string: url) {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    completion(nil)
-                    return
-                }
-                
-                if let data = data, let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        completion(image)
-                    }
-                } else {
-                    completion(nil)
-                }
-            }.resume()
-        }
-    }
 }
 
 extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, BuyerMainTableViewCellDelegate {

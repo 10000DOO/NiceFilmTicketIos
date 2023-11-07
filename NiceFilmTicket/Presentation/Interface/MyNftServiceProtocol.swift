@@ -10,4 +10,6 @@ import Combine
 
 protocol MyNftServiceProtocol {
     func getMyNft(username: String, page: Int, size: Int) -> AnyPublisher<NFTInfo, ErrorResponse>
+    
+    func getMyNftList(username: String, page: Int, size: Int) -> AnyPublisher<MyNftListDto, ErrorResponse>
 }

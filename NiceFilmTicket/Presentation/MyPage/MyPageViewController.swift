@@ -12,20 +12,62 @@ import Kingfisher
 class MyPageViewController: UIViewController {
 
     private let myPageView = MyPageView()
+    private let myPageViewModel: MyPageViewModel
     var cancellable = Set<AnyCancellable>()
+    
+    init(myPageViewModel: MyPageViewModel) {
+        self.myPageViewModel = myPageViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("MyPageViewController(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .white
         view.addSubview(myPageView)
-        listUpButtonSet()
-        
-        myPageView.searchTextField.delegate = self
+
         myPageView.tableView.delegate = self
         myPageView.tableView.dataSource = self
-        myPageView.searchTableView.delegate = self
-        myPageView.searchTableView.dataSource = self
+        myPageView.tableView.register(BuyerMainTableViewCell.self, forCellReuseIdentifier: "buyerMainTableViewCell")
+        hideKeyboardWhenTappedAround()
+        
+        myPageViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
+            if result {
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                signInVC.modalPresentationStyle = .fullScreen
+                self?.present(signInVC, animated: true, completion: nil)
+            }
+        }
+        
+        myPageViewModel.updateNormalNftCount(store: &cancellable) { [weak self] result in
+            self?.myPageView.normalCount.text = result.description
+        }
+        
+        myPageViewModel.updateRareNftCount(store: &cancellable) { [weak self] result in
+            self?.myPageView.rareCount.text = result.description
+        }
+        
+        myPageViewModel.updateLegendNftCount(store: &cancellable) { [weak self] result in
+            self?.myPageView.legendCount.text = result.description
+        }
+        
+        myPageViewModel.$nftData
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.myPageView.tableView.reloadData()
+            }
+            .store(in: &cancellable)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if myPageViewModel.nftData.count == 0 {
+            myPageViewModel.getMyNftList(username: UserDefaults.standard.string(forKey: "username")!)
+        }
     }
 }
 
@@ -39,45 +81,50 @@ extension MyPageViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
-    
-    func listUpButtonSet() {
-        let optionHandler = { [weak self] (action: UIAction) in
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.boldSystemFont(ofSize: 16),
-                .foregroundColor: UIColor(red: 8/255, green: 30/255, blue: 92/255,alpha: 1)
-            ]
-            
-            let attributedTitle = NSAttributedString(string: action.title, attributes :attributes)
-            
-            self?.myPageView.listUpButton.setAttributedTitle(attributedTitle, for:.normal)
-//            self?.buyerMainViewModel.sortType = action.title
-//            self?.buyerMainViewModel.movieData = []
-//            self?.buyerMainViewModel.page = 0
-//            self?.buyerMainViewModel.getMovies(sortType: action.title)
-        }
-        
-        myPageView.listUpButton.menu = UIMenu(children: [UIAction(title:"최신순", state: .on, handler: optionHandler),
-                                                            UIAction(title:"이름순", handler: optionHandler)])
-        myPageView.listUpButton.showsMenuAsPrimaryAction = true
-        myPageView.listUpButton.changesSelectionAsPrimaryAction = true
-    }
 }
 
-extension MyPageViewController: UITableViewDelegate, UITableViewDataSource, BuyerMainTableViewCellDelegate {
+extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        if myPageViewModel.nftData.count == 0 {
+            return 4
+        } else {
+            return myPageViewModel.nftData.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "buyerMainTableViewCell", for: indexPath) as! BuyerMainTableViewCell
+        cell.selectionStyle = .none
+        
+        myPageViewModel.updateNftData(index: indexPath.row, store: &cell.cancellable) { nftData in
+            cell.leftMoiveTitle.text = nftData.leftMovieTitle
+            if let url = URL(string: nftData.leftPoster) {
+                cell.leftMovieImage.kf.setImage(with: url)
+            }
+            
+            if nftData.rightMovieTitle != nil {
+                if let url = URL(string: nftData.rightPoster!) {
+                    cell.rightMoiveTitle.text = nftData.rightMovieTitle!
+                    cell.rightMovieImage.kf.setImage(with:url)
+                }
+            } else {
+                cell.rightMoiveTitle.text = ""
+                cell.rightMovieImage.image = nil
+            }
+        }
+        
+        return cell
     }
     
-    func imageViewTapped(in cell: BuyerMainTableViewCell, imageViewIndex: Int) {
-        <#code#>
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 275
     }
     
-    
-}
-
-extension MyPageViewController: UITextFieldDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if myPageView.tableView.contentOffset.y > (myPageView.tableView.contentSize.height - myPageView.tableView.bounds.size.height) * 0.8 {
+            if myPageViewModel.fetchMoreResult {
+                myPageViewModel.getMyNftList(username: UserDefaults.standard.string(forKey: "username")!)
+            }
+        }
+    }
 }

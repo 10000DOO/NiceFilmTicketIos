@@ -14,7 +14,7 @@ class BuyerTabbarViewController: UITabBarController {
 
         let buyerMainVC = BuyerMainViewController(buyerMainViewModel: BuyerMainViewModel(movieListService: MovieListService(movieListRepository: MovieListRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), searchMovieService: SearchMovieService(searchMovieRepository: SearchMovieRepository())))
         let drawNftVC = DrawNftViewController(drawNftViewModel: DrawNftViewModel(drawNftService: DrawNftService(drawNftRepository: DrawNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
-        let myPageVC = MyPageViewController()
+        let myPageVC = MyPageViewController(myPageViewModel: MyPageViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         
         self.viewControllers = [UINavigationController(rootViewController: buyerMainVC), drawNftVC, myPageVC]
         
