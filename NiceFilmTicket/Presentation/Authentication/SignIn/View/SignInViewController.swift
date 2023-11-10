@@ -97,7 +97,7 @@ extension SignInViewController {
     }
     
     @objc func findId() {
-        let findIdVC = FindIdViewController()
+        let findIdVC = FindIdViewController(findViewModel: FindIdViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
         
         self.navigationController?.pushViewController(findIdVC, animated: false)
     }

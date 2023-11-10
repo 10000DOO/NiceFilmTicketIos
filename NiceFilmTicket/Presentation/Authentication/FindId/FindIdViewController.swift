@@ -11,9 +11,11 @@ import Combine
 class FindIdViewController: UIViewController {
     
     private let findIdView = FindIdView()
+    private let findViewModel: FindIdViewModel
     var cancellables = Set<AnyCancellable>()
     
-    init() {
+    init(findViewModel: FindIdViewModel) {
+        self.findViewModel = findViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -27,6 +29,19 @@ class FindIdViewController: UIViewController {
         self.navigationController?.navigationBar.isHidden = true
         
         hideKeyboardWhenTappedAround()
+        let emailSending = UITapGestureRecognizer(target: self, action: #selector(clickSendButton))
+        findIdView.emailSendButton.addGestureRecognizer(emailSending)
+        
+        let findId = UITapGestureRecognizer(target: self, action: #selector(findId))
+        findIdView.checkButton.addGestureRecognizer(findId)
+        
+        findViewModel.updateErrorMessage(store: &cancellables) { [weak self] result in
+            self?.findIdView.errorLabel.text = result
+        }
+        
+        findViewModel.updateFindedId(store: &cancellables) { [weak self] result in
+            print(result)
+        }
     }
 }
 
@@ -39,5 +54,17 @@ extension FindIdViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc func clickSendButton() {
+        if findIdView.emailTextField.text != "" {
+            findViewModel.sendEmailCode(email: findIdView.emailTextField.text!)
+        }
+    }
+    
+    @objc func findId() {
+        if findIdView.emailTextField.text != "" && findIdView.emailCodeTextField.text != "" {
+            findViewModel.findId(emailCode: findIdView.emailCodeTextField.text!)
+        }
     }
 }

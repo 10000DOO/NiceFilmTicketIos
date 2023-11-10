@@ -89,6 +89,7 @@ extension FindIdView {
     func setErrorLabel() {
         errorLabel.textColor = .red
         errorLabel.font = UIFont.systemFont(ofSize: 20)
+        errorLabel.numberOfLines = 0
         self.addSubview(errorLabel)
         
         errorLabel.snp.makeConstraints { make in
