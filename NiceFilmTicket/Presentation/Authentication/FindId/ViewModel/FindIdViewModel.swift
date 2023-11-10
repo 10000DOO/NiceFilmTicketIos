@@ -13,7 +13,7 @@ class FindIdViewModel: ObservableObject{
     private let emailService: EmailServiceProtocol
     private let findIdPwService: FindIdPwServiceProtocol
     @Published var errorMessage = ""
-    @Published var findedId = ""
+    @Published var findedId: String?
     var cancellables = Set<AnyCancellable>()
     
     init(emailService: EmailServiceProtocol, findIdPwService: FindIdPwServiceProtocol) {
@@ -46,10 +46,9 @@ class FindIdViewModel: ObservableObject{
             }.store(in: &store)
     }
     
-    func updateFindedId(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
+    func updateFindedId(store: inout Set<AnyCancellable>, completion: @escaping (String?) -> Void) {
         $findedId
             .sink { result in
-                print(result)
                 completion(result)
             }.store(in: &store)
     }

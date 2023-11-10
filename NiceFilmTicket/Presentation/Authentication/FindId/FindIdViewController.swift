@@ -40,7 +40,11 @@ class FindIdViewController: UIViewController {
         }
         
         findViewModel.updateFindedId(store: &cancellables) { [weak self] result in
-            print(result)
+            let findIdResultVC = FindIdResultViewController()
+            if result != nil {
+                findIdResultVC.findedId = result!
+                self?.navigationController?.pushViewController(findIdResultVC, animated: false)
+            }
         }
     }
 }
