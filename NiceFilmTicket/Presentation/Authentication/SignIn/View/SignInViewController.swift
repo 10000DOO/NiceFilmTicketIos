@@ -52,6 +52,9 @@ extension SignInViewController {
         
         let businessImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
         signInView.businessSignInImage.addGestureRecognizer(businessImageClickRecognizer)
+        
+        let findIdClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(findId))
+        signInView.findId.addGestureRecognizer(findIdClickRecognizer)
     
         signInView.signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         
@@ -91,6 +94,12 @@ extension SignInViewController {
             signInView.signInErrorLabel.textColor = .red
             signInView.signInErrorLabel.text = ErrorMessage.signInFail.message
         }
+    }
+    
+    @objc func findId() {
+        let findIdVC = FindIdViewController()
+        
+        self.navigationController?.pushViewController(findIdVC, animated: false)
     }
     
     func bindingSignInError() {
