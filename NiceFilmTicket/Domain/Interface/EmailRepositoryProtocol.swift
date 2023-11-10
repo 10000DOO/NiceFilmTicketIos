@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import Combine
 
 protocol EmailRepositoryProtocol {
     
     func sendEmail(email: EmailSendingReq, completion: @escaping (Result<EmailSendingRes, ErrorResponse>) -> Void)
+    
+    func checkEmailCode(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
 }

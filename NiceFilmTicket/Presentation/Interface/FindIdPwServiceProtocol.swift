@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol FindIdPwServiceProtocol {
-    func drawNft(emailCode: String) -> AnyPublisher<String, ErrorResponse>
+    func findId(emailCode: String) -> AnyPublisher<String, ErrorResponse>
 }

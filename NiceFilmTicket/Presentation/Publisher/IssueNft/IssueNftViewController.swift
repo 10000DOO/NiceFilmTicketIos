@@ -85,6 +85,22 @@ class IssueNftViewController: UIViewController {
         
         setView()
         hideKeyboardWhenTappedAround()
+        
+        movieTitleTextField.delegate = self
+        genreTextField.delegate = self
+        ageLimitTextField.delegate = self
+        releaseDateTextField.delegate = self
+        directorTextField.delegate = self
+        actorsTextField.delegate = self
+        runningTimeTextField.delegate = self
+        normalPriceTextField.delegate = self
+        saleStartTextField.delegate = self
+        saleEndDateTextField.delegate = self
+        storyLineTextView.delegate = self
+        normalNftCountTextField.delegate = self
+        rareNftCountTextField.delegate = self
+        legendNftCountTextField.delegate = self
+        
         scrollView.delegate = self
         scrollProgressView.progress = 0.0
         
@@ -497,7 +513,7 @@ extension IssueNftViewController: UIImagePickerControllerDelegate, UINavigationC
     }
 }
 
-extension IssueNftViewController: UITextViewDelegate {
+extension IssueNftViewController: UITextViewDelegate, UITextFieldDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if storyLineTextView.text == storyLineTextViewPlaceHolder {
             storyLineTextView.text = nil
@@ -510,6 +526,11 @@ extension IssueNftViewController: UITextViewDelegate {
             storyLineTextView.text = storyLineTextViewPlaceHolder
             storyLineTextView.textColor = .lightGray
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

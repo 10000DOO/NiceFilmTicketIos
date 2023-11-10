@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 protocol FindIdPwRepositoryProtocol {
-    func searchMovie(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
+    func findId(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
 }

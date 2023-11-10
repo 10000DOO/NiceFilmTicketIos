@@ -17,9 +17,9 @@ class FindIdPwService: FindIdPwServiceProtocol {
         self.findIdPwRepository = findIdPwRepository
     }
     
-    func drawNft(emailCode: String) -> AnyPublisher<String, ErrorResponse> {
+    func findId(emailCode: String) -> AnyPublisher<String, ErrorResponse> {
         return Future<String, ErrorResponse> { [weak self] promise in
-            self?.findIdPwRepository.searchMovie(emailCode: emailCode)
+            self?.findIdPwRepository.findId(emailCode: emailCode)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                     case .failure(let error):

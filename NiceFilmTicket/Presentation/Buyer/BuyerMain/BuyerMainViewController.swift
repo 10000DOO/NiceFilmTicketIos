@@ -14,6 +14,8 @@ class BuyerMainViewController: UIViewController {
     
     private let buyerMainView = BuyerMainView()
     private let buyerMainViewModel: BuyerMainViewModel
+    var keyHeight: CGFloat?
+    var originFrameHeight: CGFloat?
     var cancellable: Set<AnyCancellable> = []
     
     init(buyerMainViewModel: BuyerMainViewModel) {
@@ -32,6 +34,7 @@ class BuyerMainViewController: UIViewController {
         view.addSubview(buyerMainView)
         listUpButtonSet()
         
+        originFrameHeight = self.view.frame.size.height
         buyerMainView.searchTextField.delegate = self
         buyerMainView.tableView.delegate = self
         buyerMainView.tableView.dataSource = self
@@ -72,6 +75,16 @@ class BuyerMainViewController: UIViewController {
                 buyerMainViewModel.getMovies(sortType: "최신순")
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //name으로 하나씩 지우기
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }
 
@@ -106,6 +119,24 @@ extension BuyerMainViewController {
                                                             UIAction(title:"이름순", handler: optionHandler)])
         buyerMainView.listUpButton.showsMenuAsPrimaryAction = true
         buyerMainView.listUpButton.changesSelectionAsPrimaryAction = true
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyHeight = keyboardHeight
+        
+        if originFrameHeight! <= self.view.frame.size.height {
+            self.view.frame.size.height -= keyboardHeight
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if originFrameHeight! > self.view.frame.size.height {
+            self.view.frame.size.height += keyHeight ?? 0
+        }
     }
 }
 
@@ -230,7 +261,7 @@ extension BuyerMainViewController: UITextFieldDelegate {
         buyerMainViewModel.searchPage = 0
         return true
     }
-
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
         let searchText = textField.text ?? ""
         if searchText != "" {

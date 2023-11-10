@@ -47,6 +47,7 @@ class SignUpViewController: UIViewController {
         signUpView.nicknameTextField.delegate = self
         signUpView.pwTextField.delegate = self
         signUpView.pwCheckTextField.delegate = self
+        signUpView.emailCodeTextField.delegate = self
         view.addSubview(signUpView)
         
         signUpView.pwTextField.textContentType = .oneTimeCode
@@ -344,6 +345,11 @@ extension SignUpViewController: UITextFieldDelegate {
             signUpViewModel.passwordMatching(passwordForCheck: updatedText)
             bindingPasswordCheck()
         }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return true
     }
 }

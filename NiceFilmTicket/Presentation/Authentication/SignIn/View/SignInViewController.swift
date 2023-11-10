@@ -30,6 +30,8 @@ class SignInViewController: UIViewController {
         signInView = SignInView(frame: view.bounds)
         view.addSubview(signInView)
         
+        signInView.pwTextField.delegate = self
+        signInView.idTextField.delegate = self
         UserDefaults.standard.set("USER", forKey: "memberType")
         signInView.pwTextField.textContentType = .oneTimeCode
         
@@ -55,6 +57,9 @@ extension SignInViewController {
         
         let findIdClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(findId))
         signInView.findId.addGestureRecognizer(findIdClickRecognizer)
+        
+        let findPwClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(findPw))
+        signInView.findPw.addGestureRecognizer(findPwClickRecognizer)
     
         signInView.signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         
@@ -102,6 +107,12 @@ extension SignInViewController {
         self.navigationController?.pushViewController(findIdVC, animated: false)
     }
     
+    @objc func findPw() {
+        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        
+        self.navigationController?.pushViewController(findPwVC, animated: false)
+    }
+    
     func bindingSignInError() {
         signInViewModel.subscribeSignInError(store: &cancellables) { [weak self] signInMessage in
             if signInMessage == ErrorMessage.signInSuccess.message {
@@ -132,5 +143,12 @@ extension SignInViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension SignInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

@@ -14,7 +14,7 @@ class FindIdPwRepository: FindIdPwRepositoryProtocol {
     
     private let provider = MoyaProvider<FindIdPwAPI>()
     
-    func searchMovie(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
+    func findId(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
         return provider.requestPublisher(.findId(emailCode: emailCode))
             .tryMap { response in
                 switch response.statusCode {

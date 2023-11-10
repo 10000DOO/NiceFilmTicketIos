@@ -29,11 +29,19 @@ class FindIdResultViewController: UIViewController {
         
         let gotoLoginVC = UITapGestureRecognizer(target: self, action: #selector(gotoLoginVC))
         findIdResultView.gotoLoginButton.addGestureRecognizer(gotoLoginVC)
+        
+        let gotoFindPwVC = UITapGestureRecognizer(target: self, action: #selector(gotoFindPwVC))
+        findIdResultView.findPwButton.addGestureRecognizer(gotoFindPwVC)
     }
 }
 
 extension FindIdResultViewController {
     @objc func gotoLoginVC() {
         self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc func gotoFindPwVC() {
+        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        self.navigationController?.pushViewController(findPwVC, animated: true)
     }
 }
