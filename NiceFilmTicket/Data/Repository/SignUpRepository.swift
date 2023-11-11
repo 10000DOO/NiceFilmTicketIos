@@ -126,8 +126,8 @@ class SignUpRepository: SignUpRepositoryProtocol {
         }
     }
     
-    func signUp(signUpReq: SignUpReq, emailCode: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
-        provider.request(.signUpReq(signUpReq: signUpReq, emailCode: emailCode)) { result in
+    func signUp(signUpReq: SignUpReq, emailCode: String, memberType: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
+        provider.request(.signUpReq(signUpReq: signUpReq, emailCode: emailCode, memberType: memberType)) { result in
             switch result {
             case .success(let response):
                 switch response.statusCode {

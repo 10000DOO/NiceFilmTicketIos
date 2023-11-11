@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum SignInAPI{
-    case signIn(signInReq: SignInReq)
+    case signIn(signInReq: SignInReq, memberType: String)
 }
 
 extension SignInAPI: TargetType {
@@ -33,8 +33,9 @@ extension SignInAPI: TargetType {
     
     var task: Task {
         switch self {
-        case .signIn(let signInReq):
-            return .requestJSONEncodable(signInReq)
+        case .signIn(let signInReq, let memberType):
+            let encoded = try! JSONEncoder().encode(signInReq)
+            return .requestCompositeData(bodyData: encoded, urlParameters: ["role": memberType])
         }
     }
     

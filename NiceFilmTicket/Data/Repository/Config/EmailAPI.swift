@@ -10,6 +10,7 @@ import Moya
 
 enum EmailAPI{
     case sendEmail(email: EmailSendingReq)
+    case checkCode(emailCode: String)
 }
 
 extension EmailAPI: TargetType {
@@ -21,12 +22,16 @@ extension EmailAPI: TargetType {
         switch self {
         case .sendEmail:
             return "/email"
+        case .checkCode:
+            return "/email/check"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .sendEmail:
+            return .post
+        case .checkCode:
             return .post
         }
     }
@@ -35,10 +40,12 @@ extension EmailAPI: TargetType {
         switch self {
         case .sendEmail(let emailSendingReq):
             return .requestJSONEncodable(emailSendingReq)
+        case .checkCode(let emailCode):
+            return .requestParameters(parameters: ["code": emailCode], encoding: URLEncoding.queryString)
         }
     }
     
     var headers: [String : String]? {
-        return nil
+        return ["Content-Type": "application/json"]
     }
 }

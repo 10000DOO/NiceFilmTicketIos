@@ -117,9 +117,9 @@ class SignUpService: SignUpServiceProtocol {
         return passwordPredicate.evaluate(with: password)
     }
     
-    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, completion: @escaping (SignUpRes) -> Void) {
-        let signUpReq = SignUpReq(loginId: loginId, password: password, publisherName: nickName, email: email)
-        signUpRepository.signUp(signUpReq: signUpReq, emailCode: emailCode) { result in
+    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, memberType: String, completion: @escaping (SignUpRes) -> Void) {
+        let signUpReq = SignUpReq(loginId: loginId, password: password, username: nickName, email: email)
+        signUpRepository.signUp(signUpReq: signUpReq, emailCode: emailCode, memberType: memberType) { result in
             switch result {
             case .success(_):
                 var signUpRes = SignUpRes()

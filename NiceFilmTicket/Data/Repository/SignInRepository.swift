@@ -12,8 +12,8 @@ class SignInRepository: SignInRepositoryProtocol {
     
     private let provider = MoyaProvider<SignInAPI>()
     
-    func signIn(signInReq: SignInReq, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void) {
-        provider.request(.signIn(signInReq: signInReq)) { result in
+    func signIn(signInReq: SignInReq, memberType: String, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void) {
+        provider.request(.signIn(signInReq: signInReq, memberType: memberType)) { result in
             switch result {
             case .success(let response):
                 switch response.statusCode {

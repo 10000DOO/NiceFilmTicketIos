@@ -21,7 +21,7 @@ class SignInViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("AuthenticationViewController(coder:) has not been implemented")
+        fatalError("SignInViewController(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -30,6 +30,9 @@ class SignInViewController: UIViewController {
         signInView = SignInView(frame: view.bounds)
         view.addSubview(signInView)
         
+        signInView.pwTextField.delegate = self
+        signInView.idTextField.delegate = self
+        UserDefaults.standard.set("USER", forKey: "memberType")
         signInView.pwTextField.textContentType = .oneTimeCode
         
         setupGestureRecognizers()
@@ -51,6 +54,12 @@ extension SignInViewController {
         
         let businessImageClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(clickBusinessButton))
         signInView.businessSignInImage.addGestureRecognizer(businessImageClickRecognizer)
+        
+        let findIdClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(findId))
+        signInView.findId.addGestureRecognizer(findIdClickRecognizer)
+        
+        let findPwClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(findPw))
+        signInView.findPw.addGestureRecognizer(findPwClickRecognizer)
     
         signInView.signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         
@@ -65,45 +74,26 @@ extension SignInViewController {
     @objc private func clickPersonButton() {
         signInView.personalSignInImage.image = UIImage(systemName: "person.fill")
         signInView.businessSignInImage.image = UIImage(systemName: "bag")
-        signInView.kakaoImageView.isHidden = false
-        signInView.idTextField.isHidden = true
-        signInView.pwTextField.isHidden = true
-        signInView.signInButton.isHidden = true
-        signInView.signInErrorLabel.isHidden = true
-        signInView.orDivider.isHidden = true
-        signInView.signupButton.isHidden = true
-        signInView.findId.isHidden = true
-        signInView.findPw.isHidden = true
-        signInView.dividerLine.isHidden = true
-        signInView.scrollView.isScrollEnabled = false
+        UserDefaults.standard.set("USER", forKey: "memberType")
     }
     
     //비즈니스 로그인으로 변경
     @objc private func clickBusinessButton() {
         signInView.businessSignInImage.image = UIImage(systemName: "bag.fill")
         signInView.personalSignInImage.image = UIImage(systemName: "person")
-        signInView.kakaoImageView.isHidden = true
-        signInView.idTextField.isHidden = false
-        signInView.pwTextField.isHidden = false
-        signInView.signInErrorLabel.isHidden = false
-        signInView.signInButton.isHidden = false
-        signInView.orDivider.isHidden = false
-        signInView.signupButton.isHidden = false
-        signInView.findId.isHidden = false
-        signInView.findPw.isHidden = false
-        signInView.dividerLine.isHidden = false
-        signInView.scrollView.isScrollEnabled = true
+        UserDefaults.standard.set("PUBLISHER", forKey: "memberType")
     }
     
     //회원가입 뷰로 이동
     @objc private func didTapSignupButton() {
         let signUpVC = SignUpViewController(signUpViewModel: SignUpViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
+        
         self.navigationController?.pushViewController(signUpVC, animated: false)
     }
     
     @objc func signIn() {
         if let loginId = signInView.idTextField.text, let password = signInView.pwTextField.text {
-            signInViewModel.signIn(loginId: loginId, password: password)
+            signInViewModel.signIn(loginId: loginId, password: password, memberType: UserDefaults.standard.string(forKey: "memberType")!)
             bindingSignInError()
         } else {
             signInView.signInErrorLabel.textColor = .red
@@ -111,12 +101,32 @@ extension SignInViewController {
         }
     }
     
+    @objc func findId() {
+        let findIdVC = FindIdViewController(findViewModel: FindIdViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        
+        self.navigationController?.pushViewController(findIdVC, animated: false)
+    }
+    
+    @objc func findPw() {
+        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        
+        self.navigationController?.pushViewController(findPwVC, animated: false)
+    }
+    
     func bindingSignInError() {
         signInViewModel.subscribeSignInError(store: &cancellables) { [weak self] signInMessage in
             if signInMessage == ErrorMessage.signInSuccess.message {
-                self?.signInView.signInErrorLabel.textColor = UIColor(red: 8/255, green: 30/255, blue: 92/255, alpha: 1)
-                self?.signInView.signInErrorLabel.text = signInMessage
                 //다음 화면으로 이동
+                if (UserDefaults.standard.string(forKey: "memberType") == "PUBLISHER") {
+                    let publisherTabbarVC = PublisherTapbarViewController()
+                    publisherTabbarVC.modalPresentationStyle = .fullScreen
+                    self?.present(publisherTabbarVC, animated: true, completion: nil)
+                }
+                if (UserDefaults.standard.string(forKey: "memberType") == "USER") {
+                    let buyerTabbarVC = BuyerTabbarViewController()
+                    buyerTabbarVC.modalPresentationStyle = .fullScreen
+                    self?.present(buyerTabbarVC, animated: true, completion: nil)
+                }
             } else {
                 self?.signInView.signInErrorLabel.textColor = .red
                 self?.signInView.signInErrorLabel.text = signInMessage
@@ -133,5 +143,12 @@ extension SignInViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension SignInViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

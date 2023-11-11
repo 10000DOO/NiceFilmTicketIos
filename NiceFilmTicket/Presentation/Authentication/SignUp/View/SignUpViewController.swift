@@ -14,6 +14,8 @@ class SignUpViewController: UIViewController {
     private let signUpView = SignUpView(emailCodeHidden: true)
     let signUpViewModel: SignUpViewModel
     var cancellables = Set<AnyCancellable>()
+    var keyHeight: CGFloat?
+    var originFrameHeight: CGFloat?
     
     init(signUpViewModel: SignUpViewModel) {
         self.signUpViewModel = signUpViewModel
@@ -24,6 +26,20 @@ class SignUpViewController: UIViewController {
         fatalError("SignUpViewController(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        //name으로 하나씩 지우기
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         signUpView.emailTextField.delegate = self
@@ -31,6 +47,7 @@ class SignUpViewController: UIViewController {
         signUpView.nicknameTextField.delegate = self
         signUpView.pwTextField.delegate = self
         signUpView.pwCheckTextField.delegate = self
+        signUpView.emailCodeTextField.delegate = self
         view.addSubview(signUpView)
         
         signUpView.pwTextField.textContentType = .oneTimeCode
@@ -39,6 +56,8 @@ class SignUpViewController: UIViewController {
         signUpView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        originFrameHeight = self.view.frame.size.height
         
         let emailSendingButtonClickRecognizer = UITapGestureRecognizer(target: self, action: #selector(sendEmail))
         signUpView.emailCodeSendingButton.addGestureRecognizer(emailSendingButtonClickRecognizer)
@@ -57,13 +76,31 @@ class SignUpViewController: UIViewController {
 extension SignUpViewController {
     //키보드 내리기
     func hideKeyboardWhenTappedAround() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(SignInViewController.dismissKeyboard))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SignUpViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        keyHeight = keyboardHeight
+        
+        if originFrameHeight! <= self.view.frame.size.height {
+            self.view.frame.size.height -= keyboardHeight
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if originFrameHeight! > self.view.frame.size.height {
+            self.view.frame.size.height += keyHeight ?? 0
+        }
     }
     
     @objc func sendEmail() {
@@ -143,15 +180,20 @@ extension SignUpViewController {
         }
         
         if password == passwordCheck {
-            signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName)
+            guard let memberType = UserDefaults.standard.string(forKey: "memberType") else { return }
+            signUpViewModel.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType)
             bindingEmailError()
             bindingEmailCodeError()
             bindingLoginIdDuplicate()
             bindingPasswordPattern()
             bindingNickNameDuplicate()
             
-            let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
-            self.navigationController?.pushViewController(signInVC, animated: false)
+            signUpViewModel.$signUpSuccess.sink { [weak self] result in
+                if result {
+                    let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                    self?.navigationController?.pushViewController(signInVC, animated: false)
+                }
+            }.store(in: &cancellables)
         }
     }
     
@@ -179,8 +221,6 @@ extension SignUpViewController {
                 } else {
                     self?.signUpView.emailCodeStackView.isHidden = false
                     self?.signUpView.emailErrorLabel.textColor = .clear
-                    self?.signUpView.emailTextField.isEnabled = false
-                    self?.signUpView.emailTextField.backgroundColor = .lightGray
                 }
             }
         }
@@ -305,6 +345,11 @@ extension SignUpViewController: UITextFieldDelegate {
             signUpViewModel.passwordMatching(passwordForCheck: updatedText)
             bindingPasswordCheck()
         }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return true
     }
 }

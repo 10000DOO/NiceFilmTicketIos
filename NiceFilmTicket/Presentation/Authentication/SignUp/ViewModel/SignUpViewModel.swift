@@ -111,8 +111,8 @@ class SignUpViewModel: ObservableObject {
         }.store(in: &store)
     }
     
-    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String) {
-        signUpService.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName) { [weak self] response in
+    func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, memberType: String) {
+        signUpService.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType) { [weak self] response in
             if response.serverError.isEmpty {
                 if response.statusCode == 200 {
                     self?.signUpSuccess = true
