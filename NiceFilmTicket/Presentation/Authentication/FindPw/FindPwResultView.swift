@@ -12,10 +12,10 @@ class FindPwResultView: UIView {
     var logoImageView = UIImageView()
     var titleLabel = MenuUILabel(text: "비밀번호 찾기", size: UIFont.boldSystemFont(ofSize: 25))
     var borderView = UIView()
-    var explanation = UILabel()
-    var idLabel = UILabel()
-    var gotoLoginButton = AuthenticationUIButton(title: "로그인하러 가기", isHidden: false)
-    var findPwButton = AuthenticationUIButton(title: "비밀번호 찾기", isHidden: false)
+    var pwTextField = AuthenticationTextField(placeholder: "  비밀번호", isSecureTextEntry: false, backgroundColor: .white, isHidden: false, font: UIFont.systemFont(ofSize: 20))
+    var pwCheckTextField = AuthenticationTextField(placeholder: "  비밀번호 확인", isSecureTextEntry: false, backgroundColor: .white, isHidden: false, font: UIFont.systemFont(ofSize: 20))
+    var errorLabel = UILabel()
+    var findPwButton = AuthenticationUIButton(title: "비밀번호 재설정", isHidden: false)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,10 +36,10 @@ extension FindPwResultView {
         setLogo()
         setTitleLabel()
         setBorderView()
-        setExplanation()
-        setIdLabel()
+        setPwTextField()
+        setPwCheckTextField()
+        setErrorLabel()
         setFindPwButton()
-        setGotoLoginButton()
     }
     
     func setLogo() {
@@ -76,26 +76,38 @@ extension FindPwResultView {
             make.height.equalTo(400)
         }
     }
-    func setExplanation() {
-        explanation.text = "아이디를 찾았습니다!"
-        explanation.textColor = .gray
-        explanation.font = UIFont.systemFont(ofSize: 20)
-        self.addSubview(explanation)
+    func setPwTextField() {
+        pwTextField.isSecureTextEntry = true
+        self.addSubview(pwTextField)
         
-        explanation.snp.makeConstraints { make in
+        pwTextField.snp.makeConstraints { make in
             make.top.equalTo(borderView.snp.top).offset(50)
-            make.centerX.equalToSuperview()
+            make.leading.equalToSuperview().offset(40)
+            make.trailing.equalToSuperview().offset(-40)
+            make.height.equalTo(50)
         }
     }
     
-    func setIdLabel() {
-        idLabel.font = UIFont.boldSystemFont(ofSize: 30)
-        idLabel.numberOfLines = 0
-        idLabel.textAlignment = .center
-        self.addSubview(idLabel)
+    func setPwCheckTextField() {
+        pwCheckTextField.isSecureTextEntry = true
+        self.addSubview(pwCheckTextField)
         
-        idLabel.snp.makeConstraints { make in
-            make.top.equalTo(explanation.snp.top).offset(30)
+        pwCheckTextField.snp.makeConstraints { make in
+            make.top.equalTo(pwTextField.snp.bottom).offset(30)
+            make.leading.equalToSuperview().offset(40)
+            make.trailing.equalToSuperview().offset(-40)
+            make.height.equalTo(50)
+        }
+    }
+    
+    func setErrorLabel() {
+        errorLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        errorLabel.numberOfLines = 0
+        errorLabel.textAlignment = .center
+        self.addSubview(errorLabel)
+        
+        errorLabel.snp.makeConstraints { make in
+            make.top.equalTo(pwCheckTextField.snp.bottom).offset(10)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)
         }
@@ -106,17 +118,6 @@ extension FindPwResultView {
         
         findPwButton.snp.makeConstraints { make in
             make.bottom.equalTo(borderView.snp.bottom).offset(-50)
-            make.height.equalTo(40)
-            make.leading.equalToSuperview().offset(40)
-            make.trailing.equalToSuperview().offset(-40)
-        }
-    }
-    
-    func setGotoLoginButton() {
-        self.addSubview(gotoLoginButton)
-        
-        gotoLoginButton.snp.makeConstraints { make in
-            make.bottom.equalTo(findPwButton.snp.top).offset(-50)
             make.height.equalTo(40)
             make.leading.equalToSuperview().offset(40)
             make.trailing.equalToSuperview().offset(-40)

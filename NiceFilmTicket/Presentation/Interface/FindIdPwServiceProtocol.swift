@@ -10,4 +10,6 @@ import Combine
 
 protocol FindIdPwServiceProtocol {
     func findId(emailCode: String) -> AnyPublisher<String, ErrorResponse>
+    
+    func findPw(newPwDto: NewPwDto) -> AnyPublisher<String, ErrorResponse>
 }

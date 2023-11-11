@@ -10,6 +10,7 @@ import Moya
 
 enum FindIdPwAPI{
     case findId(emailCode: String)
+    case findPw(newPwDto: NewPwDto)
 }
 
 extension FindIdPwAPI: TargetType {
@@ -21,6 +22,8 @@ extension FindIdPwAPI: TargetType {
         switch self {
         case .findId:
             return "/find/id"
+        case .findPw:
+            return "/find/pw"
         }
     }
     
@@ -28,6 +31,8 @@ extension FindIdPwAPI: TargetType {
         switch self {
         case .findId:
             return .get
+        case .findPw:
+            return .patch
         }
     }
     
@@ -35,6 +40,8 @@ extension FindIdPwAPI: TargetType {
         switch self {
         case .findId(let emailCode):
             return .requestParameters(parameters: ["code": emailCode], encoding: URLEncoding.queryString)
+        case .findPw(let newPwDto):
+            return .requestJSONEncodable(newPwDto)
         }
     }
     

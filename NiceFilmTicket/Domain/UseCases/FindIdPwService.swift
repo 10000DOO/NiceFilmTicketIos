@@ -32,4 +32,20 @@ class FindIdPwService: FindIdPwServiceProtocol {
                 }).store(in: &self!.cancellables)
                 }.eraseToAnyPublisher()
     }
+    
+    func findPw(newPwDto: NewPwDto) -> AnyPublisher<String, ErrorResponse> {
+        return Future<String, ErrorResponse> { [weak self] promise in
+            self?.findIdPwRepository.findPw(newPwDto: newPwDto)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response.data))
+                }).store(in: &self!.cancellables)
+                }.eraseToAnyPublisher()
+    }
 }

@@ -30,15 +30,11 @@ class FindPwViewModel: ObservableObject{
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
-                    print("여기")
-                    print(error)
                     self?.errorMessage = error.error.first!.error
                 case .finished:
                     break
                 }
             } receiveValue: { [weak self] result in
-                print("여기2")
-                print(result)
                 self?.checkCodeSuccess = true
             }.store(in: &self.cancellables)
     }
@@ -46,7 +42,6 @@ class FindPwViewModel: ObservableObject{
     func updateErrorMessage(store: inout Set<AnyCancellable>, completion: @escaping (String) -> Void) {
         $errorMessage
             .sink { result in
-                print(result)
                 completion(result)
             }.store(in: &store)
     }

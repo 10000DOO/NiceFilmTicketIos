@@ -53,13 +53,11 @@ class EmailService: EmailServiceProtocol {
                 .sink(receiveCompletion: { completion in
                     switch completion {
                     case .failure(let error):
-                        print(error)
                         promise(.failure(ErrorResponse(status: error.status, error: error.error)))
                     case .finished:
                         break
                     }
                 }, receiveValue: { response in
-                    print(response)
                     promise(.success(response.data))
                 }).store(in: &self!.cancellables)
         }.eraseToAnyPublisher()
