@@ -15,8 +15,8 @@ class PublisherMainService: PublisherMainServiceProtocol {
         self.publisherMainRepository = publisherMainRepository
     }
     
-    func getNfts(page: Int, size: Int, completion: @escaping (Result<NFTResponse, ErrorResponse>) -> Void) {
-        publisherMainRepository.getNfts(page: page, size: size) { result in
+    func getNfts(username: String, page: Int, size: Int, completion: @escaping (Result<NFTResponse, ErrorResponse>) -> Void) {
+        publisherMainRepository.getNfts(username: username, page: page, size: size) { result in
             switch result {
             case .success(let response):
                 if response.data.nftListDtos.isEmpty {

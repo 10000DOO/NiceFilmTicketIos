@@ -34,7 +34,7 @@ class MyNftTableViewCell: UITableViewCell {
 extension MyNftTableViewCell {
     private func setView() {
         nftLevel.font = .boldSystemFont(ofSize: 20)
-        
+        nftImage.contentMode = .scaleAspectFit
         contentView.addSubview(nftImage)
         contentView.addSubview(nftLevel)
         contentView.addSubview(movieTitle)

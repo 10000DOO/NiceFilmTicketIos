@@ -64,6 +64,7 @@ extension BuyerDetailView {
     }
     
     private func setLogo() {
+        logoImageView.contentMode = .scaleAspectFit
         self.addSubview(logoImageView)
         
         logoImageView.snp.makeConstraints { make in
@@ -96,12 +97,13 @@ extension BuyerDetailView {
     }
     
     private func setMovieImage() {
+        movieImage.contentMode = .scaleAspectFit
         contentView.addSubview(movieImage)
         
         movieImage.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.top)
             make.centerX.equalTo(contentView.snp.centerX)
-            make.width.equalTo(150)
+            make.width.equalTo(350)
             make.height.equalTo(225)
         }
     }

@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum PublisherGetNftAPI{
-    case getNfts(page: Int, size: Int)
+    case getNfts(username: String, page: Int, size: Int)
 }
 
 extension PublisherGetNftAPI: TargetType {
@@ -33,8 +33,8 @@ extension PublisherGetNftAPI: TargetType {
     
     var task: Task {
         switch self {
-        case .getNfts(let page, let size):
-            return .requestParameters(parameters: ["sortType": "최신순", "page": page, "size": size], encoding: URLEncoding.queryString)
+        case .getNfts(let username, let page, let size):
+            return .requestParameters(parameters: ["sortType": "최신순", "username": username, "page": page, "size": size], encoding: URLEncoding.queryString)
         }
     }
     

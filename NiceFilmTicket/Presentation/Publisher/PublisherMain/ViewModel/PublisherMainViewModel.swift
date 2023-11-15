@@ -26,7 +26,7 @@ class PublisherMainViewModel: ObservableObject {
     func getIssuedNft(store: inout Set<AnyCancellable>) {
         fetchMoreResult = false
         var storeCopy = store
-        publisherMainService.getNfts(page: page, size: 15) { [weak self] result in
+        publisherMainService.getNfts(username: UserDefaults.standard.string(forKey: "username")!, page: page, size: 15) { [weak self] result in
             switch result {
             case .success(let response):
                 self?.nftList.append(contentsOf: response.nftListDtos)

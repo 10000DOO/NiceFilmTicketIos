@@ -43,13 +43,14 @@ class PublisherMainViewController: UIViewController {
         
         publisherMainView.registerButton.addTarget(self, action: #selector(moveToIssueNftView), for: .touchUpInside)
         self.navigationController?.navigationBar.isHidden = true
+        
+        publisherMainView.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         publisherMainViewModel.getIssuedNft(store: &cancellable)
-        publisherMainView.tableView.reloadData()
     }
 }
 

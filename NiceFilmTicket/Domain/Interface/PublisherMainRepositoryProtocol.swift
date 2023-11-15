@@ -9,5 +9,5 @@ import Foundation
 
 protocol PublisherMainRepositoryProtocol {
     
-    func getNfts(page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void)
+    func getNfts(username: String, page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void)
 }

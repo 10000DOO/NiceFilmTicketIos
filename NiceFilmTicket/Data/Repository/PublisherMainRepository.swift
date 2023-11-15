@@ -12,8 +12,8 @@ class PublisherMainRepository: PublisherMainRepositoryProtocol {
     
     private let provider = MoyaProvider<PublisherGetNftAPI>()
     
-    func getNfts(page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void) {
-        provider.request(.getNfts(page: page, size: size)) { result in
+    func getNfts(username: String, page: Int, size: Int, completion: @escaping (Result<NFTList, ErrorResponse>) -> Void) {
+        provider.request(.getNfts(username: username, page: page, size: size)) { result in
             switch result {
             case .success(let response):
                 switch response.statusCode {
