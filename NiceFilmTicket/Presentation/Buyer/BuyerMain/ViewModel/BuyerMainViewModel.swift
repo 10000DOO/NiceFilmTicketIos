@@ -10,9 +10,8 @@ import Combine
 
 class BuyerMainViewModel: ObservableObject {
     
-    private let movieListService: MovieListServiceProtocol
+    private let movieService: MovieServiceProtocol
     private let refreshTokenService: RefreshTokenServiceProtocol
-    private let searchMovieService: SearchMovieServiceProtocol
     @Published var refreshTokenExpired = false
     @Published var movieData = [Movie]()
     @Published var searchedMovieData = [Movie]()
@@ -24,15 +23,14 @@ class BuyerMainViewModel: ObservableObject {
     var sortType = "최신순"
     var cancellables = Set<AnyCancellable>()
     
-    init(movieListService: MovieListServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol, searchMovieService: SearchMovieServiceProtocol) {
-        self.movieListService = movieListService
+    init(movieService: MovieServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
+        self.movieService = movieService
         self.refreshTokenService = refreshTokenService
-        self.searchMovieService = searchMovieService
     }
     
     func getMovies(sortType: String) {
         fetchMoreResult = false
-        movieListService.getMovies(sortType: sortType, page: page, size: 8)
+        movieService.getMovies(sortType: sortType, page: page, size: 8)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -64,7 +62,7 @@ class BuyerMainViewModel: ObservableObject {
             searchedMovieData = []
         }
         fetchMoreSearchedMovieData = false
-        searchMovieService.searchMovie(page: searchPage, size: 8, movieTitle: movieTitle)
+        movieService.searchMovie(page: searchPage, size: 8, movieTitle: movieTitle)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):

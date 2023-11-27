@@ -46,7 +46,7 @@ class BuyerMainViewController: UIViewController {
         
         buyerMainViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
             if result {
-                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 signInVC.modalPresentationStyle = .fullScreen
                 self?.present(signInVC, animated: true, completion: nil)
             }
@@ -145,11 +145,11 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
         if buyerMainView.searchTableView.isHidden {
             if let indexPath = buyerMainView.tableView.indexPath(for :cell){
                 if imageViewIndex == 0 {
-                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieService: MovieService(movieRepository: MovieRepository())))
                     detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].leftMovieId
                     self.navigationController?.pushViewController(detailVC, animated: false)
                 } else if imageViewIndex == 1 {
-                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                    let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieService: MovieService(movieRepository: MovieRepository())))
                     detailVC.movieId = buyerMainViewModel.movieData[indexPath.row].rightMovieId
                     self.navigationController?.pushViewController(detailVC, animated: false)
                 }
@@ -158,12 +158,12 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
             if let indexPath = buyerMainView.searchTableView.indexPath(for :cell){
                 if indexPath.row < buyerMainViewModel.searchedMovieData.count {
                     if imageViewIndex == 0 {
-                        let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                        let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieService: MovieService(movieRepository: MovieRepository())))
                         detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].leftMovieId
                         self.navigationController?.pushViewController(detailVC, animated: false)
                     } else if imageViewIndex == 1 {
                         if buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId != nil {
-                            let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieDetailService: MovieDetailService(movieDetailRepository: MovieDetailRepository())))
+                            let detailVC = BuyerDetailViewController(buyerDetailViewModel: BuyerDetailViewModel(refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), movieService: MovieService(movieRepository: MovieRepository())))
                             detailVC.movieId = buyerMainViewModel.searchedMovieData[indexPath.row].rightMovieId
                             self.navigationController?.pushViewController(detailVC, animated: false)
                         }

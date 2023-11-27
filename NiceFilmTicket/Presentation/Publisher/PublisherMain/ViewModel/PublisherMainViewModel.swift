@@ -10,7 +10,7 @@ import Combine
 
 class PublisherMainViewModel: ObservableObject {
     
-    private let publisherMainService: PublisherMainServiceProtocol
+    private let nftService: NFTServiceProtocol
     private let refreshTokenService: RefreshTokenServiceProtocol
     @Published var nftList: [NFTItem] = []
     @Published var refreshTokenExpired = false
@@ -18,15 +18,15 @@ class PublisherMainViewModel: ObservableObject {
     var page = 0
     var fetchMoreResult = false
     
-    init(publisherMainService: PublisherMainServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
-        self.publisherMainService = publisherMainService
+    init(nftService: NFTServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
+        self.nftService = nftService
         self.refreshTokenService = refreshTokenService
     }
     
     func getIssuedNft(store: inout Set<AnyCancellable>) {
         fetchMoreResult = false
         var storeCopy = store
-        publisherMainService.getNfts(username: UserDefaults.standard.string(forKey: "username")!, page: page, size: 1500) { [weak self] result in
+        nftService.getNfts(username: UserDefaults.standard.string(forKey: "username")!, page: page, size: 1500) { [weak self] result in
             switch result {
             case .success(let response):
                 self?.nftList.append(contentsOf: response.nftListDtos)

@@ -10,17 +10,17 @@ import Combine
 
 class SignInViewModel: ObservableObject {
     
-    private let signInService: SignInServiceProtocol
+    private let memberService: MemberServiceProtocol
     @Published var loginId = ""
     @Published var password = ""
     @Published var signInError = ""
     
-    init(signInService: SignInServiceProtocol) {
-        self.signInService = signInService
+    init(memberService: MemberServiceProtocol) {
+        self.memberService = memberService
     }
     
     func signIn(loginId: String, password: String, memberType: String) {
-        signInService.signIn(loginId: loginId, password: password, memberType: memberType) { [weak self] message in
+        memberService.signIn(loginId: loginId, password: password, memberType: memberType) { [weak self] message in
             self?.signInError = message
         }
     }

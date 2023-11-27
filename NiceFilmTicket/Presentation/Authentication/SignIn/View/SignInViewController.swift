@@ -86,7 +86,7 @@ extension SignInViewController {
     
     //회원가입 뷰로 이동
     @objc private func didTapSignupButton() {
-        let signUpVC = SignUpViewController(signUpViewModel: SignUpViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
+        let signUpVC = SignUpViewController(signUpViewModel: SignUpViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository())), emailService: EmailService(emailRepository: EmailRepository())))
         
         self.navigationController?.pushViewController(signUpVC, animated: false)
     }
@@ -102,13 +102,13 @@ extension SignInViewController {
     }
     
     @objc func findId() {
-        let findIdVC = FindIdViewController(findViewModel: FindIdViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        let findIdVC = FindIdViewController(findViewModel: FindIdViewModel(emailService: EmailService(emailRepository: EmailRepository()), memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
         
         self.navigationController?.pushViewController(findIdVC, animated: false)
     }
     
     @objc func findPw() {
-        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository())))
         
         self.navigationController?.pushViewController(findPwVC, animated: false)
     }

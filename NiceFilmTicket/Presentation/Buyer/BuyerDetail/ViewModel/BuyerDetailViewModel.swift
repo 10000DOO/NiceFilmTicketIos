@@ -11,19 +11,19 @@ import Combine
 class BuyerDetailViewModel: ObservableObject {
     
     private let refreshTokenService: RefreshTokenServiceProtocol
-    private let movieDetailService: MovieDetailServiceProtocol
+    private let movieService: MovieServiceProtocol
     @Published var refreshTokenExpired = false
     @Published var movieData: MovieDataDTO?
     @Published var buyNftSuccess = true
     var cancellables = Set<AnyCancellable>()
     
-    init(refreshTokenService: RefreshTokenServiceProtocol, movieDetailService: MovieDetailServiceProtocol) {
+    init(refreshTokenService: RefreshTokenServiceProtocol, movieService: MovieServiceProtocol) {
         self.refreshTokenService = refreshTokenService
-        self.movieDetailService = movieDetailService
+        self.movieService = movieService
     }
     
     func getMovie(id: Int) {
-        movieDetailService.getMovieDetails(id: id)
+        movieService.getMovieDetails(id: id)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -47,7 +47,7 @@ class BuyerDetailViewModel: ObservableObject {
     }
     
     func buyNft(id: Int) {
-        movieDetailService.buyNFt(id: id)
+        movieService.buyNFt(id: id)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):

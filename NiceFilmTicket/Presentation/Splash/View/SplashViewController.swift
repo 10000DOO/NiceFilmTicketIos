@@ -47,7 +47,7 @@ class SplashViewController : UIViewController {
                     self.present(buyerTabbarVC, animated: true, completion: nil)
                 }
             } else {
-                let rootVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let rootVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 let navigationController = UINavigationController(rootViewController:rootVC)
                 
                 self.navigationController?.pushViewController(rootVC, animated: false)

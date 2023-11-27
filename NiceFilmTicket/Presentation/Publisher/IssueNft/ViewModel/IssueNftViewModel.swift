@@ -10,7 +10,7 @@ import Combine
 
 class IssueNftViewModel: ObservableObject {
     
-    private let issueNftService: IssueNftServiceProtocol
+    private let nftService: NFTServiceProtocol
     private let refreshTokenService: RefreshTokenServiceProtocol
     var posterImageIsSelected = false
     var normalImageIsSelected = false
@@ -24,8 +24,8 @@ class IssueNftViewModel: ObservableObject {
     @Published var refreshTokenExpired = false
     var cancellables = Set<AnyCancellable>()
     
-    init(issueNftService: IssueNftServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
-        self.issueNftService = issueNftService
+    init(nftService: NFTServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
+        self.nftService = nftService
         self.refreshTokenService = refreshTokenService
     }
     
@@ -62,15 +62,15 @@ class IssueNftViewModel: ObservableObject {
     }
     
     func actorPatternCheck(actor: String) -> [String]? {
-        issueNftService.actorPatternCheck(actor: actor)
+        nftService.actorPatternCheck(actor: actor)
     }
     
     func datePatternCheck(date: String) -> Bool {
-        issueNftService.datePatternCheck(date: date)
+        nftService.datePatternCheck(date: date)
     }
     
     func issueNft(issueNftReq: IssueNFTReq, countNftReq: CountNFTReq, posterImage: [String: Foundation.Data], normalNftImage: [String: Foundation.Data], rareNftImage: [String: Foundation.Data], legendNftImage: [String: Foundation.Data]) {
-        issueNftService.issueNft(issueNftReq: issueNftReq, countNftReq: countNftReq, posterImage: posterImage, normalNftImage: normalNftImage, rareNftImage: rareNftImage, legendNftImage: legendNftImage)
+        nftService.issueNft(issueNftReq: issueNftReq, countNftReq: countNftReq, posterImage: posterImage, normalNftImage: normalNftImage, rareNftImage: rareNftImage, legendNftImage: legendNftImage)
             .sink (receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):

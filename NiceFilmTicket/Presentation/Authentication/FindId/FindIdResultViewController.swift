@@ -41,7 +41,7 @@ extension FindIdResultViewController {
     }
     
     @objc func gotoFindPwVC() {
-        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository()), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+        let findPwVC = FindPwViewController(findPwViewModel: FindPwViewModel(emailService: EmailService(emailRepository: EmailRepository())))
         self.navigationController?.pushViewController(findPwVC, animated: true)
     }
 }

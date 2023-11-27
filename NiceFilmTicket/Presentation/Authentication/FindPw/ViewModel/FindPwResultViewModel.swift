@@ -10,8 +10,7 @@ import Combine
 
 class FindPwResultViewModel {
     
-    private let signUpService: SignUpServiceProtocol
-    private let findIdPwService: FindIdPwServiceProtocol
+    private let memberService: MemberServiceProtocol
     @Published var password = ""
     @Published var passwordError = ""
     @Published var passwordCheck = ""
@@ -20,13 +19,12 @@ class FindPwResultViewModel {
     @Published var newPwSuccess = false
     var cancellables = Set<AnyCancellable>()
     
-    init(signUpService: SignUpServiceProtocol, findIdPwService: FindIdPwServiceProtocol) {
-        self.signUpService = signUpService
-        self.findIdPwService = findIdPwService
+    init(memberService: MemberServiceProtocol) {
+        self.memberService = memberService
     }
     
     func passwordPatternCheck(password: String) {
-        signUpService.passwordPatternCheck(password: password) { [weak self] message in
+        memberService.passwordPatternCheck(password: password) { [weak self] message in
             self?.passwordError = message
         }
     }
@@ -38,7 +36,7 @@ class FindPwResultViewModel {
     }
     
     func passwordMatching(password: String, passwordForCheck: String) {
-        signUpService.passwordMatchingCheck(password: password, passwordForCheck: passwordForCheck) { [weak self] message in
+        memberService.passwordMatchingCheck(password: password, passwordForCheck: passwordForCheck) { [weak self] message in
             self?.passwordCheckError = message
         }
     }
@@ -50,7 +48,7 @@ class FindPwResultViewModel {
     }
     
     func findPw(newPwDto: NewPwDto) {
-        findIdPwService.findPw(newPwDto: newPwDto)
+        memberService.findPw(newPwDto: newPwDto)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):

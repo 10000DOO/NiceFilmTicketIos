@@ -35,7 +35,7 @@ class DrawNftViewController: UIViewController {
         
         drawNftViewModel.refreshTokenExpired(store: &cancellables) { [weak self] result in
             if result {
-                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 signInVC.modalPresentationStyle = .fullScreen
                 self?.present(signInVC, animated: true, completion: nil)
             }
@@ -68,21 +68,21 @@ extension DrawNftViewController {
     
     @objc func selectFirstNFT() {
         drawNftViewModel.firstNftSelected = true
-        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
     }
     
     @objc func selectSecondNFT() {
         drawNftViewModel.secondNftSelected = true
-        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
     }
     
     @objc func selectThirdNFT() {
         drawNftViewModel.thirdNftSelected = true
-        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let myNftVc = MyNftViewController(myNftViewModel: MyNftViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         myNftVc.delegate = self
         self.present(myNftVc, animated: true, completion: nil)
     }

@@ -1,25 +1,94 @@
 //
-//  MyNftService.swift
+//  NFTService.swift
 //  NiceFilmTicket
 //
-//  Created by 이건준 on 11/2/23.
+//  Created by 이건준 on 11/27/23.
 //
 
 import Foundation
 import Combine
 
-class MyNftService: MyNftServiceProtocol {
+class NFTService: NFTServiceProtocol {
     
-    private let myNftRepository: MyNftRepositoryProtocol
+    private let nftRepository: NFTRepositoryProtocol
     var cancellables = Set<AnyCancellable>()
     
-    init(myNftRepository: MyNftRepositoryProtocol) {
-        self.myNftRepository = myNftRepository
+    init(nftRepository: NFTRepositoryProtocol) {
+        self.nftRepository = nftRepository
+    }
+    
+    func drawNft(firstNft: NFTPickDto, secondNft: NFTPickDto, thirdNft: NFTPickDto) -> AnyPublisher<NewNftData, ErrorResponse> {
+        let drawNftReq = DrawNftReq(nftSerialnum1: firstNft.nftSerialnum, nftLevel1: firstNft.nftLevel, nftSerialnum2: secondNft.nftSerialnum, nftLevel2: secondNft.nftLevel, nftSerialnum3: thirdNft.nftSerialnum, nftLevel3: thirdNft.nftLevel)
+        return Future<NewNftData, ErrorResponse> { [weak self] promise in
+            self?.nftRepository.drawNft(drawNftReq: drawNftReq)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response.data))
+                }).store(in: &self!.cancellables)
+                }.eraseToAnyPublisher()
+    }
+    
+    func actorPatternCheck(actor: String) -> [String]? {
+        let actors = actor.components(separatedBy: ", ")
+
+        if !actors.isEmpty {
+            return actors
+        }
+        return nil
+    }
+    
+    func datePatternCheck(date: String) -> Bool {
+        // yyyy-MM-dd 형식의 정규 표현식 패턴
+        let pattern = #"^\d{4}-\d{2}-\d{2}$"#
+        
+        let regex = try! NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: date.utf16.count)
+        return regex.firstMatch(in: date, options: [], range: range) != nil
+    }
+    
+    func issueNft(issueNftReq: IssueNFTReq, countNftReq: CountNFTReq, posterImage: [String: Foundation.Data], normalNftImage: [String: Foundation.Data], rareNftImage: [String: Foundation.Data], legendNftImage: [String: Foundation.Data]) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
+        return Future<CommonSuccessRes, ErrorResponse> { [weak self] promise in
+            self?.nftRepository.registerNft(issueNFTReq: issueNftReq, countNFTReq: countNftReq, poster: posterImage, normal: normalNftImage, rare: rareNftImage, legend: legendNftImage)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response))
+                }).store(in: &self!.cancellables)
+                }.eraseToAnyPublisher()
+    }
+    
+    func getNfts(username: String, page: Int, size: Int, completion: @escaping (Result<NFTResponse, ErrorResponse>) -> Void) {
+        nftRepository.getNfts(username: username, page: page, size: size) { result in
+            switch result {
+            case .success(let response):
+                if response.data.nftListDtos.isEmpty {
+                    return
+                }
+                completion(.success(response.data))
+            case .failure(let error):
+                switch error.status {
+                case 400...499:
+                    completion(.failure(ErrorResponse(status: 401, error: [ErrorDetail(error: error.error[0].error)])))
+                default: break
+                }
+            }
+        }
     }
     
     func getMyNft(username: String, page: Int, size: Int) -> AnyPublisher<NFTInfo, ErrorResponse> {
         return Future<NFTInfo, ErrorResponse> { [weak self] promise in
-            self?.myNftRepository.getMyNft(username: username, page: page, size: size)
+            self?.nftRepository.getMyNft(username: username, page: page, size: size)
                 .sink(receiveCompletion: { completion in
                     switch completion {
                     case .failure(let error):
@@ -35,7 +104,7 @@ class MyNftService: MyNftServiceProtocol {
     
     func getMyNftList(username: String, page: Int, size: Int) -> AnyPublisher<MyNftListDto, ErrorResponse> {
         return Future<MyNftListDto, ErrorResponse> { [weak self] promise in
-            self?.myNftRepository.getMyNft(username: username, page: page, size: size)
+            self?.nftRepository.getMyNft(username: username, page: page, size: size)
                 .sink { completion in
                     switch completion {
                     case .failure(let error):
@@ -69,3 +138,4 @@ class MyNftService: MyNftServiceProtocol {
         }.eraseToAnyPublisher()
     }
 }
+

@@ -12,10 +12,9 @@ class BuyerTabbarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let buyerMainVC = BuyerMainViewController(buyerMainViewModel: BuyerMainViewModel(movieListService: MovieListService(movieListRepository: MovieListRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()), searchMovieService: SearchMovieService(searchMovieRepository: SearchMovieRepository())))
-        let drawNftVC = DrawNftViewController(drawNftViewModel: DrawNftViewModel(drawNftService: DrawNftService(drawNftRepository: DrawNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
-        let myPageVC = MyPageViewController(myPageViewModel: MyPageViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
-        
+        let buyerMainVC = BuyerMainViewController(buyerMainViewModel: BuyerMainViewModel(movieService: MovieService(movieRepository: MovieRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let drawNftVC = DrawNftViewController(drawNftViewModel: DrawNftViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let myPageVC = MyPageViewController(myPageViewModel: MyPageViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         self.viewControllers = [UINavigationController(rootViewController: buyerMainVC), drawNftVC, myPageVC]
         
         UITabBar.appearance().backgroundColor = UIColor(red: 251/255, green: 251/255, blue: 251/255, alpha: 1)

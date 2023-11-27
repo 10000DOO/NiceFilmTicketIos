@@ -33,7 +33,7 @@ class BuyerDetailViewController: UIViewController {
         
         buyerDetailViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
             if result {
-                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 signInVC.modalPresentationStyle = .fullScreen
                 self?.present(signInVC, animated: true, completion: nil)
             }

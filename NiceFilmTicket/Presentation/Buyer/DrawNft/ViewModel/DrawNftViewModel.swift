@@ -10,7 +10,7 @@ import Combine
 
 class DrawNftViewModel: ObservableObject {
     
-    private let drawNftService: DrawNftServiceProtocol
+    private let nftService: NFTServiceProtocol
     private let refreshTokenService: RefreshTokenServiceProtocol
     var firstNftSelected = false
     var secondNftSelected = false
@@ -22,13 +22,13 @@ class DrawNftViewModel: ObservableObject {
     @Published var refreshTokenExpired = false
     var cancellables = Set<AnyCancellable>()
     
-    init(drawNftService: DrawNftServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
-        self.drawNftService = drawNftService
+    init(nftService: NFTServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
+        self.nftService = nftService
         self.refreshTokenService = refreshTokenService
     }
     
     func drawNft() {
-        drawNftService.drawNft(firstNft: firstNft!, secondNft: secondNft!, thirdNft: thirdNft!)
+        nftService.drawNft(firstNft: firstNft!, secondNft: secondNft!, thirdNft: thirdNft!)
             .sink (receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):

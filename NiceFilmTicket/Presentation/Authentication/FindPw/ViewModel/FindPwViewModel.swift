@@ -11,14 +11,12 @@ import Combine
 class FindPwViewModel: ObservableObject{
     
     private let emailService: EmailServiceProtocol
-    private let findIdPwService: FindIdPwServiceProtocol
     @Published var errorMessage = ""
     @Published var checkCodeSuccess = false
     var cancellables = Set<AnyCancellable>()
     
-    init(emailService: EmailServiceProtocol, findIdPwService: FindIdPwServiceProtocol) {
+    init(emailService: EmailServiceProtocol) {
         self.emailService = emailService
-        self.findIdPwService = findIdPwService
     }
     
     func sendEmailCode(email: String) {

@@ -10,7 +10,7 @@ import Combine
 
 class SignUpViewModel: ObservableObject {
     
-    private let signUpService: SignUpServiceProtocol
+    private let memberService: MemberServiceProtocol
     private let emailService: EmailServiceProtocol
     @Published var email = ""
     @Published var emailError = ""
@@ -26,8 +26,8 @@ class SignUpViewModel: ObservableObject {
     @Published var nickNameError = ""
     @Published var signUpSuccess = false
     
-    init(signUpService: SignUpServiceProtocol, emailService: EmailServiceProtocol) {
-        self.signUpService = signUpService
+    init(memberService: MemberServiceProtocol, emailService: EmailServiceProtocol) {
+        self.memberService = memberService
         self.emailService = emailService
     }
     
@@ -44,21 +44,21 @@ class SignUpViewModel: ObservableObject {
     }
     
     func emailDuplicateCheck(email: String) {
-        signUpService.emailDuplicateCheck(email: email) { [weak self] message in
+        memberService.emailDuplicateCheck(email: email) { [weak self] message in
             self?.emailError = message
         }
     }
     
     func loginIdDuplicateCheck(loginId: String) {
         self.loginId = loginId
-        signUpService.loginIdDuplicateCheck(loginId: loginId) { [weak self] message in
+        memberService.loginIdDuplicateCheck(loginId: loginId) { [weak self] message in
             self?.loginIdError = message
         }
     }
     
     func nickNameDuplicateCheck(nickName: String) {
         self.nickName = nickName
-        signUpService.nickNameDuplicateCheck(nickName: nickName) { [weak self] message in
+        memberService.nickNameDuplicateCheck(nickName: nickName) { [weak self] message in
             self?.nickNameError = message
         }
     }
@@ -77,11 +77,11 @@ class SignUpViewModel: ObservableObject {
     
     func passwordPatternCheck(password: String) {
         self.password = password
-        signUpService.passwordPatternCheck(password: password) { [weak self] message in
+        memberService.passwordPatternCheck(password: password) { [weak self] message in
             self?.passwordError = message
         }
         
-        signUpService.passwordMatchingCheck(password: password, passwordForCheck: passwordCheck) { [weak self] message in
+        memberService.passwordMatchingCheck(password: password, passwordForCheck: passwordCheck) { [weak self] message in
             self?.passwordCheckError = message
         }
     }
@@ -94,7 +94,7 @@ class SignUpViewModel: ObservableObject {
     
     func passwordMatching(passwordForCheck: String) {
         self.passwordCheck = passwordForCheck
-        signUpService.passwordMatchingCheck(password: password, passwordForCheck: passwordForCheck) { [weak self] message in
+        memberService.passwordMatchingCheck(password: password, passwordForCheck: passwordForCheck) { [weak self] message in
             self?.passwordCheckError = message
         }
     }
@@ -112,7 +112,7 @@ class SignUpViewModel: ObservableObject {
     }
     
     func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, memberType: String) {
-        signUpService.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType) { [weak self] response in
+        memberService.signUp(email: email, emailCode: emailCode, loginId: loginId, password: password, nickName: nickName, memberType: memberType) { [weak self] response in
             if response.serverError.isEmpty {
                 if response.statusCode == 200 {
                     self?.signUpSuccess = true

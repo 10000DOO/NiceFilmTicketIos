@@ -190,7 +190,7 @@ extension SignUpViewController {
             
             signUpViewModel.$signUpSuccess.sink { [weak self] result in
                 if result {
-                    let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                    let signInVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                     self?.navigationController?.pushViewController(signInVC, animated: false)
                 }
             }.store(in: &cancellables)

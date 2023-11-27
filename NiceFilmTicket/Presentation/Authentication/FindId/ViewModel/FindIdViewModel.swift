@@ -11,14 +11,14 @@ import Combine
 class FindIdViewModel: ObservableObject{
     
     private let emailService: EmailServiceProtocol
-    private let findIdPwService: FindIdPwServiceProtocol
+    private let memberService: MemberServiceProtocol
     @Published var errorMessage = ""
     @Published var findedId: String?
     var cancellables = Set<AnyCancellable>()
     
-    init(emailService: EmailServiceProtocol, findIdPwService: FindIdPwServiceProtocol) {
+    init(emailService: EmailServiceProtocol, memberService: MemberServiceProtocol) {
         self.emailService = emailService
-        self.findIdPwService = findIdPwService
+        self.memberService = memberService
     }
     
     func sendEmailCode(email: String) {
@@ -26,7 +26,7 @@ class FindIdViewModel: ObservableObject{
     }
     
     func findId(emailCode: String) {
-        findIdPwService.findId(emailCode: emailCode)
+        memberService.findId(emailCode: emailCode)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):

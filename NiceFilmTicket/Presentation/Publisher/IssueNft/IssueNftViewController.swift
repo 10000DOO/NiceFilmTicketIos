@@ -64,7 +64,7 @@ class IssueNftViewController: UIViewController {
     @IBAction func registerNft(_ sender: Any) {
         registerNft()
     }
-    private let issueNftViewModel = IssueNftViewModel(issueNftService: IssueNftService(issueNftRepository: IssueNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()))
+    private let issueNftViewModel = IssueNftViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository()))
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -140,7 +140,7 @@ class IssueNftViewController: UIViewController {
         
         issueNftViewModel.refreshTokenExpired(store: &cancellable) { [weak self] result in
             if result {
-                let signInVC = SignInViewController(signInViewModel: SignInViewModel(signInService: SignInService(signInRepository: SignInRepository())))
+                let signInVC = SignInViewController(signInViewModel: SignInViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 signInVC.modalPresentationStyle = .fullScreen
                 self?.present(signInVC, animated: true, completion: nil)
             }

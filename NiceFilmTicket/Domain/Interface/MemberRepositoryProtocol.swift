@@ -1,13 +1,16 @@
 //
-//  SignUpRepositoryProtocol.swift
+//  MemberRepositoryProtocol.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/06.
+//  Created by 이건준 on 11/27/23.
 //
 
 import Foundation
+import Combine
+import Moya
 
-protocol SignUpRepositoryProtocol {
+protocol MemberRepositoryProtocol {
+    func signIn(signInReq: SignInReq, memberType: String, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void)
     
     func emailDuplicateCheck(email: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
     
@@ -16,5 +19,8 @@ protocol SignUpRepositoryProtocol {
     func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
     
     func signUp(signUpReq: SignUpReq, emailCode: String, memberType: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void)
+    
+    func findId(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
+    
+    func findPw(newPwDto: NewPwDto) -> AnyPublisher<CommonSuccessRes, ErrorResponse>
 }
-

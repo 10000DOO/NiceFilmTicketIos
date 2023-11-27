@@ -1,24 +1,33 @@
 //
-//  issueNft.swift
+//  NftAPI.swift
 //  NiceFilmTicket
 //
-//  Created by 이건준 on 2023/10/05.
+//  Created by 이건준 on 11/27/23.
 //
 
 import Foundation
 import Moya
 
-enum issueNftAPI {
+enum NftAPI {
+    case getMyNft(username: String, page: Int, size: Int)
+    case drawNft(drawNftReq: DrawNftReq)
+    case getNfts(username: String, page: Int, size: Int)
     case issueNft(issueNFTReq: IssueNFTReq, countNFTReq: CountNFTReq, poster: [String: Foundation.Data], normal: [String: Foundation.Data], rare: [String: Foundation.Data], legend: [String: Foundation.Data])
 }
 
-extension issueNftAPI: TargetType {
+extension NftAPI: TargetType {
     var baseURL: URL {
         return URL(string: ServerInfo.serverURL)!
     }
     
     var path: String {
         switch self {
+        case .getMyNft:
+            return "/nft/pick/list"
+        case .drawNft:
+            return "/nft/pick"
+        case .getNfts:
+            return "/nft"
         case .issueNft:
             return "/nft/save"
         }
@@ -26,6 +35,12 @@ extension issueNftAPI: TargetType {
     
     var method: Moya.Method {
         switch self {
+        case .getMyNft:
+            return .get
+        case .drawNft:
+            return .post
+        case .getNfts:
+            return .get
         case .issueNft:
             return .post
         }
@@ -33,6 +48,12 @@ extension issueNftAPI: TargetType {
     
     var task: Task {
         switch self {
+        case .getMyNft(let username, let page, let size):
+            return .requestParameters(parameters: ["username": username, "page": page, "size": size], encoding: URLEncoding.queryString)
+        case .drawNft(let drawNftReq):
+            return .requestJSONEncodable(drawNftReq)
+        case .getNfts(let username, let page, let size):
+            return .requestParameters(parameters: ["sortType": "최신순", "username": username, "page": page, "size": size], encoding: URLEncoding.queryString)
         case .issueNft(let issueNFTReq, let countNFTReq, let poster, let normal, let rare, let legend):
             var multipartFormData = [MultipartFormData]()
             
@@ -78,6 +99,6 @@ extension issueNftAPI: TargetType {
     }
     
     var headers: [String : String]? {
-        return ["Content-Type": "multipart/form-data", "Authorization" : UserDefaults.standard.string(forKey: "accessToken")!]
+        return ["Content-Type": "application/json", "Authorization" : UserDefaults.standard.string(forKey: "accessToken")!]
     }
 }

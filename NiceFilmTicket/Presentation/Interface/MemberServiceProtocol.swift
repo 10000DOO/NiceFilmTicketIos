@@ -1,13 +1,16 @@
 //
-//  SignUpServiceProtocol.swift
+//  MemberServiceProtocol.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/05.
+//  Created by 이건준 on 11/27/23.
 //
 
 import Foundation
+import Combine
 
-protocol SignUpServiceProtocol {
+protocol MemberServiceProtocol {
+    
+    func signIn(loginId: String, password: String, memberType: String, completion: @escaping (String) -> Void)
     
     func emailDuplicateCheck(email: String, completion: @escaping (String) -> Void)
     
@@ -26,4 +29,8 @@ protocol SignUpServiceProtocol {
     func isValidPassword(password: String) -> Bool
     
     func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, memberType: String, completion: @escaping (SignUpRes) -> Void)
+    
+    func findId(emailCode: String) -> AnyPublisher<String, ErrorResponse>
+    
+    func findPw(newPwDto: NewPwDto) -> AnyPublisher<String, ErrorResponse>
 }

@@ -50,7 +50,7 @@ class FindPwViewController: UIViewController {
         
         findPwViewModel.updateCode(store: &cancellables) { [weak self] result in
             if result {
-                let findPwResult = FindPwResultViewController(findPwResultViewModel: FindPwResultViewModel(signUpService: SignUpService(signUpRepository: SignUpRepository(), emailService: EmailService(emailRepository: EmailRepository())), findIdPwService: FindIdPwService(findIdPwRepository: FindIdPwRepository())))
+                let findPwResult = FindPwResultViewController(findPwResultViewModel: FindPwResultViewModel(memberService: MemberService(memberRepository: MemberRepository(), emailService: EmailService(emailRepository: EmailRepository()))))
                 findPwResult.email = (self?.findPwView.emailTextField.text)!
                 self?.navigationController?.pushViewController(findPwResult, animated: false)
             }

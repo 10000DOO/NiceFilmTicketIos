@@ -10,7 +10,7 @@ import Combine
 
 class MyNftViewModel: ObservableObject {
     
-    private let myNftService: MyNftServiceProtocol
+    private let nftService: NFTServiceProtocol
     private let refreshTokenService: RefreshTokenServiceProtocol
     @Published var refreshTokenExpired = false
     @Published var nftData = [NFTPickDto]()
@@ -18,14 +18,14 @@ class MyNftViewModel: ObservableObject {
     var page = 0
     var cancellables = Set<AnyCancellable>()
     
-    init(myNftService: MyNftServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
-        self.myNftService = myNftService
+    init(nftService: NFTServiceProtocol, refreshTokenService: RefreshTokenServiceProtocol) {
+        self.nftService = nftService
         self.refreshTokenService = refreshTokenService
     }
     
     func getMyNft(username: String, size: Int) {
         fetchMoreResult = false
-        myNftService.getMyNft(username: username, page: page, size: size)
+        nftService.getMyNft(username: username, page: page, size: size)
             .sink { [weak self] completion in
                 switch completion {
                 case .failure(let error):

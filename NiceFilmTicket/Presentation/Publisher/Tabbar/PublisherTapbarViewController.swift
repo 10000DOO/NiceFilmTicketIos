@@ -12,8 +12,8 @@ class PublisherTapbarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let publisherMainVC = PublisherMainViewController(publisherMainViewModel: PublisherMainViewModel(publisherMainService: PublisherMainService(publisherMainRepository: PublisherMainRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
-        let myPageVC = MyPageViewController(myPageViewModel: MyPageViewModel(myNftService: MyNftService(myNftRepository: MyNftRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let publisherMainVC = PublisherMainViewController(publisherMainViewModel: PublisherMainViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
+        let myPageVC = MyPageViewController(myPageViewModel: MyPageViewModel(nftService: NFTService(nftRepository: NFTRepository()), refreshTokenService: RefreshTokenService(refreshTokenRepository: RefreshTokenRepository())))
         
         self.viewControllers = [UINavigationController(rootViewController: publisherMainVC), myPageVC]
         

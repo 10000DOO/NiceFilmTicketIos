@@ -1,25 +1,49 @@
 //
-//  SignUpService.swift
+//  MemberService.swift
 //  NiceFilmTicket
 //
-//  Created by 10000DOO on 2023/09/05.
+//  Created by 이건준 on 11/27/23.
 //
 
 import Foundation
+import Combine
 
-class SignUpService: SignUpServiceProtocol {
-        
-    private let signUpRepository: SignUpRepositoryProtocol
-    private let emailService: EmailServiceProtocol
+class MemberService: MemberServiceProtocol {
     
-    init(signUpRepository: SignUpRepositoryProtocol, emailService: EmailServiceProtocol) {
-        self.signUpRepository = signUpRepository
+    private let memberRepository: MemberRepositoryProtocol
+    private let emailService: EmailServiceProtocol
+    var cancellables = Set<AnyCancellable>()
+    
+    init(memberRepository: MemberRepositoryProtocol, emailService: EmailServiceProtocol) {
+        self.memberRepository = memberRepository
         self.emailService = emailService
+    }
+    
+    func signIn(loginId: String, password: String, memberType: String, completion: @escaping (String) -> Void) {
+        let signInReq = SignInReq(loginId: loginId, password: password)
+        memberRepository.signIn(signInReq: signInReq, memberType: memberType) { result in
+            switch result {
+            case .success(let response):
+                UserDefaults.standard.set("Bearer[\(response.data.accessToken)]", forKey: "accessToken")
+                UserDefaults.standard.set("Bearer[\(response.data.refreshToken)]", forKey: "refreshToken")
+                UserDefaults.standard.set(response.data.username, forKey: "username")
+                completion(ErrorMessage.signInSuccess.message)
+            case .failure(let error):
+                switch error.status {
+                case 401:
+                    completion(ErrorMessage.signInFail.message)
+                case 500:
+                    completion(ErrorMessage.serverError.message)
+                default:
+                    completion(ErrorMessage.serverError.message)
+                }
+            }
+        }
     }
     
     func emailDuplicateCheck(email: String, completion: @escaping (String) -> Void) {
         if emailService.isEmailValid(email: email) {
-            signUpRepository.emailDuplicateCheck(email: email) { result in
+            memberRepository.emailDuplicateCheck(email: email) { result in
                 switch result {
                 case .success(_):
                     completion(ErrorMessage.availableEmail.message)
@@ -41,7 +65,7 @@ class SignUpService: SignUpServiceProtocol {
     
     func loginIdDuplicateCheck(loginId: String, completion: @escaping (String) -> Void) {
         if isValidLoginId(loginId: loginId) {
-            signUpRepository.loginIdDuplicateCheck(loginId: loginId) { result in
+            memberRepository.loginIdDuplicateCheck(loginId: loginId) { result in
                 switch result {
                 case .success(_):
                     completion(ErrorMessage.availableLoginId.message)
@@ -63,7 +87,7 @@ class SignUpService: SignUpServiceProtocol {
     
     func nickNameDuplicateCheck(nickName: String, completion: @escaping (String) -> Void) {
         if isValidNickName(nickName: nickName) {
-            signUpRepository.nickNameDuplicateCheck(nickName: nickName) { result in
+            memberRepository.nickNameDuplicateCheck(nickName: nickName) { result in
                 switch result {
                 case .success(_):
                     completion(ErrorMessage.availableNickName.message)
@@ -119,7 +143,7 @@ class SignUpService: SignUpServiceProtocol {
     
     func signUp(email: String, emailCode: String, loginId: String, password: String, nickName: String, memberType: String, completion: @escaping (SignUpRes) -> Void) {
         let signUpReq = SignUpReq(loginId: loginId, password: password, username: nickName, email: email)
-        signUpRepository.signUp(signUpReq: signUpReq, emailCode: emailCode, memberType: memberType) { result in
+        memberRepository.signUp(signUpReq: signUpReq, emailCode: emailCode, memberType: memberType) { result in
             switch result {
             case .success(_):
                 var signUpRes = SignUpRes()
@@ -166,5 +190,37 @@ class SignUpService: SignUpServiceProtocol {
                 }
             }
         }
+    }
+    
+    func findId(emailCode: String) -> AnyPublisher<String, ErrorResponse> {
+        return Future<String, ErrorResponse> { [weak self] promise in
+            self?.memberRepository.findId(emailCode: emailCode)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response.data))
+                }).store(in: &self!.cancellables)
+                }.eraseToAnyPublisher()
+    }
+    
+    func findPw(newPwDto: NewPwDto) -> AnyPublisher<String, ErrorResponse> {
+        return Future<String, ErrorResponse> { [weak self] promise in
+            self?.memberRepository.findPw(newPwDto: newPwDto)
+                .sink(receiveCompletion: { completion in
+                    switch completion {
+                    case .failure(let error):
+                        promise(.failure(ErrorResponse(status: error.status, error: error.error)))
+                    case .finished:
+                        break
+                    }
+                }, receiveValue: { response in
+                    promise(.success(response.data))
+                }).store(in: &self!.cancellables)
+                }.eraseToAnyPublisher()
     }
 }
