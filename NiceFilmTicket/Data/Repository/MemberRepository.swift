@@ -6,245 +6,210 @@
 //
 
 import Foundation
-import Moya
 import Combine
-import CombineMoya
+import Alamofire
 
 class MemberRepository: MemberRepositoryProtocol {
     
-    private let provider = MoyaProvider<MemberAPI>()
-    
     func signIn(signInReq: SignInReq, memberType: String, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void) {
-        provider.request(.signIn(signInReq: signInReq, memberType: memberType)) { result in
-            switch result {
-            case .success(let response):
-                switch response.statusCode {
-                case 200...299:
-                    do {
-                        let signInRes = try response.map(SignInResponse.self)
-                        completion(.success(signInRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+        let url = URLComponents(string: ServerInfo.serverURL + "/signin")!
+        var components = url
+        components.queryItems = [URLQueryItem(name: "role", value: memberType)]
+        
+        AF.request(components.url!,
+                   method: .post,
+                   parameters: signInReq,
+                   encoder: JSONParameterEncoder.default,
+                   headers: ["Content-Type": "application/json"])
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let signInResponse = try JSONDecoder().decode(SignInResponse.self, from: data)
+                    completion(.success(signInResponse))
+                } catch {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        completion(.failure(errorResponse))
+                    } else {
+                        let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                        completion(.failure(defaultError))
                     }
-                case 400...499:
-                    do {
-                        let signInErrorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(signInErrorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                default:
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
-            case let .failure(error):
-                if case let .statusCode(response) = error,
-                   500...599 ~= response.statusCode {
-                    do {
-                        let signInErrorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(signInErrorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                } else {
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                }
+            case .failure(let error):
+                let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                completion(.failure(customError))
             }
         }
     }
     
+    
     func emailDuplicateCheck(email: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
-        provider.request(.emailDuplicateTest(email: email)) { result in
-            switch result {
-            case let .success(response):
-                switch response.statusCode {
-                case 200...299:
-                    do {
-                        let result = try response.map(CommonSuccessRes.self)
-                        completion(.success(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+        AF.request(ServerInfo.serverURL + "/member/check/email",
+                   method: .get,
+                   parameters: ["email": email],
+                   encoder: URLEncodedFormParameterEncoder.default,
+                   headers: ["Content-Type": "application/json"])
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let emailDuplicateCheckRes = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                    completion(.success(emailDuplicateCheckRes))
+                } catch {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        completion(.failure(errorResponse))
+                    } else {
+                        let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                        completion(.failure(defaultError))
                     }
-                case 400...499:
-                    do {
-                        let result = try response.map(ErrorResponse.self)
-                        completion(.failure(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                default:
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
-            case let .failure(error):
-                if case let .statusCode(response) = error,
-                   500...599 ~= response.statusCode {
-                    do {
-                        let errorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(errorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                } else {
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                }
+            case .failure(let error):
+                let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                completion(.failure(customError))
             }
         }
     }
     
     func loginIdDuplicateCheck(loginId: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
-        provider.request(.loginIdDuplicateTest(loginId: loginId)) { result in
-            switch result {
-            case let .success(response):
-                switch response.statusCode {
-                case 200...299:
-                    do {
-                        let result = try response.map(CommonSuccessRes.self)
-                        completion(.success(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+        AF.request(ServerInfo.serverURL + "/member/check/loginid",
+                   method: .get,
+                   parameters: ["loginid": loginId],
+                   encoder: URLEncodedFormParameterEncoder.default,
+                   headers: ["Content-Type": "application/json"])
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let loginIdDuplicateCheckRes = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                    completion(.success(loginIdDuplicateCheckRes))
+                } catch {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        completion(.failure(errorResponse))
+                    } else {
+                        let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                        completion(.failure(defaultError))
                     }
-                case 400...499:
-                    do {
-                        let result = try response.map(ErrorResponse.self)
-                        completion(.failure(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                default:
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
-            case let .failure(error):
-                if case let .statusCode(response) = error,
-                   500...599 ~= response.statusCode {
-                    do {
-                        let errorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(errorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                } else {
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                }
+            case .failure(let error):
+                let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                completion(.failure(customError))
             }
         }
     }
     
     func nickNameDuplicateCheck(nickName: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
-        provider.request(.nickNameDuplicateTest(nickName: nickName)) { result in
-            switch result {
-            case let .success(response):
-                switch response.statusCode {
-                case 200...299:
-                    do {
-                        let result = try response.map(CommonSuccessRes.self)
-                        completion(.success(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+        AF.request(ServerInfo.serverURL + "/member/check/username",
+                   method: .get,
+                   parameters: ["username": nickName],
+                   encoder: URLEncodedFormParameterEncoder.default,
+                   headers: ["Content-Type": "application/json"])
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let nickNameDuplicateCheckRes = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                    completion(.success(nickNameDuplicateCheckRes))
+                } catch {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        completion(.failure(errorResponse))
+                    } else {
+                        let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                        completion(.failure(defaultError))
                     }
-                case 400...499:
-                    do {
-                        let result = try response.map(ErrorResponse.self)
-                        completion(.failure(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                default:
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
-            case let .failure(error):
-                if case let .statusCode(response) = error,
-                   500...599 ~= response.statusCode {
-                    do {
-                        let errorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(errorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                } else {
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                }
+            case .failure(let error):
+                let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                completion(.failure(customError))
             }
         }
     }
     
     func signUp(signUpReq: SignUpReq, emailCode: String, memberType: String, completion: @escaping (Result<CommonSuccessRes, ErrorResponse>) -> Void) {
-        provider.request(.signUpReq(signUpReq: signUpReq, emailCode: emailCode, memberType: memberType)) { result in
-            switch result {
-            case .success(let response):
-                switch response.statusCode {
-                case 200...299:
-                    do {
-                        let result = try response.map(CommonSuccessRes.self)
-                        completion(.success(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
+        let url = URLComponents(string: ServerInfo.serverURL + "/signup")!
+        var components = url
+        components.queryItems = [URLQueryItem(name: "code", value: emailCode), URLQueryItem(name: "role", value: memberType)]
+        
+        AF.request(components.url!,
+                   method: .post,
+                   parameters: signUpReq,
+                   encoder: JSONParameterEncoder.default,
+                   headers: ["Content-Type": "application/json"])
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                do {
+                    let signUpResponse = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                    completion(.success(signUpResponse))
+                } catch {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                        completion(.failure(errorResponse))
+                    } else {
+                        let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                        completion(.failure(defaultError))
                     }
-                case 400...499:
-                    do {
-                        let result = try response.map(ErrorResponse.self)
-                        completion(.failure(result))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                default:
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
                 }
             case .failure(let error):
-                if case .statusCode(let response) = error,
-                   500...599 ~= response.statusCode {
-                    do {
-                        let errorRes = try response.map(ErrorResponse.self)
-                        completion(.failure(errorRes))
-                    } catch {
-                        completion(.failure(ErrorResponse(status: response.statusCode, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                    }
-                } else {
-                    completion(.failure(ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])))
-                }
+                let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                completion(.failure(customError))
             }
         }
     }
     
     func findId(emailCode: String) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
-        return provider.requestPublisher(.findId(emailCode: emailCode))
-            .tryMap { response in
-                switch response.statusCode {
-                case 200...299:
-                    return try response.map(CommonSuccessRes.self)
-                case 400...499:
-                    throw try response.map(ErrorResponse.self)
-                default:
-                    throw ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
+        return Future<CommonSuccessRes, ErrorResponse> { promise in
+            AF.request(ServerInfo.serverURL + "/find/id",
+                       method: .get,
+                       parameters: ["code" : emailCode],
+                       encoder: URLEncodedFormParameterEncoder.default,
+                       headers: ["Content-Type": "application/json"])
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        let findIdRes = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                        promise(.success(findIdRes))
+                    } catch {
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                            promise(.failure(errorResponse))
+                        } else {
+                            let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                            promise(.failure(defaultError))
+                        }
+                    }
+                case .failure(let error):
+                    let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                    promise(.failure(customError))
                 }
             }
-            .mapError { error in
-                if case let MoyaError.statusCode(response) = error, 500...599 ~= response.statusCode {
-                    do {
-                        return try response.map(ErrorResponse.self)
-                    } catch {}
-                }
-                return error as? ErrorResponse ?? ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
-            }.eraseToAnyPublisher()
+        }.eraseToAnyPublisher()
     }
     
     func findPw(newPwDto: NewPwDto) -> AnyPublisher<CommonSuccessRes, ErrorResponse> {
-        return provider.requestPublisher(.findPw(newPwDto: newPwDto))
-            .tryMap { response in
-                switch response.statusCode {
-                case 200...299:
-                    return try response.map(CommonSuccessRes.self)
-                case 400...499:
-                    throw try response.map(ErrorResponse.self)
-                default:
-                    throw ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
+        return Future<CommonSuccessRes, ErrorResponse> { promise in
+            AF.request(ServerInfo.serverURL + "/find/pw",
+                       method: .post,
+                       parameters: newPwDto,
+                       encoder: JSONParameterEncoder.default,
+                       headers: ["Content-Type": "application/json"])
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        let findPwResponse = try JSONDecoder().decode(CommonSuccessRes.self, from: data)
+                        promise(.success(findPwResponse))
+                    } catch {
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                            promise(.failure(errorResponse))
+                        } else {
+                            let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                            promise(.failure(defaultError))
+                        }
+                    }
+                case .failure(let error):
+                    let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                    promise(.failure(customError))
                 }
             }
-            .mapError { error in
-                if case let MoyaError.statusCode(response) = error, 500...599 ~= response.statusCode {
-                    do {
-                        return try response.map(ErrorResponse.self)
-                    } catch {}
-                }
-                return error as? ErrorResponse ?? ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
-            }.eraseToAnyPublisher()
+        }.eraseToAnyPublisher()
     }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 
-//200 정상
 struct CommonSuccessRes: Codable {
     var status: Int
     var data: String

@@ -7,7 +7,6 @@
 
 import Foundation
 import Combine
-import Moya
 
 protocol MemberRepositoryProtocol {
     func signIn(signInReq: SignInReq, memberType: String, completion: @escaping (Result<SignInResponse, ErrorResponse>) -> Void)

@@ -7,7 +7,6 @@
 
 import Foundation
 import Combine
-import Moya
 
 protocol MovieRepositoryProtocol {
     func getMovieDetails(id: Int) -> AnyPublisher<MovieDetail, ErrorResponse>

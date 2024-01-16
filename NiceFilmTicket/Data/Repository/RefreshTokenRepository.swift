@@ -6,37 +6,34 @@
 //
 
 import Foundation
-import CombineMoya
-import Moya
+import Alamofire
 import Combine
 
 class RefreshTokenRepository: RefreshTokenRepositoryProtocol {
-    
-    private let provider = MoyaProvider<RefreshTokenAPI>()
-    
     func getNewToken() -> AnyPublisher<SignInResponse, ErrorResponse> {
-            return provider.requestPublisher(.refreshToken)
-                .tryMap { response in
-                    switch response.statusCode {
-                    case 200...299:
-                        return try response.map(SignInResponse.self)
-                    case 400...499:
-                        let expiredToken = try response.map(CommonSuccessRes.self)
-                        throw ErrorResponse(status: 401, error: [ErrorDetail(error: expiredToken.data)])
-                    default:
-                        throw ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
+        return Future<SignInResponse, ErrorResponse> { promise in
+            AF.request(ServerInfo.serverURL + "/token/issue",
+                       method: .get,
+                       headers: ["Content-Type": "application/json", "Authorization" : UserDefaults.standard.string(forKey: "accessToken")!, "refreshToken" : UserDefaults.standard.string(forKey: "refreshToken")!])
+            .responseData { response in
+                switch response.result {
+                case .success(let data):
+                    do {
+                        let issuedToken = try JSONDecoder().decode(SignInResponse.self, from: data)
+                        promise(.success(issuedToken))
+                    } catch {
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                            promise(.failure(errorResponse))
+                        } else {
+                            let defaultError = ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                            promise(.failure(defaultError))
+                        }
                     }
+                case .failure(let error):
+                    let customError = ErrorResponse(status: error.responseCode ?? 500, error: [ErrorDetail(error: ErrorMessage.serverError.rawValue)])
+                    promise(.failure(customError))
                 }
-                .mapError { error in
-                    if case let MoyaError.statusCode(response) = error,
-                       500...599 ~= response.statusCode {
-                        do {
-                            return try response.map(ErrorResponse.self)
-                        } catch {}
-                    }
-                    return error as? ErrorResponse ?? ErrorResponse(status: 500, error: [ErrorDetail(error: ErrorMessage.serverError.message)])
-                }
-                .eraseToAnyPublisher()
-        }
+            }
+        }.eraseToAnyPublisher()
+    }
 }
-
