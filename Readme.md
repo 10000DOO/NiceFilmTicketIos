@@ -26,7 +26,7 @@
 # Environment
 
 ## 주요 적용 기술
-#Swift #MVVM #UIKit #CodeBaseUI #Storyboard #SnapKit #Combine #Moya #Kingfisher #SPM
+#Swift #MVVM #UIKit #CodeBaseUI #Storyboard #SnapKit #Combine #Alamofire #Kingfisher #SPM
 
 # Reference 
 API 문서 : https://documenter.getpostman.com/view/25143637/2s9Y5WyPnP
