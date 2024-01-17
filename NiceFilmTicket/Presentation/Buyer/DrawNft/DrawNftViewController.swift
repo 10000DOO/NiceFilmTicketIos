@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import Combine
 
 class DrawNftViewController: UIViewController {
@@ -100,7 +99,7 @@ extension DrawNftViewController: DrawNftViewDelegate {
             if nftInfo != drawNftViewModel.secondNft && nftInfo != drawNftViewModel.thirdNft {
                 drawNftViewModel.firstNft = nftInfo
                 if let url = URL(string: nftInfo.poster) {
-                    drawNftView.firstNFT.kf.setImage(with: url)
+                    drawNftView.firstNFT.configureImage(url: url)
                 }
                 drawNftViewModel.firstNftSelected = false
             }
@@ -110,7 +109,7 @@ extension DrawNftViewController: DrawNftViewDelegate {
             if nftInfo != drawNftViewModel.firstNft && nftInfo != drawNftViewModel.thirdNft {
                 drawNftViewModel.secondNft = nftInfo
                 if let url = URL(string: nftInfo.poster) {
-                    drawNftView.secondNFT.kf.setImage(with: url)
+                    drawNftView.secondNFT.configureImage(url: url)
                 }
                 drawNftViewModel.secondNftSelected = false
             }
@@ -120,7 +119,7 @@ extension DrawNftViewController: DrawNftViewDelegate {
             if nftInfo != drawNftViewModel.firstNft && nftInfo != drawNftViewModel.secondNft {
                 drawNftViewModel.thirdNft = nftInfo
                 if let url = URL(string: nftInfo.poster) {
-                    drawNftView.thirdNFT.kf.setImage(with: url)
+                    drawNftView.thirdNFT.configureImage(url: url)
                 }
                 drawNftViewModel.thirdNftSelected = false
             }

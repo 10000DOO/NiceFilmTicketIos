@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import Combine
-import Kingfisher
 
 class BuyerMainViewController: UIViewController {
     
@@ -198,13 +197,13 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
             buyerMainViewModel.updateMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
                 cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
                 if let url = URL(string: movieData.leftMoviePoster) {
-                    cell.leftMovieImage.kf.setImage(with: url)
+                    cell.leftMovieImage.configureImage(url: url)
                 }
                 
                 if movieData.rightMovieId != nil {
                     if let url = URL(string: movieData.rightMoviePoster!) {
                         cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
-                        cell.rightMovieImage.kf.setImage(with:url)
+                        cell.rightMovieImage.configureImage(url: url)
                     }
                 } else {
                     cell.rightMoiveTitle.text = ""
@@ -215,13 +214,13 @@ extension BuyerMainViewController: UITableViewDelegate, UITableViewDataSource, B
             buyerMainViewModel.updateSearchedMovieData(index: indexPath.row, store: &cell.cancellable) { movieData in
                 cell.leftMoiveTitle.text = movieData.leftMovieMovieTitle
                 if let url = URL(string: movieData.leftMoviePoster) {
-                    cell.leftMovieImage.kf.setImage(with: url)
+                    cell.leftMovieImage.configureImage(url: url)
                 }
                 
                 if movieData.rightMovieId != nil {
                     if let url = URL(string: movieData.rightMoviePoster!) {
                         cell.rightMoiveTitle.text = movieData.rightMovieMovieTitle!
-                        cell.rightMovieImage.kf.setImage(with:url)
+                        cell.rightMovieImage.configureImage(url: url)
                     }
                 } else {
                     cell.rightMoiveTitle.text = ""

@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import Kingfisher
 
 class BuyerDetailViewController: UIViewController {
 
@@ -41,7 +40,7 @@ class BuyerDetailViewController: UIViewController {
         
         buyerDetailViewModel.updateMovieData(store: &cancellable) { [weak self] movieData in
             if let url = URL(string: movieData.poster) {
-                self?.buyerDetailView.movieImage.kf.setImage(with: url)
+                self?.buyerDetailView.movieImage.configureImage(url: url)
             }
             self?.buyerDetailView.movieTitle.text = movieData.movieTitle
             self?.buyerDetailView.nftLevel.text = movieData.nftLevel

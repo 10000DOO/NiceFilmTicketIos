@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import Kingfisher
 
 class MyPageViewController: UIViewController {
 
@@ -99,13 +98,13 @@ extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
         myPageViewModel.updateNftData(index: indexPath.row, store: &cell.cancellable) { nftData in
             cell.leftMoiveTitle.text = nftData.leftMovieTitle
             if let url = URL(string: nftData.leftPoster) {
-                cell.leftMovieImage.kf.setImage(with: url)
+                cell.leftMovieImage.configureImage(url: url)
             }
             
             if nftData.rightMovieTitle != nil {
                 if let url = URL(string: nftData.rightPoster!) {
                     cell.rightMoiveTitle.text = nftData.rightMovieTitle!
-                    cell.rightMovieImage.kf.setImage(with:url)
+                    cell.rightMovieImage.configureImage(url: url)
                 }
             } else {
                 cell.rightMoiveTitle.text = ""

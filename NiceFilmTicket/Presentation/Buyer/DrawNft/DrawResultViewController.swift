@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class DrawResultViewController: UIViewController {
     
@@ -49,7 +48,7 @@ class DrawResultViewController: UIViewController {
         }
         drawResultView.nftLevel.text = nftLevel
         if let url = URL(string: nftImage) {
-            drawResultView.nftImage.kf.setImage(with: url)
+            drawResultView.nftImage.configureImage(url: url)
         }
     }
 }

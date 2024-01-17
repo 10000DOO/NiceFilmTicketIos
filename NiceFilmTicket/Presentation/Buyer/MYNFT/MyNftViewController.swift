@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 import Combine
-import Kingfisher
 
 class MyNftViewController: UIViewController {
 
@@ -73,7 +72,7 @@ extension MyNftViewController: UITableViewDelegate, UITableViewDataSource {
         
         myNftViewModel.updateNftData(index: indexPath.row, store: &cell.cancellables) { nftData in
             if let url = URL(string: nftData.poster) {
-                cell.nftImage.kf.setImage(with:url)
+                cell.nftImage.configureImage(url: url)
             }
             if nftData.nftLevel == "NORMAL" {
                 cell.nftLevel.textColor = UIColor(red: 50/255, green: 173/255, blue: 230/255, alpha: 1)
